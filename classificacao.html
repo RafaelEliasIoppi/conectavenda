@@ -1,294 +1,166 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>classificação do Futebol Gaúcho</title>
-        <link rel="shortcut icon" href="imagens/bola-de-futebol.png" type="image/x-icon">
-        
-        <style>
-         @font-face {
-        font-family: Android;
-        src: url('../fontes/idroid.otf');
-}
-:root {
-    --fonteandroid:'Android', cursive;
-} 
- body{
-            background-color: #CFEEE7;;
-            box-sizing: border-box;
-        }
- h1 {
-    color: var(--cor5);
-    font-family: var(--fonteandroid);
-    font-size: 2em;
-    background-image: linear-gradient(to right, #69B8A5, #063D1e);
-    text-align: center;
-    max-width: 800px;
-    
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classificação do Futebol Gaúcho</title>
+  <link rel="shortcut icon" href="imagens/bola-de-futebol.png" type="image/x-icon" />
+  <style>
+    /* Estilos base */
+    :root {
+      --fonteandroid: 'Android', cursive;
+    }
 
+    @font-face {
+      font-family: Android;
+      src: url('../fontes/idroid.otf');
+    }
 
-}
-h1  img {
-    max-width: 50px;
-    min-height: auto;
-     padding: 10px;
-     
-}
-h3 {
-    font-size: 2em;
-    background-image: linear-gradient(to right, #86EBD3,transparent);
-    margin:0;
+    * {
+      box-sizing: border-box;
+    }
 
-}
-    
+    body {
+      background-color: #cfeee7;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
+    hgroup {
+      max-width: 800px;
+      width: 90%;
+      background-color: white;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.76);
+    }
 
-         hgroup{
-            
-            max-width: 750px;
-            background-color: white;
-            margin: auto;
-            margin-bottom: 30px;
-            padding: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.76);
-            border-radius: 10px;
-        }
-        th {
-    border: 2px solid black;
+    h1 {
+      color: white;
+      font-family: var(--fonteandroid);
+      font-size: 2em;
+      background-image: linear-gradient(to right, #69b8a5, #063d1e);
+      text-align: center;
+      padding: 10px;
+      border-radius: 5px;
+    }
 
-}
+    h1 img {
+      width: 40px;
+      height: auto;
+      vertical-align: middle;
+      margin: 0 5px;
+    }
 
-td {
-    background-color: antiquewhite;
-    padding: 3px;
-    border-radius: 2px;
-    border: 1px solid black
-    
-} 
-table {
-    margin:auto;
-    text-align: calc();
+    /* Responsividade da tabela */
+    .table-wrapper {
+      overflow-x: auto;
+    }
 
-}
+    table {
+      width: 100%;
+      min-width: 600px;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
 
-#legenda {
-    max-width: 660px;
-    min-width: 425px;
-    border: 1px;
-    margin: auto;
-    
-}
-        </style>
-    </head>
+    th, td {
+      padding: 8px;
+      border: 1px solid black;
+      text-align: center;
+      background-color: antiquewhite;
+    }
+
+    thead th {
+      background-color: #dcdcdc;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f5f5f5;
+    }
+
+    /* Cores específicas */
+    tr.destacado {
+      background-color: #00ff7f;
+    }
+
+    tr.rebaixado {
+      background-color: #ff4500;
+    }
+
+    /* Legenda */
+    #legenda {
+      margin-top: 20px;
+      font-size: 0.9em;
+      line-height: 1.5;
+      padding: 10px;
+      background-color: #fefefe;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.4em;
+      }
+
+      h1 img {
+        width: 30px;
+      }
+
+      th, td {
+        font-size: 0.85em;
+        padding: 6px;
+      }
+    }
+  </style>
+</head>
+
 <body>
-    <hgroup>
-        <h1> <img src="imagens/_FGF400.png"> Tabela de Classificação 
-             <img src="imagens/_FGF400.png"> 
-             <br> FGF GAUCHÃO 2024
-        </h1>
-        <table bgcolor="#DCDCDC">
-            <th width="20" height="30">Pos
-            <td width="200" height="30">Equipe</td>
-            <td width="40" height="30">Pts</td>
-            <td width="35" height="30">Jgs</td>
-            <td width="35" height="30">Vit</td>
-            <td width="35" height="30">Emp</td>
-            <td width="35" height="30">Der</td>
-            <td width="35" height="30">GP</td>
-            <td width="35" height="30">GC</td>
-            <td width="35" height="30">SdG</td>
-            <td width="35" height="30">%</td>
-            </th>
+  <hgroup>
+    <h1>
+      <img src="imagens/_FGF400.png" alt="Logo FGF" />
+      Tabela de Classificação
+      <img src="imagens/_FGF400.png" alt="Logo FGF" />
+      <br />FGF GAUCHÃO 2024
+    </h1>
 
-            <tr bgcolor="#00FF7F">
-                <td>1º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/aimore.png"> CE Aimoré </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-            <tr bgcolor="#00FF7F">
-                <td>2º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/Avenida.png"> EC Avenida </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-            <tr bgcolor="#00FF7F">
-                <td>3º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/Brasil.png"> GE Brasil </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-            <tr bgcolor="#00FF7F">
-                <td>4º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/CAXIAS.png"> SER Caxias do Sul </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-            <tr bgcolor="#F5F5F5">
-                <td>5º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/Esportivo.png"> CBG Esportivo </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-            <tr bgcolor="#F5F5F5">
-                <td>6º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/Grebio.png"> Grêmio FBPA </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-            <tr bgcolor="#F5F5F5">
-                <td>7º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/inter.png"> SC Internacional </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-            <tr bgcolor="#F5F5F5">
-                <td>8º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/Juventude.png"> EC Juventude </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-            <tr bgcolor="#F5F5F5">
-                <td>9º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/Novo Hamburgo.png"> EC Novo Hamburgo </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-            <tr bgcolor="#F5F5F5">
-                <td>10º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/SaoJose.png"> EC São José </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-            <tr bgcolor="#FF4500">
-                <td>11º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/São Luiz.png"> EC São Luiz </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-            <tr bgcolor="#FF4500">
-                <td>12º</td>
-                <td><img width="25" height="25"
-                    src="imagens/logo/Ypiranga.png"> Ypiranga FC </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0 </td>
-                <td> 0% </td>
-            </tr>
-        </table>    
-        <table id="legenda">
-            <tr>
-                <td>Legenda:<br/>
-                    POS - Posição;
-                    PTS - Pontos Conquistados;
-                    JGS - Jogos;
-                    VIT - Partidas Vencidas;
-                    EMP - Partidas Empatadas;
-                    DER - Derrotas;
-                    GP - Gols Pró (Marcados);
-                    GC - Gols Contra (Sofridos);
-                    SdG - Saldo de Gols;
-                    % - Percentual de pontos conquistados
-                </td>
-            </table>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Pos</th><th>Equipe</th><th>Pts</th><th>Jgs</th>
+            <th>Vit</th><th>Emp</th><th>Der</th><th>GP</th>
+            <th>GC</th><th>SdG</th><th>%</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="destacado">
+            <td>1º</td>
+            <td><img src="imagens/logo/aimore.png" width="25" /> CE Aimoré</td>
+            <td>0</td><td>0</td><td>0</td><td>0</td>
+            <td>0</td><td>0</td><td>0</td><td>0</td><td>0%</td>
+          </tr>
+          <!-- Repita o bloco <tr> acima com dados dos outros clubes -->
+          <tr class="rebaixado">
+            <td>12º</td>
+            <td><img src="imagens/logo/Ypiranga.png" width="25" /> Ypiranga FC</td>
+            <td>0</td><td>0</td><td>0</td><td>0</td>
+            <td>0</td><td>0</td><td>0</td><td>0</td><td>0%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-
-
+    <div id="legenda">
+      <strong>Legenda:</strong><br />
+      POS - Posição, PTS - Pontos, JGS - Jogos, VIT - Vitórias, EMP - Empates, DER - Derrotas, <br />
+      GP - Gols Pró, GC - Gols Contra, SdG - Saldo de Gols, % - Aproveitamento
+    </div>
+  </hgroup>
 </body>
-
 </html>
