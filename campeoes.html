@@ -6,53 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campeões do Futebol Gaúcho</title>
     <link rel="shortcut icon" href="imagens/bola-de-futebol.png" type="image/x-icon">
+    <style>
+         *, *::before, *::after {
+          box-sizing: border-box;
+        }
+    
+        hgroup {
+          width: 90%;
+          max-width: 1000px;
+          margin: 20px auto;
+          padding: 10px;
+        }
+    
+        table {
+          width: 100%;
+          display: block;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          -ms-overflow-style: -ms-autohiding-scrollbar;
+          margin: 20px 0;
+          border-collapse: collapse;
+        }
+    
+        th, td {
+          padding: 6px;
+          text-align: center;
+          word-wrap: break-word;
+        }
+    
+        @media (max-width: 768px) {
+          h1 {
+            font-size: 1.6em;
+            padding: 0.5em 0;
+          }
+          h3 {
+            font-size: 1.2em;
+          }
+          th, td {
+            padding: 4px;
+            font-size: 0.9em;
+          }
+        }
+  </style>
     
 </head>
-<style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-    
-    /* 2) Hgroup fluido */
-    hgroup {
-      width: 90%;
-      max-width: 1000px;
-      margin: 20px auto;
-      padding: 10px;
-    }
-    
-    /* 3) Tabelas roláveis e 100% da largura */
-    table {
-      width: 100%;
-      display: block;                  /* para overflow funcionar */
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      -ms-overflow-style: -ms-autohiding-scrollbar;
-      margin: 20px 0;
-      border-collapse: collapse;
-    }
-    
-    th, td {
-      padding: 6px;
-      text-align: center;
-      word-wrap: break-word;
-    }
-    
-    /* 4) Ajustes em telas pequenas */
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 1.6em;
-        padding: 0.5em 0;
-      }
-      h3 {
-        font-size: 1.2em;
-      }
-      th, td {
-        padding: 4px;
-        font-size: 0.9em;
-      }
 
-</style>
 <body>
     <hgroup>
         <h1>Lista de Campeões do Rio Grande do Sul</h1>
