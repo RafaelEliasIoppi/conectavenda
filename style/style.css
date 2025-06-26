@@ -68,21 +68,7 @@ header > p {
    margin-bottom: 20px;
 
    
-}
-.menu {
-    list-style:none;
-    border: 1.5px solid #c0c0c0;
-    float:left;
-    margin-left: -40px;
-    font-weight: bold;
-    max-width: 470px;
-
-    
-    
-    
-    
-
-}
+}      
 /* 1. Base: Flexbox no container, remove floats */
 .menu {
   display: flex;
