@@ -6,55 +6,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campeões do Futebol Gaúcho</title>
     <link rel="shortcut icon" href="imagens/bola-de-futebol.png" type="image/x-icon">
-    <style>
-         @font-face {
-        font-family: Android;
-        src: url('../fontes/idroid.otf');
-        }
-        :root {
-        --fonteandroid:'Android', cursive;
-} 
-         *, *::before, *::after {
-          box-sizing: border-box;
-        }
-    
-        hgroup {
-          width: 90%;
-          max-width: 1000px;
-          margin: 20px auto;
-          padding: 10px;
-        }
-    
-        table {
-          width: 100%;
-          display: block;
-          overflow-x: auto;
-          -webkit-overflow-scrolling: touch;
-          -ms-overflow-style: -ms-autohiding-scrollbar;
-          margin: 20px 0;
-          border-collapse: collapse;
-        }
-    
-        th, td {
-          padding: 6px;
-          text-align: center;
-          word-wrap: break-word;
-        }
-    
-        @media (max-width: 768px) {
-          h1 {
-            font-size: 1.6em;
-            padding: 0.5em 0;
-          }
-          h3 {
-            font-size: 1.2em;
-          }
-          th, td {
-            padding: 4px;
-            font-size: 0.9em;
-          }
-        }
-  </style>
+   <style>
+  @font-face {
+    font-family: Android;
+    src: url('../fontes/idroid.otf');
+  }
+
+  :root {
+    --cor0: #CFEEE7;
+    --cor1: #89F0D8;
+    --cor2: #86EBD3;
+    --cor3: #69B8A5;
+    --cor4: #3f5c55;
+    --cor5: #063D1e;
+
+    --fontedestaque: 'Bebas Neue', cursive;
+    --fontepadrao: Arial, Verdana, Helvetica, sans-serif;
+    --fonteandroid: 'Android', cursive;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--cor0);
+    font-family: var(--fontepadrao);
+    color: var(--cor5);
+    margin: 0;
+    padding: 0;
+  }
+
+  hgroup {
+    min-width: 300px;
+    max-width: 1000px;
+    background-color: white;
+    margin: 20px auto 30px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.76);
+    border-radius: 10px;
+  }
+
+  h1 {
+    font-family: var(--fonteandroid);
+    color: var(--cor5);
+    font-size: 2em;
+    margin: 0 0 10px 0;
+    text-align: center;
+    background-image: linear-gradient(to right, var(--cor3), var(--cor5));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  h3 {
+    font-family: var(--fonteandroid);
+    font-size: 2em;
+    margin: 0 0 10px 0;
+    background-image: linear-gradient(to right, var(--cor2), transparent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  table {
+    margin: auto;
+    padding: 10px;
+    width: auto;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+  }
+
+  th {
+    border: 2px solid black;
+    padding: 6px 12px;
+    background-color: var(--cor2);
+    color: var(--cor5);
+    font-weight: bold;
+  }
+
+  td {
+    background-color: antiquewhite;
+    padding: 6px 12px;
+    border-radius: 2px;
+    text-align: center;
+    border: 1px solid black;
+    word-wrap: break-word;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 1.6em;
+      padding: 0.5em 0;
+    }
+
+    h3 {
+      font-size: 1.2em;
+    }
+
+    th, td {
+      padding: 4px 6px;
+      font-size: 0.9em;
+    }
+
+    table {
+      width: 100%;
+      padding: 0;
+    }
+  }
+</style>
+
+
     
 </head>
 

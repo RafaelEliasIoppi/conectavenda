@@ -5,8 +5,7 @@
     src: url('../fontes/idroid.otf');
 }
 
-
-:root{
+:root {
      --cor0:#CFEEE7;
      --cor1:#89F0D8;
      --cor2:#86EBD3;
@@ -18,58 +17,52 @@
      --fontepadrao: Arial, Verdana, Helvetica, sans-serif;
      --fonteandroid:'Android', cursive;
 }  
-* {
-    margin: 0px;
-    padding: 0px;
-}
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     background-color: var(--cor0);
     font-family: var(--fontepadrao);
-     box-sizing: border-box;
 }
-a.externo::after{
-    content: '\00A0\1F517';
 
+a.externo::after {
+    content: '\00A0\1F517';
 }
+
 header {
     background-image: linear-gradient(to top, var(--cor3), var(--cor5));
     min-height: 150px;
     text-align: center;
     padding: 40px;
-    
-    
-
-    
-    
-    
-    
 }
+
 header > h1 {
-    color:white;
+    color: white;
     font-family: var(--fontedestaque);
     font-size: 3em;
-    text-align: center;
-    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.801);
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
     margin-bottom: 20px;
     font-weight: normal;
-    
 }
-header > p {
-   color:white;
-   font-family: var(--fontepadrao);
-   font-size: 1.3em;
-   max-width: 500px;
-   margin:auto;
-   padding-right: 10px;
-   padding-left: 10px;
-   text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.788) ;
-   margin-bottom: 20px;
 
-   
-}      
-/* 1. Base: Flexbox no container, remove floats */
+header > p {
+    color: white;
+    font-family: var(--fontepadrao);
+    font-size: 1.3em;
+    max-width: 500px;
+    margin: auto;
+    padding: 0 10px;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.79);
+    margin-bottom: 20px;
+}
+
+/* ===== MENU ===== */
+
+/* Base do menu: flex container */
 .menu {
   display: flex;
   flex-wrap: wrap;
@@ -83,13 +76,12 @@ header > p {
 }
 
 .menu li {
-  position: relative;
+  position: relative; /* necessário para posicionar submenu */
   list-style: none;
 }
 
 .menu > li {
-  /* só os itens de topo */
-  flex: 1 0 auto;        /* distribui igualmente */
+  flex: 1 0 auto; /* distribui igualmente */
   border-right: 1px solid #c0c0c0;
 }
 
@@ -103,8 +95,10 @@ header > p {
   color: #333;
   text-decoration: none;
   text-align: center;
+  cursor: pointer;
 }
 
+/* Hover no link principal */
 .menu li a:hover {
   background: #333;
   color: #fff;
@@ -112,13 +106,16 @@ header > p {
   text-shadow: 0 0 5px #fff;
 }
 
-/* dropdown */
+/* Dropdown - submenu */
 .menu li ul {
   position: absolute;
   top: 100%;
   left: 0;
   display: none;
   background: #fff;
+  border: 1px solid #c0c0c0;
+  min-width: 150px;
+  z-index: 1000;
 }
 
 .menu li:hover > ul {
@@ -126,15 +123,26 @@ header > p {
 }
 
 .menu li ul li {
-  width: 150px;
-  border: 1px solid #c0c0c0;
+  border: none;
   background-color: rgba(204, 204, 204, 0.57);
 }
 
-/* 2. Breakpoint para mobile */
+.menu li ul li a {
+  padding: 8px 12px;
+  color: #333;
+  display: block;
+  text-align: left;
+}
+
+/* Hover submenu */
+.menu li ul li a:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+/* ===== Responsivo - Mobile ===== */
 @media (max-width: 768px) {
   .menu {
-    display: flex;
     flex-direction: column;
     border: none;
     padding: 0;
@@ -157,16 +165,19 @@ header > p {
     color: #333;
   }
 
+  /* Submenu fica estático, oculto inicialmente */
   .menu li ul {
+    position: static;
     display: none;
     flex-direction: column;
-    position: static;
     background-color: #f9f9f9;
     margin: 0;
-    padding: 0;
+    padding-left: 20px;
+    border: none;
   }
 
-  .menu li:hover > ul {
+  /* Mostra submenu quando li tem classe open */
+  .menu li.open > ul {
     display: flex;
   }
 
@@ -183,34 +194,17 @@ header > p {
   }
 }
 
-
-  /* dropdown deixa de flutuar e vira sub-lista estática */
-  .menu li ul {
-    position: static;
-    display: none;
-    width: 100%;
-  }
-
-  .menu li:hover > ul {
-    display: block;
-  }
-
-  .menu li ul li {
-    border: none;
-  }
-}
-
-/* garante que o link esteja sempre preto */
+/* Estilo para garantir links no menu sempre preto (override) */
 nav .menu li > a {
   color: #000 !important;
 }
 
-/* mantém o hover em branco como antes */
+/* Hover links menu */
 nav .menu li > a:hover {
   color: #fff !important;
 }
 
-
+/* ===== Conteúdo principal ===== */
 main {
     min-width: 300px;
     max-width: 1000px;
@@ -218,14 +212,13 @@ main {
     margin: auto;
     margin-bottom: 30px;
     padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.76);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.76);
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-
 }
 
 main p {
-    margin: 15px 0px;
+    margin: 15px 0;
     text-align: justify;
     text-indent: 30px;
     font-size: 1em;
@@ -237,57 +230,56 @@ main h1 {
     font-family: var(--fonteandroid);
     font-size: 1.8em;
 }
-main  h2 {
+
+main h2 {
     font-family: var(--fonteandroid);
     color: var(--cor4);
     font-size: 1.4em;
-    background-image: linear-gradient(to right, var(--cor2),transparent);
+    background-image: linear-gradient(to right, var(--cor2), transparent);
     text-indent: 8px;
     font-weight: normal;
     text-align: left;
-    
-    
 }
-main p {
-    margin: 15px 0px;
-    text-align: justify;
-}
-main strong{
+
+main strong {
     color: var(--cor5);
     font-weight: bolder;
-    
-    
 }
+
 main a {
-      text-decoration: none;
-      font-weight: bold;
-      color:var(--cor5);
-      background-color: var(--cor0);
-      padding: 4px 6px;
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--cor5);
+    background-color: var(--cor0);
+    padding: 4px 6px;
 }
-main a:hover{
+
+main a:hover {
     text-decoration: underline;
-    color:var(--cor3)
+    color: var(--cor3);
 }
- main img {
+
+main img {
     width: 100%;
     height: 400px;
 }
- #banner {
+
+#banner {
     max-width: 250px;
-    display:block;
+    display: block;
     margin: auto; 
     max-height: 250px;
     padding: 10px;
 }
-div.video{
 
+div.video {
     background-color: var(--cor5);
-    margin: 0px -20px 30px -20px;
+    margin: 0 -20px 30px -20px;
     padding: 20px;
     position: relative;
     padding-bottom: 57%;
 }
+
 div.video > iframe {
     position: absolute;
     top: 5%;
@@ -296,9 +288,7 @@ div.video > iframe {
     height: 90%;
 }
 
-.corpo{
-    
-    
+.corpo {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -329,14 +319,11 @@ div.video > iframe {
     
 
 }
-#h2banner{
+
+#h2banner {
     margin-bottom: 20px;
 }
 
-
-.container img:hover{
-    border: 1px solid #c0c0c0;
-}
 .container span{ /* Espaço da mensagem que ira aparecer */
     
     position: absolute;
@@ -348,26 +335,29 @@ div.video > iframe {
 
     padding-left: 20px;
 }
+
+
 aside {
     background-color: var(--cor3);
     padding: 10px;
     border-radius: 10px;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.664);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.66);
 }
-aside > h3{
-    background-color: var(--cor4);
-    color:white;
-    padding:5px;
-    margin: -10px -10px 0px -10px;
-    border-radius: 10px 10px 0px 0px;
-    
 
+aside > h3 {
+    background-color: var(--cor4);
+    color: white;
+    padding: 5px;
+    margin: -10px -10px 0 -10px;
+    border-radius: 10px 10px 0 0;
 }
+
 aside > ul {
-    list-style-type:'\2714\00A0\00A0';
+    list-style-type: '\2714\00A0\00A0';
     list-style-position: inside;
     columns: 2;
 }
+
 footer {
     background-color: var(--cor5);
     color: white;
@@ -375,8 +365,10 @@ footer {
     font-size: 0.8em;
     padding: 5px;
 }
+
 footer p:hover {
     text-decoration: underline;
     font-size: larger;
-    
 }
+
+
