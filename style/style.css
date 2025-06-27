@@ -335,6 +335,67 @@ div.video > iframe {
 
     padding-left: 20px;
 }
+.botao-container {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.botao-container {
+  text-align: center;
+  margin: 60px 0;
+}
+
+.botao-link {
+  position: relative;
+  display: inline-block;
+  padding: 20px 40px;
+  font-size: 1.4em;
+  font-family: var(--fontepadrao);
+  font-weight: bold;
+  color: var(--cor5); /* letra escura */
+  background: linear-gradient(135deg, var(--cor1), var(--cor2), var(--cor3));
+  background-size: 400% 400%;
+  border-radius: 12px;
+  text-decoration: none;
+  overflow: hidden;
+  z-index: 1;
+  animation: fundoAnimado 6s ease infinite;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+}
+
+.botao-link:hover {
+  transform: scale(1.07);
+  color: var(--cor0);
+  text-decoration: underline;
+}
+
+/* Fundo animado */
+@keyframes fundoAnimado {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Estilo das partículas */
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--cor4);
+  pointer-events: none;
+  animation: particleFade 0.6s ease-out forwards;
+}
+
+@keyframes particleFade {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(3) translateY(-30px); }
+}
+
+
+
+
 
 
 aside {

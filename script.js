@@ -1,55 +1,69 @@
 
+  // ===== BANNER DE SLIDES =====
 
-function slide1(){
-    document.getElementById("banner").src="imagens/logo/inter.png"
-    setTimeout("slide2()",1000)
-}
+  function slide1(){
+      document.getElementById("banner").src="imagens/logo/inter.png"
+      setTimeout(slide2, 1000)
+  }
 
-function slide2(){
-    document.getElementById("banner").src="imagens/logo/Juventude.png"
-    setTimeout("slide3()",1000)
-}
+  function slide2(){
+      document.getElementById("banner").src="imagens/logo/Juventude.png"
+      setTimeout(slide3, 1000)
+  }
 
-function slide3(){
-    document.getElementById("banner").src="imagens/logo/Ypiranga.png"
-    setTimeout("slide4()",1000)
-}
+  function slide3(){
+      document.getElementById("banner").src="imagens/logo/Ypiranga.png"
+      setTimeout(slide4, 1000)
+  }
 
-function slide4(){
-    document.getElementById("banner").src="imagens/logo/Avenida.png"
-    setTimeout("slide5()",1000)
-    
-}
-function slide5(){
-    document.getElementById("banner").src="imagens/logo/aimore.png"
-    setTimeout("slide6()",1000)
-    
-}
-function slide6(){
-    document.getElementById("banner").src="imagens/logo/CAXIAS.png"
-    setTimeout("slide7()",1000)
-    
-}
-function slide7(){
-    document.getElementById("banner").src="imagens/logo/SaoJose.png"
-    setTimeout("slide1()",1000)
-    
-}
+  function slide4(){
+      document.getElementById("banner").src="imagens/logo/Avenida.png"
+      setTimeout(slide5, 1000)
+  }
 
-const imgs = document.getElementById('imagem')
-const img = document.querySelectorAll('#imagem img')
+  function slide5(){
+      document.getElementById("banner").src="imagens/logo/aimore.png"
+      setTimeout(slide6, 1000)
+  }
 
-let idx = 0
+  function slide6(){
+      document.getElementById("banner").src="imagens/logo/CAXIAS.png"
+      setTimeout(slide7, 1000)
+  }
 
-function carrossel(){
-    idx++;
-    if (idx > 11){
-        idx = 0
-    }
-     imgs.style.transform = `translateX(${-idx * 200}px)`
+  function slide7(){
+      document.getElementById("banner").src="imagens/logo/SaoJose.png"
+      setTimeout(slide1, 1000)
+  }
 
-}
-setInterval(carrossel, 1500)
+  // ===== CARROSSEL DE IMAGENS =====
 
+  const imgs = document.getElementById('imagem')
+  const img = document.querySelectorAll('#imagem img')
 
-  
+  let idx = 0
+
+  function carrossel(){
+      idx++
+      if (idx > 11) idx = 0
+      imgs.style.transform = `translateX(${-idx * 200}px)`
+  }
+
+  setInterval(carrossel, 1500)
+
+  // ===== EFEITO DE PARTÍCULAS NO BOTÃO =====
+
+  const botao = document.querySelector('.botao-link')
+  const particleContainer = document.createElement('span')
+  particleContainer.classList.add('particle-container')
+  botao.appendChild(particleContainer)
+
+  botao.addEventListener('mousemove', e => {
+    const particle = document.createElement('span')
+    particle.classList.add('particle')
+    particle.style.left = `${e.offsetX}px`
+    particle.style.top = `${e.offsetY}px`
+    particleContainer.appendChild(particle)
+    setTimeout(() => particle.remove(), 600)
+  })
+
