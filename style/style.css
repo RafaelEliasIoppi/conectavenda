@@ -295,13 +295,12 @@ div.video > iframe {
     min-height: 100px;
 }
 .carrossel{
-       
-       
+         
        overflow: hidden;
        width: 300x;
        height: 300px;
        border-radius: 20px;
-       
+      
 
 }
 .container {
@@ -316,8 +315,6 @@ div.video > iframe {
     max-width: 250px;
     max-height: 250px;
     padding: 20px;
-    
-
 }
 
 #h2banner {
@@ -330,9 +327,6 @@ div.video > iframe {
     width:300px;
     text-align: center;
     font-size: 1.3em;
-    
-    
-
     padding-left: 20px;
 }
 .botao-container {
@@ -422,10 +416,6 @@ div.video > iframe {
   0%, 100% { box-shadow: 0 0 10px var(--cor3); }
   50% { box-shadow: 0 0 20px var(--cor1); }
 }
-
-
-
-
 
 aside {
     background-color: var(--cor3);
