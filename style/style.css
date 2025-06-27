@@ -393,6 +393,35 @@ div.video > iframe {
   to { opacity: 0; transform: scale(3) translateY(-30px); }
 }
 
+.mini-produto {
+    background-color: var(--cor0);
+    border: 2px solid var(--cor3);
+    padding: 16px;
+    text-align: center;
+    border-radius: 10px;
+    max-width: 350px;
+    margin: 40px auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    animation: pulsar 4s infinite ease-in-out;
+}
+
+.mini-produto img {
+    width: 100%;
+    max-height: 180px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.mini-produto img:hover {
+    transform: scale(1.05);
+}
+
+@keyframes pulsar {
+  0%, 100% { box-shadow: 0 0 10px var(--cor3); }
+  50% { box-shadow: 0 0 20px var(--cor1); }
+}
 
 
 
