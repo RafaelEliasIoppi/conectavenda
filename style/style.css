@@ -483,13 +483,32 @@ footer {
     background-color: var(--cor5);
     color: white;
     text-align: center;
-    font-size: 0.8em;
-    padding: 5px;
+    font-size: 0.85em;
+    padding: 10px 15px;
+    line-height: 1.6;
+}
+
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+footer a:hover,
+footer p:hover a {
+    text-decoration: underline;
+    color: #ffd700; /* cor do link quando passar o mouse */
+}
+
+footer p {
+    margin: 4px 0;
+    transition: color 0.3s ease;
 }
 
 footer p:hover {
-    text-decoration: underline;
-    font-size: larger;
+    color: #ffd700; /* muda a cor do texto ao passar o mouse */
 }
+
+
 
 
