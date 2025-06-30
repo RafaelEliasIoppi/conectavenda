@@ -428,9 +428,9 @@ div.video > iframe {
 }
 .selo-promocao {
   position: absolute;
-  top: -30px;
+  top: -15px;
   left: 30%;
-  transform: translateX(-30%);
+  transform: translateX(-40%);
   background-color: crimson;
   color: white;
   font-size: 14px;
