@@ -74,24 +74,40 @@ window.addEventListener("DOMContentLoaded", () => {
 
 // ===== FUNÇÃO DE CHAT COM GEMINI VIA RAILWAY =====
 async function sendMessage() {
-  const input = document.getElementById("user-input").value;
-  if (!input) return;
-
+  const inputField = document.getElementById("user-input");
   const chatBox = document.getElementById("chat-box");
-  chatBox.innerHTML += `<p><strong>Você:</strong> ${input}</p>`;
-  document.getElementById("user-input").value = "";
+  const message = inputField.value.trim();
+
+  if (!message) return;
+
+  // Exibe a mensagem do usuário
+  chatBox.innerHTML += `<p><strong>Você:</strong> ${message}</p>`;
+  inputField.value = "";
+
+  // Exibe indicador de carregamento
+  const loading = document.createElement("p");
+  loading.innerHTML = `<em>Gemini está digitando...</em>`;
+  chatBox.appendChild(loading);
+  chatBox.scrollTop = chatBox.scrollHeight;
 
   try {
     const response = await fetch("https://authentic-adaptation-production-c12e.up.railway.app/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: input })
+      body: JSON.stringify({ message })
     });
 
+    if (!response.ok) {
+      throw new Error(`Erro ${response.status}: ${response.statusText}`);
+    }
+
     const data = await response.json();
+    loading.remove();
     chatBox.innerHTML += `<p><strong>Gemini:</strong> ${data.reply}</p>`;
-    chatBox.scrollTop = chatBox.scrollHeight;
   } catch (error) {
-    chatBox.innerHTML += `<p><strong>Erro:</strong> Não foi possível se conectar ao servidor.</p>`;
+    loading.remove();
+    chatBox.innerHTML += `<p><strong>Erro:</strong> ${error.message}</p>`;
   }
+
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
