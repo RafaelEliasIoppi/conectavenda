@@ -16,11 +16,7 @@ if (!process.env.GEMINI_API_KEY) {
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.use(cors({
-  origin: "https://rafaeleliasioppi.github.io", // sem subcaminhos
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"]
-}));
+app.use(cors()); 
 app.options("*", cors());
 app.use(express.json());
 app.use(express.static(__dirname));

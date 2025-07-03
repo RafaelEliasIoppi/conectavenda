@@ -76,15 +76,15 @@ window.addEventListener("DOMContentLoaded", () => {
 async function sendMessage() {
   const inputField = document.getElementById("user-input");
   const chatBox = document.getElementById("chat-box");
-  const message = inputField.value.trim();
+  const userMessage = inputField.value.trim();
 
-  if (!message) return;
+  if (!userMessage) return;
 
-  // Exibe a mensagem do usuário
-  chatBox.innerHTML += `<p><strong>Você:</strong> ${message}</p>`;
+  // Exibe mensagem do usuário
+  chatBox.innerHTML += `<p><strong>Você:</strong> ${userMessage}</p>`;
   inputField.value = "";
 
-  // Exibe indicador de carregamento
+  // Exibe carregamento
   const loading = document.createElement("p");
   loading.innerHTML = `<em>Gemini está digitando...</em>`;
   chatBox.appendChild(loading);
@@ -94,7 +94,9 @@ async function sendMessage() {
     const response = await fetch("https://authentic-adaptation-production-c12e.up.railway.app/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message })
+      body: JSON.stringify({
+        message: `Responda em português de forma clara: ${userMessage}`
+      })
     });
 
     if (!response.ok) {
@@ -111,3 +113,4 @@ async function sendMessage() {
 
   chatBox.scrollTop = chatBox.scrollHeight;
 }
+
