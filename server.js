@@ -4,14 +4,28 @@ const dotenv = require("dotenv");
 const path = require("path");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// Carrega variáveis do .env
 dotenv.config();
 
-const app = express();
-const port = process.env.PORT || 3000;
+// --- Verificação Crítica da Chave da API ---
+if (!process.env.GEMINI_API_KEY) {
+  console.error("❌ ERRO: A variável de ambiente GEMINI_API_KEY não foi definida.");
+  console.error("Verifique se você criou um arquivo .env e adicionou sua chave.");
+  process.exit(1); // Impede o servidor de iniciar sem a chave
+}
 
-// Middleware padrão
-app.use(cors());
+const app = express();
+const port = process.env.PORT || 8080;
+
+// ✅ Middleware CORS configurado
+app.use(cors({
+  origin: [
+    "https://rafaeleliasioppi.github.io/rafael",
+    "https://jubilant-telegram-x5wpw447qx9wc6q7w-5507.app.github.dev"
+  ],
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"]
+}));
+
 app.use(express.json());
 app.use(express.static(__dirname));
 
@@ -20,10 +34,15 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// Inicializa Gemini
+// ✅ Rota GET opcional para teste direto via navegador
+app.get("/chat", (req, res) => {
+  res.send("🧠 Endpoint de chat ativo! Envie mensagens com POST.");
+});
+
+// Inicializa a IA Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Rota de chat
+// Rota de chat (POST)
 app.post("/chat", async (req, res) => {
   const { message } = req.body;
 
@@ -34,21 +53,20 @@ app.post("/chat", async (req, res) => {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(message);
+    const response = await result.response;
+    const text = response.text();
 
-    const reply =
-      result?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "⚠️ Resposta não disponível no momento. Tente novamente em instantes.";
+    res.json({ reply: text });
 
-    res.json({ reply });
   } catch (err) {
-    console.error("Erro Gemini:", err.message);
+    console.error("Erro na chamada para a API Gemini:", err);
     res.status(500).json({
-      reply: "❌ Não foi possível se comunicar com o Gemini. Verifique sua conexão ou limite de uso.",
+      reply: "❌ Ocorreu um erro ao se comunicar com a API Gemini. Verifique os logs do servidor.",
     });
   }
 });
 
-// 🚀 Inicia o servidor (somente 1 vez)
-app.listen(port, () => {
+// Inicia o servidor
+app.listen(port, "0.0.0.0", () => {
   console.log(`✅ Servidor rodando na porta ${port}`);
 });

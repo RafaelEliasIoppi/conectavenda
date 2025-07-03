@@ -1,9 +1,12 @@
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Courgette&family=Kalam:wght@300;400&display=swap');
 @font-face {
-    font-family: Android;
-    src: url('../fontes/idroid.otf');
+  font-family: 'Android';
+  src: url('fontes/idroid.otf') format('opentype');
+  font-display: swap;
 }
+
+
 
 :root {
      --cor0:#CFEEE7;
