@@ -251,6 +251,18 @@ nav .menu li > a:hover {
     box-sizing: border-box;
 }
 
+#chat-container {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#chat-box {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#user-input {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 button {
     width: 100%;
     padding: 10px;
