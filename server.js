@@ -16,16 +16,12 @@ if (!process.env.GEMINI_API_KEY) {
 const app = express();
 const port = process.env.PORT || 8080;
 
-// ✅ Middleware CORS configurado
 app.use(cors({
-  origin: [
-    "https://rafaeleliasioppi.github.io/rafael",
-    "https://jubilant-telegram-x5wpw447qx9wc6q7w-5507.app.github.dev"
-  ],
-  methods: ["GET", "POST"],
+  origin: "https://rafaeleliasioppi.github.io", // sem subcaminhos
+  methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type"]
 }));
-
+app.options("*", cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
