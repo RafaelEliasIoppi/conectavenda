@@ -15,7 +15,7 @@
     
     <title>Times do Futebol Gaúcho</title>
     <link rel="shortcut icon" href="imagens/bola-de-futebol.png" type="image/x-icon">
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <!-- Google tag (gtag.js) -->
@@ -27,6 +27,8 @@
 
   gtag('config', 'G-P7DF49ECP6');
 </script>
+ </script>
+ <script src="script.js"></script>
 <body onLoad="slide1()">
     <header>
         <h1>Times do Futebol Gaúcho</h1>
@@ -114,6 +116,16 @@
                 </iframe>
             </div>
 
+        <div id="chat-container">
+    <div id="chat-box"></div>
+
+        <div id="chat-input-area">
+            <input type="text" id="user-input" placeholder="Digite sua mensagem...">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+ 
+
             <div class="mini-produto">
                 <div class="selo-promocao">🔥 Super Oferta</div>
                 <img src="imagens/fone.jpg" alt="Fone Bluetooth Fuxi H3">
@@ -157,37 +169,6 @@
         <p>🔗 LinkedIn: <a href="https://www.linkedin.com/in/rafael-elias-ioppi/" target="_blank" class="externo">linkedin.com/in/rafael-elias-ioppi</a></p>
     </footer>
 
-    <!-- JavaScript para dropdown funcionar no mobile -->
-   <script>
-  // Seleciona todos os links que têm submenu
-   document.querySelectorAll('.menu li > a').forEach(link => {
-    link.addEventListener('click', function(e) {
-      const submenu = this.nextElementSibling;
-      if (submenu && submenu.tagName === 'UL') {
-        e.preventDefault();
-
-        // Fecha todos os outros submenus abertos
-        document.querySelectorAll('.menu li.open').forEach(item => {
-          if (item !== this.parentElement) {
-            item.classList.remove('open');
-          }
-        });
-
-        // Alterna o submenu clicado (abre ou fecha)
-        this.parentElement.classList.toggle('open');
-      }
-    });
-  });
-  // Fecha o submenu se clicar fora do menu no mobile
-  document.addEventListener('click', function(e) {
-    const isClickInsideMenu = e.target.closest('.menu');
-    if (!isClickInsideMenu) {
-      document.querySelectorAll('.menu li.open').forEach(item => {
-        item.classList.remove('open');
-      });
-    }
-  });
-   </script>
-   <script src="script.js"></script>
+  
 </body>
 </html>
