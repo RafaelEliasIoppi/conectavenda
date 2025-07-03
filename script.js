@@ -74,7 +74,7 @@
   document.getElementById("user-input").value = "";
 
   try {
-    const response = await fetch("/chat", {
+    const response = await fetch("https://authentic-adaptation-production-dbe7.up.railway.app/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: input })
@@ -87,5 +87,6 @@
     chatBox.innerHTML += `<p><strong>Erro:</strong> Não foi possível se conectar ao servidor.</p>`;
   }
 }
+
 
 
