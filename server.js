@@ -4,61 +4,61 @@ const dotenv = require("dotenv");
 const path = require("path");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
+// 🔐 Carrega variáveis do .env
 dotenv.config();
 
-// --- Verificação Crítica da Chave da API ---
-if (!process.env.GEMINI_API_KEY) {
-  console.error("❌ ERRO: A variável de ambiente GEMINI_API_KEY não foi definida.");
-  console.error("Verifique se você criou um arquivo .env e adicionou sua chave.");
-  process.exit(1); // Impede o servidor de iniciar sem a chave
+// 🔑 Verifica a chave da API
+const apiKey = process.env.GEMINI_API_KEY;
+if (!apiKey) {
+  console.error("❌ ERRO: A variável GEMINI_API_KEY não foi definida no .env.");
+  process.exit(1);
 }
 
+// 🚀 Inicializa a IA do Gemini
+const genAI = new GoogleGenerativeAI(apiKey);
 const app = express();
-const port = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 
-app.use(cors()); 
-app.options("*", cors());
+// 🧱 Middlewares
+app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use(express.static(path.resolve(__dirname)));
 
-// Página principal
+// 🌐 Página inicial
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+  res.sendFile(path.resolve(__dirname, "index.html"));
 });
 
-// ✅ Rota GET opcional para teste direto via navegador
+// 🩺 Rota de teste
 app.get("/chat", (req, res) => {
-  res.send("🧠 Endpoint de chat ativo! Envie mensagens com POST.");
+  res.send("🧠 Endpoint de chat ativo! Envie mensagens usando POST.");
 });
 
-// Inicializa a IA Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-// Rota de chat (POST)
+// 💬 Rota principal para interação com Gemini
 app.post("/chat", async (req, res) => {
   const { message } = req.body;
 
-  if (!message || message.trim() === "") {
-    return res.status(400).json({ reply: "❗ Mensagem vazia. Digite algo antes de enviar." });
+  if (!message || typeof message !== "string" || message.trim() === "") {
+    return res.status(400).json({
+      reply: "⚠️ Mensagem inválida. Envie um texto válido.",
+    });
   }
 
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const result = await model.generateContent(message);
-    const response = await result.response;
-    const text = response.text();
-
+    const result = await model.generateContent(message.trim());
+    const text = result.response.text();
     res.json({ reply: text });
-
-  } catch (err) {
-    console.error("Erro na chamada para a API Gemini:", err);
+  } catch (error) {
+    console.error("❌ Erro ao gerar conteúdo:", error.message);
     res.status(500).json({
-      reply: "❌ Ocorreu um erro ao se comunicar com a API Gemini. Verifique os logs do servidor.",
+      reply: "Erro ao tentar processar a mensagem. Verifique o console do servidor.",
     });
   }
 });
 
-// Inicia o servidor
-app.listen(port, "0.0.0.0", () => {
-  console.log(`✅ Servidor rodando na porta ${port}`);
+// 🟢 Inicializa o servidor
+// 🟢 Inicializa o servidor
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Servidor rodando em https://rafael-production.up.railway.app:${PORT}`);
 });

@@ -91,7 +91,7 @@ async function sendMessage() {
   chatBox.scrollTop = chatBox.scrollHeight;
 
   try {
-    const response = await fetch("https://authentic-adaptation-production-c12e.up.railway.app/chat", {
+    const response = await fetch("https://rafael-production.up.railway.app/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
