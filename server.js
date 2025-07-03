@@ -8,17 +8,11 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 dotenv.config();
 
 const app = express();
-// 🚀 Use a porta que o Railway define via variável de ambiente
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
-});
 
 // Middleware padrão
 app.use(cors());
 app.use(express.json());
-
-// Serve arquivos estáticos da pasta atual (HTML, CSS, JS)
 app.use(express.static(__dirname));
 
 // Página principal
@@ -26,10 +20,10 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// Inicializa a IA do Gemini com a chave da API
+// Inicializa Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Rota de chat para receber a mensagem e gerar a resposta
+// Rota de chat
 app.post("/chat", async (req, res) => {
   const { message } = req.body;
 
@@ -37,7 +31,6 @@ app.post("/chat", async (req, res) => {
     return res.status(400).json({ reply: "❗ Mensagem vazia. Digite algo antes de enviar." });
   }
 
-  
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(message);
@@ -55,7 +48,7 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-// Inicia o servidor
+// 🚀 Inicia o servidor (somente 1 vez)
 app.listen(port, () => {
   console.log(`✅ Servidor rodando na porta ${port}`);
 });
