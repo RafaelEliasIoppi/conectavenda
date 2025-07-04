@@ -161,44 +161,63 @@
                 <p>Acesse aqui o site  do <a href="https://www.fgf.com.br/" target="_blank" class="externo">Campeonato Gaúcho</a> para conhecer mais sobre um dos mais tradicionais campeonatos estaduais do Brasil.</p>
             </aside>
             <p>Então é isso! Espero que você tenha gostado do nosso artigo com essa curiosidade sobre o nosso campeonato de futebol estadual.</p>
-            <div class="coords" id="resultado">
-  
-        <div id="map">🗺️ Carregando mapa...</div>
-
-    <!-- LeafletJS (CDN) -->
+           <!-- LeafletJS (CDN) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Div do mapa -->
+    <div id="map" style="height: 300px; width: 100%; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 12px;">
+    🗺️ Carregando mapa...
+    </div>
+
+    <!-- Botão para abrir o Google Maps -->
+    <button onclick="abrirNoGoogleMaps()">📍 Ver no Google Maps</button>
+
     <script>
-        window.addEventListener("load", () => {
-            const container = document.getElementById("map");
+    let latitude, longitude;
 
-            if (!navigator.geolocation) {
-            container.textContent = "❌ Geolocalização não é suportada neste navegador.";
-            return;
-            }
+    window.addEventListener("load", () => {
+        const container = document.getElementById("map");
 
-            navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
+        if (!navigator.geolocation) {
+        container.textContent = "❌ Geolocalização não é suportada neste navegador.";
+        return;
+        }
 
-                // Inicializa o mapa e posiciona com base na localização
-                const mapa = L.map("map").setView([latitude, longitude], 15);
+        navigator.geolocation.getCurrentPosition(
+        (position) => {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
 
-                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: "Map data © OpenStreetMap contributors"
-                }).addTo(mapa);
+            // Inicializa o mapa e posiciona com base na localização
+            const mapa = L.map("map").setView([latitude, longitude], 15);
 
-                L.marker([latitude, longitude])
-                .addTo(mapa)
-                .bindPopup("📍 Você está aqui!")
-                .openPopup();
-            },
-            (erro) => {
-                container.textContent = `❌ Erro ao obter localização: ${erro.message}`;
-            }
-            );
-        });
-    </script>
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "Map data © OpenStreetMap contributors"
+            }).addTo(mapa);
+
+            L.marker([latitude, longitude])
+            .addTo(mapa)
+            .bindPopup("📍 Você está aqui!")
+            .openPopup();
+        },
+        (erro) => {
+            container.textContent = `❌ Erro ao obter localização: ${erro.message}`;
+        }
+        );
+    });
+
+    function abrirNoGoogleMaps() {
+        if (latitude && longitude) {
+        const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+        window.open(url, "_blank");
+        } else {
+        alert("⚠️ A localização ainda não foi carregada.");
+        }
+    }
+    </script>    
+
+ 
     </article>
     </main>
    <footer>
