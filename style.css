@@ -533,6 +533,15 @@ div.video > iframe {
   }
 }
 
+#map {
+  height: 300px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 20px;
+  overflow: hidden; /* 👈 isso impede a barra de rolagem interna */
+}
+
 
 
 aside {

@@ -118,21 +118,20 @@
             </div>
 
         <!-- Elfsight AI Chatbot | Untitled AI Chatbot -->
-        <div id="chat-container">
-            <div id="chat-box"></div>
+            <div id="chat-container">
+                <div id="chat-box"></div>
 
-            <div id="chat-input-area">
-                <input type="text" id="user-input" placeholder="Digite sua mensagem..." />
-                <button onclick="sendMessage()">Enviar</button>
+                <div id="chat-input-area">
+                    <input type="text" id="user-input" placeholder="Digite sua mensagem..." />
+                    <button onclick="sendMessage()">Enviar</button>
+                </div>
             </div>
-        </div>
-
-      <div class="mini-produto">
-            <div class="selo-promocao">🔥 Super Oferta</div>
-                <img src="imagens/fone.jpg" alt="Fone Bluetooth Fuxi H3">
-                <p><strong>Click no link abaixo para comprar<strong></p>
-            </div>        
-        </div>
+            <div class="mini-produto">
+                    <div class="selo-promocao">🔥 Super Oferta</div>
+                        <img src="imagens/fone.jpg" alt="Fone Bluetooth Fuxi H3">
+                        <p><strong>Click no link abaixo para comprar<strong></p>
+                    </div>        
+            </div>
 
             <div class="botao-container">
                 <a href="https://www.amazon.com.br/dp/B0CHJXCJTW?tag=rafaelioppi-20" class="botao-link" target="_blank">
@@ -162,7 +161,45 @@
                 <p>Acesse aqui o site  do <a href="https://www.fgf.com.br/" target="_blank" class="externo">Campeonato Gaúcho</a> para conhecer mais sobre um dos mais tradicionais campeonatos estaduais do Brasil.</p>
             </aside>
             <p>Então é isso! Espero que você tenha gostado do nosso artigo com essa curiosidade sobre o nosso campeonato de futebol estadual.</p>
-        </article>
+            <div class="coords" id="resultado">
+  
+        <div id="map">🗺️ Carregando mapa...</div>
+
+    <!-- LeafletJS (CDN) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        window.addEventListener("load", () => {
+            const container = document.getElementById("map");
+
+            if (!navigator.geolocation) {
+            container.textContent = "❌ Geolocalização não é suportada neste navegador.";
+            return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+
+                // Inicializa o mapa e posiciona com base na localização
+                const mapa = L.map("map").setView([latitude, longitude], 15);
+
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                attribution: "Map data © OpenStreetMap contributors"
+                }).addTo(mapa);
+
+                L.marker([latitude, longitude])
+                .addTo(mapa)
+                .bindPopup("📍 Você está aqui!")
+                .openPopup();
+            },
+            (erro) => {
+                container.textContent = `❌ Erro ao obter localização: ${erro.message}`;
+            }
+            );
+        });
+    </script>
+    </article>
     </main>
    <footer>
         <p>Desenvolvido por <strong>Rafael Elias Ioppi</strong></p>
