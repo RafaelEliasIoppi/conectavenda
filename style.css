@@ -207,6 +207,7 @@ nav .menu li > a:hover {
   color: #fff !important;
 }
 
+
 #chat-container {
     background-color: white;
     border: 2px solid var(--cor3);
@@ -595,6 +596,40 @@ footer p:hover {
     color: #ffd700; /* muda a cor do texto ao passar o mouse */
 }
 
+ #container-mensagens {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
 
+.mensagem-compra {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: aparecer 0.5s forwards, desaparecer 0.5s forwards 4s;
+}
 
+@keyframes aparecer {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+@keyframes desaparecer {
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}

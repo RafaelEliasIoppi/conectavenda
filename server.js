@@ -58,7 +58,6 @@ app.post("/chat", async (req, res) => {
 });
 
 // 🟢 Inicializa o servidor
-// 🟢 Inicializa o servidor
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Servidor rodando em https://rafael-production.up.railway.app:${PORT}`);
 });

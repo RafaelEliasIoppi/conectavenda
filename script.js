@@ -114,3 +114,38 @@ async function sendMessage() {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+const nomes = [
+  "Ana", "Carlos", "Fernanda", "João", "Mariana",
+  "Lucas", "Patrícia", "Rafael", "Juliana", "Eduardo"
+];
+
+const produtos = [
+  "Tênis Esportivo", "Fone Bluetooth", "Relógio Smart",
+  "Camiseta Dry Fit", "Notebook Gamer", "Livro de Ficção",
+  "Cadeira Ergonômica", "Mouse Sem Fio", "Garrafa Térmica",
+  "Mochila Executiva"
+];
+
+function criarMensagemCompra() {
+  const container = document.getElementById('container-mensagens');
+
+  const nome = nomes[Math.floor(Math.random() * nomes.length)];
+  const produto = produtos[Math.floor(Math.random() * produtos.length)];
+
+  const div = document.createElement('div');
+  div.className = 'mensagem-compra';
+  div.textContent = `🛍️ ${nome} acabou de comprar: ${produto}!`;
+
+  container.appendChild(div);
+
+  // Remove a mensagem após 5 segundos
+  setTimeout(() => {
+    container.removeChild(div);
+  }, 5000);
+}
+
+// Primeira exibição
+criarMensagemCompra();
+
+// Repetir a cada 10 segundos
+setInterval(criarMensagemCompra, 10000);
