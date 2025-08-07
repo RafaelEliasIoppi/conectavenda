@@ -21,7 +21,7 @@
 <div id="notificacao-compra" class="notificacao-compra"></div>
 
 <body>
-
+  
   <main class="container">
     <!-- Cabeçalho de Oferta -->
     <header class="hero">
@@ -61,7 +61,7 @@
         </a>
       </article>
 
-      <article class="produto-card">
+     <article class="produto-card">
         <div class="selo-promocao">🔥 Super Oferta</div>
         <img src="imagens/creatina.jpg" alt="Creatina" />
         <h2 class="produto-titulo">Creatina Pura Dark Lab 500g, Monohidratada 100% de Pureza. Sem sabor</h2>
@@ -75,77 +75,79 @@
 
     <!-- Botão WhatsApp -->
    <footer class="footer-ajuda">
-    <a href="https://wa.me/5551983098650" class="botao-link whatsapp" target="_blank">
-      📲 Precisa de Ajuda? Fale comigo no WhatsApp
-    </a>
-    <p>💻 Site desenvolvido por <strong>Rafael Elias Ioppi</strong></p>
-    <p>© 2025 Todos os direitos reservados</p>
-    <p><a href="/politica-de-privacidade.html">🔒 Política de Privacidade</a></p>
-</footer>
+      <a href="https://wa.me/5551983098650" class="botao-link whatsapp" target="_blank">
+        📲 Precisa de Ajuda? Fale comigo no WhatsApp
+      </a>
+      <p>💻 Site desenvolvido por <strong>Rafael Elias Ioppi</strong></p>
+      <p>© 2025 Todos os direitos reservados</p>
+      <p><a href="/politica-de-privacidade.html">🔒 Política de Privacidade</a></p>
+    </footer>
 
-  </main>
+ </main>
 
-  <!-- Scripts JS -->
-  <script>
-  // Fade-in ao carregar
-  window.addEventListener('DOMContentLoaded', () => {
-    const hero = document.querySelector('.hero');
-    hero.classList.add('visible');
-  });
-
-  // Efeito de digitação no título
-  const titulo = document.getElementById('titulo-oferta');
-  const textoOriginal = titulo.textContent;
-  titulo.textContent = '';
-  let i = 0;
-
-  function digitarTitulo() {
-    if (i < textoOriginal.length) {
-      titulo.textContent += textoOriginal.charAt(i);
-      i++;
-      setTimeout(digitarTitulo, 80);
-    }
-  }
-
-  digitarTitulo();
-
-  // Parallax constante no scroll
-  window.addEventListener('scroll', () => {
-    const hero = document.querySelector('.hero');
-    const scrollY = window.scrollY;
-    const translateY = scrollY * 0.2;
-
-    // Aplica apenas o translateY sem sobrescrever outras transformações
-    hero.style.setProperty('--hero-offset', `${translateY}px`);
-  });
-
-    const nomes = ["João", "Maria", "Carlos", "Fernanda", "Rafael", "Juliana", "Lucas", "Patrícia"];
-    const cidades = ["SP", "RJ", "BH", "POA", "Curitiba", "Salvador"];
-    const produtos = ["Grill Elétrico", "Fone Bluetooth", "Smartwatch", "Air Fryer", "Teclado Gamer", "Echo Dot"];
-
-    const caixa = document.getElementById("notificacao-compra");
-
-    function mostrarNotificacao() {
-      const nome = nomes[Math.floor(Math.random() * nomes.length)];
-      const cidade = cidades[Math.floor(Math.random() * cidades.length)];
-      const produto = produtos[Math.floor(Math.random() * produtos.length)];
-
-      caixa.textContent = `${nome} de ${cidade} acabou de comprar um ${produto}!`;
-
-      // Reinicia a animação
-      caixa.style.animation = "none";
-      void caixa.offsetWidth; // força reflow
-      caixa.style.animation = "slideFadeInOut 6s ease-in-out";
-
-    }
-
-    // Dispara a cada 30 segundos
-    setInterval(mostrarNotificacao, 30000);
-
-    // Dispara uma logo ao carregar
-    setTimeout(mostrarNotificacao, 5000)
-</script>
-
-
+ 
+  <div class="aviso-seguro">
+    🔒 Você está em um ambiente seguro. Suas informações estão protegidas.
+  </div>
 </body>
+
+<script>
+  // Fade-in ao carregar
+    window.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero');
+      hero.classList.add('visible');
+    });
+
+    // Efeito de digitação no título
+    const titulo = document.getElementById('titulo-oferta');
+    const textoOriginal = titulo.textContent;
+    titulo.textContent = '';
+    let i = 0;
+
+    function digitarTitulo() {
+      if (i < textoOriginal.length) {
+        titulo.textContent += textoOriginal.charAt(i);
+        i++;
+        setTimeout(digitarTitulo, 80);
+      }
+    }
+
+    digitarTitulo();
+
+    // Parallax constante no scroll
+    window.addEventListener('scroll', () => {
+      const hero = document.querySelector('.hero');
+      const scrollY = window.scrollY;
+      const translateY = scrollY * 0.2;
+
+      // Aplica apenas o translateY sem sobrescrever outras transformações
+      hero.style.setProperty('--hero-offset', `${translateY}px`);
+    });
+
+      const nomes = ["João", "Maria", "Carlos", "Fernanda", "Rafael", "Juliana", "Lucas", "Patrícia"];
+      const cidades = ["SP", "RJ", "BH", "POA", "Curitiba", "Salvador"];
+      const produtos = ["Grill Elétrico", "Fone Bluetooth", "Smartwatch", "Air Fryer", "Teclado Gamer", "Echo Dot"];
+
+      const caixa = document.getElementById("notificacao-compra");
+
+      function mostrarNotificacao() {
+        const nome = nomes[Math.floor(Math.random() * nomes.length)];
+        const cidade = cidades[Math.floor(Math.random() * cidades.length)];
+        const produto = produtos[Math.floor(Math.random() * produtos.length)];
+
+        caixa.textContent = `${nome} de ${cidade} acabou de comprar um ${produto}!`;
+
+        // Reinicia a animação
+        caixa.style.animation = "none";
+        void caixa.offsetWidth; // força reflow
+        caixa.style.animation = "slideFadeInOut 6s ease-in-out";
+
+      }
+
+      // Dispara a cada 30 segundos
+      setInterval(mostrarNotificacao, 30000);
+
+      // Dispara uma logo ao carregar
+      setTimeout(mostrarNotificacao, 5000)
+  </script>
 </html>
