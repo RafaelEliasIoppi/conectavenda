@@ -242,7 +242,7 @@ body {
     align-items: center;
   }
    .hero {
-    position: flex;
+    position: sticky;
     top: auto;
   }
 
