@@ -290,13 +290,17 @@ main {
   background-color: #004d40;
   color: #ffffff;
   text-align: center;
-  padding: 10px 0;
-  font-size: 0.95rem;
-  font-weight: 500;
+  padding: 10px 16px;
+  font-size: 1rem;
   z-index: 9000;
-  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s ease-in-out;
+  transform: translateX(0); /* visível */
+  box-sizing: border-box;
 }
 
+.aviso-seguro.esconder {
+  transform: translateX(-100%); /* desliza para fora */
+}
 
 
 
@@ -340,9 +344,8 @@ main {
   }
 
   .aviso-seguro {
-    font-size: 0.85rem;
-    padding: 8px 12px;
-    text-align: center;
+    font-size: 0.75rem;
+    padding: 6px 10px;
   }
 }
 
