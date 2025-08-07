@@ -111,6 +111,7 @@ body {
   margin-bottom: 40px;
 }
 
+
 /* Card de Produto */
 .produto-card {
   width: 100%;
@@ -242,8 +243,8 @@ body {
   }
 
   .produto-card {
-    max-width: 100%;
     width: 100%;
+    max-width: 320px;
     margin: 0 auto 24px;
   }
 }
