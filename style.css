@@ -32,7 +32,6 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-
 .container {
   max-width: 1200px;
   margin: auto;
@@ -58,7 +57,6 @@ body {
   transition: background 0.4s ease, box-shadow 0.4s ease, opacity 1s ease, transform 1s ease;
   overflow: hidden;
   opacity: 0;
-  
   transform: translateY(var(--hero-offset, 0));
 }
 
@@ -68,27 +66,16 @@ body {
   inset: 0;
   z-index: -1;
   border-radius: 16px;
-  background: linear-gradient(135deg,
-    #063D1E,
-    #69B8A5,
-    #25D366,
-    #063D1E);
+  background: linear-gradient(135deg, #063D1E, #69B8A5, #25D366, #063D1E);
   background-size: 400% 400%;
   animation: animarGradienteHero 15s ease infinite;
 }
 
 @keyframes animarGradienteHero {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
-
 
 .hero.visible {
   opacity: 1;
@@ -98,7 +85,6 @@ body {
 .hero:hover {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
 }
-
 
 .titulo-oferta {
   font-size: clamp(2.5rem, 5vw, 3rem);
@@ -119,15 +105,16 @@ body {
 /* Grid de Produtos */
 .grid-produtos {
   display: flex;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  flex-wrap: wrap;
   gap: 24px;
   justify-content: center;
-  justify-items: center;
   margin-bottom: 40px;
 }
 
+/* Card de Produto */
 .produto-card {
-  width: 400px;
+  width: 100%;
+  max-width: 320px;
   min-height: 420px;
   display: flex;
   flex-direction: column;
@@ -139,22 +126,15 @@ body {
   text-align: center;
   padding: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 24px;
 }
-
-@media (max-width: 768px) {
-  .produto-card {
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto 24px;
-  }
-}
-
 
 .produto-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
 }
 
+/* Imagem do Produto */
 .produto-card img {
   width: 100%;
   height: 180px;
@@ -163,27 +143,40 @@ body {
   margin-bottom: 16px;
 }
 
-
+/* Título do Produto */
 .produto-titulo {
   font-size: 1.1rem;
   margin-bottom: 16px;
   color: var(--cor-principal);
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
+/* Selo de Promoção */
 .selo-promocao {
   position: absolute;
-  top: 16px;
-  right: -4px;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(0deg);
   background: #d10000;
   color: white;
-  padding: 6px 12px;
+  padding: 6px 14px;
   font-size: 0.9rem;
   font-weight: bold;
-  border-radius: 4px;
-  transform: rotate(10deg);
+  border-radius: 20px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  box-shadow: 0 0 10px rgba(209, 0, 0, 0.4);
+  z-index: 1;
+  white-space: nowrap;
+  animation: pulsar 1.5s ease-in-out infinite;
 }
+
+
+
 
 /* Botões */
 .botao-link {
@@ -220,14 +213,10 @@ body {
   padding: 20px;
 }
 
-/* Animação de gradiente */
+/* Animações */
 @keyframes animarGradiente {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 @keyframes pulsar {
@@ -245,20 +234,16 @@ body {
   }
 }
 
-.selo-promocao {
-  position: absolute;
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #d10000;
-  color: white;
-  padding: 6px 14px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  border-radius: 20px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 0 10px rgba(209, 0, 0, 0.4);
-  z-index: 1;
-  animation: pulsar 1.5s ease-in-out infinite;
+/* Responsividade */
+@media (max-width: 768px) {
+  .grid-produtos {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .produto-card {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto 24px;
+  }
 }
