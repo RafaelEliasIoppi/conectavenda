@@ -18,6 +18,8 @@
     }
   </style>
 </head>
+<div id="notificacao-compra" class="notificacao-compra"></div>
+
 <body>
 
   <main class="container">
@@ -116,6 +118,32 @@
     // Aplica apenas o translateY sem sobrescrever outras transformações
     hero.style.setProperty('--hero-offset', `${translateY}px`);
   });
+
+    const nomes = ["João", "Maria", "Carlos", "Fernanda", "Rafael", "Juliana", "Lucas", "Patrícia"];
+    const cidades = ["SP", "RJ", "BH", "POA", "Curitiba", "Salvador"];
+    const produtos = ["Grill Elétrico", "Fone Bluetooth", "Smartwatch", "Air Fryer", "Teclado Gamer", "Echo Dot"];
+
+    const caixa = document.getElementById("notificacao-compra");
+
+    function mostrarNotificacao() {
+      const nome = nomes[Math.floor(Math.random() * nomes.length)];
+      const cidade = cidades[Math.floor(Math.random() * cidades.length)];
+      const produto = produtos[Math.floor(Math.random() * produtos.length)];
+
+      caixa.textContent = `${nome} de ${cidade} acabou de comprar um ${produto}!`;
+
+      // Reinicia a animação
+      caixa.style.animation = "none";
+      void caixa.offsetWidth; // força reflow
+      caixa.style.animation = "slideFadeInOut 6s ease-in-out";
+
+    }
+
+    // Dispara a cada 30 segundos
+    setInterval(mostrarNotificacao, 30000);
+
+    // Dispara uma logo ao carregar
+    setTimeout(mostrarNotificacao, 5000)
 </script>
 
 

@@ -243,6 +243,45 @@ main {
 .footer-ajuda a:hover {
   color: #005fa3;
 }
+.notificacao-compra {
+  position: fixed;
+  bottom: 20px;
+  left: -100%;
+  background-color: #333333; /* fundo escuro */
+  color: #f9f9f9;             /* texto claro */
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 9999;
+}
+
+
+   @keyframes slideFadeInOut {
+  0% {
+    left: -100%;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  10% {
+    left: 20px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    left: 20px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    left: -100%;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
 
 
 
