@@ -298,7 +298,7 @@ main {
   box-sizing: border-box;
 }
 
-.aviso-seguro.esconder {
+.notificacao-compra.esconder {
   transform: translateX(-100%); /* desliza para fora */
 }
 
