@@ -5,13 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ofertas Especiais</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .hero {
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .hero.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
 
   <main class="container">
     <!-- Cabeçalho de Oferta -->
     <header class="hero">
-      <h1 class="titulo-oferta">💥 Ofertas Imperdíveis para Todos!</h1>
+      <h1 id="titulo-oferta">💥 Ofertas Imperdíveis para Todos!</h1>
       <p class="subtitulo-oferta">Descontos exclusivos por tempo limitado — confira agora!</p>
     </header>
 
@@ -45,6 +57,42 @@
       </a>
     </footer>
   </main>
+
+  <!-- Scripts JS -->
+  <script>
+  // Fade-in ao carregar
+  window.addEventListener('DOMContentLoaded', () => {
+    const hero = document.querySelector('.hero');
+    hero.classList.add('visible');
+  });
+
+  // Efeito de digitação no título
+  const titulo = document.getElementById('titulo-oferta');
+  const textoOriginal = titulo.textContent;
+  titulo.textContent = '';
+  let i = 0;
+
+  function digitarTitulo() {
+    if (i < textoOriginal.length) {
+      titulo.textContent += textoOriginal.charAt(i);
+      i++;
+      setTimeout(digitarTitulo, 80);
+    }
+  }
+
+  digitarTitulo();
+
+  // Parallax constante no scroll
+  window.addEventListener('scroll', () => {
+    const hero = document.querySelector('.hero');
+    const scrollY = window.scrollY;
+    const translateY = scrollY * 0.2;
+
+    // Aplica apenas o translateY sem sobrescrever outras transformações
+    hero.style.setProperty('--hero-offset', `${translateY}px`);
+  });
+</script>
+
 
 </body>
 </html>

@@ -19,40 +19,86 @@
 }
 
 body {
-  background: var(--cor-fundo);
+  background: linear-gradient(-45deg, #f7f9fa, #dff3ec, #cceae1, #f7f9fa);
+  background-size: 400% 400%;
+  animation: fundoAnimado 15s ease infinite;
   font-family: var(--font-padrao);
   color: var(--cor-principal);
 }
 
+@keyframes fundoAnimado {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
 .container {
   max-width: 1200px;
   margin: auto;
-  padding: 20px;
+  padding: 20px 16px;
 }
 
 /* Cabeçalho com gradiente animado */
 .hero {
-  background: linear-gradient(135deg, rgba(6, 61, 30, 0.8), rgba(105, 184, 165, 0.8));
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--branco);
-  padding: 40px 30px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 50px 30px;
+  margin-bottom: 40px;
   text-align: center;
   font-family: var(--font-titulo);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  color: var(--branco);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   position: sticky;
   top: 0;
   z-index: 1000;
-  transition: background 0.4s ease, box-shadow 0.4s ease;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  animation: animarGradiente 10s ease infinite;
-  background-size: 300% 300%;
+  transition: background 0.4s ease, box-shadow 0.4s ease, opacity 1s ease, transform 1s ease;
+  overflow: hidden;
+  opacity: 0;
+  
+  transform: translateY(var(--hero-offset, 0));
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 16px;
+  background: linear-gradient(135deg,
+    #063D1E,
+    #69B8A5,
+    #25D366,
+    #063D1E);
+  background-size: 400% 400%;
+  animation: animarGradienteHero 15s ease infinite;
+}
+
+@keyframes animarGradienteHero {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+.hero.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .hero:hover {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(135deg, rgba(9, 85, 40, 0.9), rgba(89, 204, 177, 0.9));
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
 }
+
 
 .titulo-oferta {
   font-size: clamp(2.5rem, 5vw, 3rem);
@@ -89,6 +135,7 @@ body {
   text-align: center;
   padding: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
 }
 
 .produto-card:hover {
@@ -113,7 +160,7 @@ body {
   position: absolute;
   top: 16px;
   right: -4px;
-  background: crimson;
+  background: #d10000;
   color: white;
   padding: 6px 12px;
   font-size: 0.9rem;
@@ -133,11 +180,14 @@ body {
   border-radius: 8px;
   text-decoration: none;
   font-weight: bold;
-  transition: background 0.3s ease, transform 0.3s ease;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .botao-link:hover {
   transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 /* Botão WhatsApp */
@@ -158,6 +208,10 @@ body {
 
 /* Animação de gradiente */
 @keyframes animarGradiente {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
