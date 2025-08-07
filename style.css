@@ -1,5 +1,3 @@
-/* style.css */
-@charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 :root {
@@ -15,7 +13,8 @@
 }
 
 * {
-  margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -31,70 +30,98 @@ body {
   padding: 20px;
 }
 
-/* Hero */
+/* Cabeçalho com gradiente animado */
 .hero {
+  background: linear-gradient(135deg, rgba(6, 61, 30, 0.8), rgba(105, 184, 165, 0.8));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--branco);
+  padding: 40px 30px;
   text-align: center;
-  padding: 40px 20px;
-  background: var(--cinza-claro);
-  border-radius: 12px;
-  margin-bottom: 40px;
-}
-.titulo-oferta {
   font-family: var(--font-titulo);
-  font-size: 3rem;
-  color: var(--cor-principal);
-  margin-bottom: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  animation: animarGradiente 10s ease infinite;
+  background-size: 300% 300%;
 }
+
+.hero:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, rgba(9, 85, 40, 0.9), rgba(89, 204, 177, 0.9));
+}
+
+.titulo-oferta {
+  font-size: clamp(2.5rem, 5vw, 3rem);
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+  letter-spacing: 2px;
+  color: var(--branco);
+}
+
 .subtitulo-oferta {
-  font-size: 1.2rem;
-  color: var(--cor-secundaria);
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  margin-top: 5px;
+  font-weight: 500;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  color: var(--branco);
 }
 
 /* Grid de Produtos */
-/* Grid de Produtos – produtos sempre centralizados */
 .grid-produtos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
-  justify-content: center;   /* centraliza as colunas na linha */
-  justify-items: center;     /* centraliza cada card dentro da célula */
+  justify-content: center;
+  justify-items: center;
   margin-bottom: 40px;
 }
 
 .produto-card {
   background: var(--branco);
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   position: relative;
   text-align: center;
   padding: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .produto-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
 }
+
 .produto-card img {
   width: 100%;
   height: auto;
   border-radius: 8px;
   margin-bottom: 16px;
 }
+
 .produto-titulo {
   font-size: 1.1rem;
   margin-bottom: 16px;
   color: var(--cor-principal);
 }
+
 .selo-promocao {
   position: absolute;
-  top: 16px; right: -4px;
+  top: 16px;
+  right: -4px;
   background: crimson;
   color: white;
   padding: 6px 12px;
   font-size: 0.9rem;
+  font-weight: bold;
   border-radius: 4px;
   transform: rotate(10deg);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Botões */
@@ -108,21 +135,29 @@ body {
   font-weight: bold;
   transition: background 0.3s ease, transform 0.3s ease;
 }
+
 .botao-link:hover {
   transform: scale(1.05);
 }
 
-/* WhatsApp */
+/* Botão WhatsApp */
 .botao-link.whatsapp {
   background: var(--cor-destaque);
-  box-shadow: 0 4px 12px rgba(37,211,102,0.4);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
 }
+
 .botao-link.whatsapp:hover {
   background: #1ebe57;
 }
 
-/* Footer Ajuda */
+/* Rodapé de Ajuda */
 .footer-ajuda {
   text-align: center;
   padding: 20px;
+}
+
+/* Animação de gradiente */
+@keyframes animarGradiente {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }

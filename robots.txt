@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://rafaeleliasioppi.github.io/rafael/sitemap.xml
+Sitemap: https://vendasonliners.netlify.app/sitemap.xml

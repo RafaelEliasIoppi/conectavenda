@@ -2,31 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://rafaeleliasioppi.github.io/rafael/</loc>
+    <loc>https://vendasonliners.netlify.app/</loc>
     <lastmod>2025-06-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <url>
-    <loc>https://rafaeleliasioppi.github.io/rafael/campeoes.html</loc>
-    <lastmod>2025-06-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://rafaeleliasioppi.github.io/rafael/classificacao.html</loc>
-    <lastmod>2025-06-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://rafaeleliasioppi.github.io/rafael/Calendário.html</loc>
-    <lastmod>2025-06-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
 
 </urlset>
