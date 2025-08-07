@@ -241,6 +241,10 @@ body {
     flex-direction: column;
     align-items: center;
   }
+   .hero {
+    position: static;
+    top: auto;
+  }
 
   .produto-card {
     width: 100%;
