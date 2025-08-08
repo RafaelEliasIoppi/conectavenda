@@ -50,9 +50,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const emailForm     = document.getElementById('email-form');
   const emailInput    = document.getElementById('email-input');
 
+  const modalKey = 'emailModalShown';
+
   if (emailModal && closeEmailBtn && emailForm && emailInput) {
-    // Exibe o modal imediatamente ao entrar na página
-    emailModal.classList.remove('hidden');
+    // Verifica se o modal já foi exibido antes
+    const hasShownModal = localStorage.getItem(modalKey);
+
+    if (!hasShownModal) {
+      emailModal.classList.remove('hidden');
+      localStorage.setItem(modalKey, 'true');
+    }
 
     closeEmailBtn.addEventListener('click', () => {
       emailModal.classList.add('hidden');
@@ -79,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Elementos do pop-up não encontrados: verifique os IDs');
   }
 });
+
 
 
   // ─── CHAT SIMULADO ───────────────────────────────────────────────
