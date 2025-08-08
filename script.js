@@ -32,12 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function mostrarNotificacao() {
     if (!caixa) return;
-    const nome    = nomes[Math.floor(Math.random()*nomes.length)];
-    const cidade  = cidades[Math.floor(Math.random()*cidades.length)];
-    const produto = produtos[Math.floor(Math.random()*produtos.length)];
+    const nome    = nomes[Math.floor(Math.random() * nomes.length)];
+    const cidade  = cidades[Math.floor(Math.random() * cidades.length)];
+    const produto = produtos[Math.floor(Math.random() * produtos.length)];
     caixa.textContent = `${nome} de ${cidade} acabou de comprar um ${produto}!`;
     caixa.style.animation = 'none';
-    void caixa.offsetWidth; // force reflow
+    void caixa.offsetWidth; // força reflow
     caixa.style.animation = 'slideFadeInOut 6s ease-in-out';
   }
 
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const emailInput    = document.getElementById('email-input');
   const modalKey      = 'emailModalShown';
 
-  if (emailModal) {
+  if (emailModal && closeEmailBtn && emailForm && emailInput) {
     function showEmailModal() {
       if (!localStorage.getItem(modalKey)) {
         emailModal.classList.remove('hidden');
@@ -68,68 +68,29 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.clientY < 10) showEmailModal();
     });
 
+    // tempo de exibição
     setTimeout(showEmailModal, 5000);
 
     emailForm.addEventListener('submit', e => {
       e.preventDefault();
       const email = emailInput.value.trim();
       if (!email) return;
+
       const coupon = 'PROMO10-' + Math.random().toString(36).substr(2, 5).toUpperCase();
       alert(`Obrigado! Seu cupom é ${coupon}`);
       emailModal.classList.add('hidden');
       localStorage.setItem(modalKey, 'true');
-      // TODO: envie email/cupom para sua API aqui
+
+      // Envia para Google Sheets via Apps Script
+      fetch('https://script.google.com/macros/s/AKfycbyVKvNGwmU77ru-6S0Boz1pOLK_VX1zCpFXyWmkQQoEQ-CfO7SvkFRAcgojOinarI3-Tw/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ email, coupon })
+      })
+      .then(() => console.log('Email enviado para o Google Sheets'))
+      .catch(err => console.error('Erro ao enviar:', err));
     });
   } else {
-    console.error('Overlay de e-mail não encontrado: verifique o ID email-modal');
-  }
-
-  // ─── WIDGET DE CHATBOT / WHATSAPP ───────────────────────────────
-  const openChat  = document.getElementById('open-chat');
-  const chatWin   = document.getElementById('chat-window');
-  const closeChat = document.getElementById('close-chat');
-  const chatBody  = document.getElementById('chat-body');
-  const chatInput = document.getElementById('chat-input');
-  const sendChat  = document.getElementById('send-chat');
-
-  if (openChat && closeChat && sendChat && chatBody) {
-    openChat.addEventListener('click',  () => chatWin.classList.remove('hidden'));
-    closeChat.addEventListener('click', () => chatWin.classList.add('hidden'));
-
-    function appendMessage(text, sender = 'bot') {
-      const div = document.createElement('div');
-      div.className = sender === 'bot' ? 'bot-message' : 'user-message';
-      div.textContent = text;
-      chatBody.appendChild(div);
-      chatBody.scrollTop = chatBody.scrollHeight;
-    }
-
-    function appendLink(text, url) {
-      const div = document.createElement('div');
-      div.className = 'bot-message';
-      div.innerHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
-      chatBody.appendChild(div);
-      chatBody.scrollTop = chatBody.scrollHeight;
-    }
-
-    sendChat.addEventListener('click', () => {
-      const msg = chatInput.value.trim();
-      if (!msg) return;
-      appendMessage(msg, 'user');
-      chatInput.value = '';
-
-      const lower = msg.toLowerCase();
-      if (lower.includes('frete') || lower.includes('entrega')) {
-        appendMessage('Qual seu CEP para calcular o frete?');
-      } else if (/promo|cupom|desconto/.test(lower)) {
-        appendMessage('Enviei um cupom de 10% para o seu e-mail. Precisa de mais ajuda?');
-      } else if (lower.includes('comprar')) {
-        appendMessage('Claro! Qual produto gostaria de comprar?');
-      } else {
-        appendMessage('Vou te conectar com nosso WhatsApp. 🙂');
-        const waLink = `https://wa.me/5551983098650?text=${encodeURIComponent('Olá, gostaria de mais informações.')}`;
-        appendLink('Clique aqui para conversar no WhatsApp', waLink);
-      }
-    });
+    console.error('Elementos do pop-up não encontrados: verifique os IDs');
   }
 });
