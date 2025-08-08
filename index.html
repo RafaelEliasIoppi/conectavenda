@@ -5,24 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ofertas Especiais</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    .hero {
-      opacity: 0;
-      transform: translateY(-20px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-
-    .hero.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  </style>
 </head>
-<div id="notificacao-compra" class="notificacao-compra"></div>
+  <div id="notificacao-compra" class="notificacao-compra"></div>
 
 <body>
   
-  <main class="container">
+ <main class="container">
     <!-- Cabeçalho de Oferta -->
     <header class="hero">
       <h1 id="titulo-oferta">💥 Ofertas Imperdíveis para Todos!</h1>
@@ -61,15 +49,15 @@
         </a>
       </article>
 
-     <article class="produto-card">
-        <div class="selo-promocao">🔥 Super Oferta</div>
-        <img src="imagens/creatina.jpg" alt="Creatina" />
-        <h2 class="produto-titulo">Creatina Pura Dark Lab 500g, Monohidratada 100% de Pureza. Sem sabor</h2>
-        <a href="https://www.amazon.com.br/Creatina-Monohidratada-Dark-Lab-Pureza/dp/B0CF71CJ2L?psc=1&linkCode=ll1&tag=rafaelioppi-20&linkId=23cd7b8a960c19d0a7d1cf2cadd4ded9&language=pt_BR&ref_=as_li_ss_tl"
-           class="botao-link" target="_blank" rel="noopener noreferrer">
-          Comprar na Amazon
-        </a>
-      </articcle>
+      <article class="produto-card">
+          <div class="selo-promocao">🔥 Super Oferta</div>
+          <img src="imagens/creatina.jpg" alt="Creatina" />
+          <h2 class="produto-titulo">Creatina Pura Dark Lab 500g, Monohidratada 100% de Pureza. Sem sabor</h2>
+          <a href="https://www.amazon.com.br/Creatina-Monohidratada-Dark-Lab-Pureza/dp/B0CF71CJ2L?psc=1&linkCode=ll1&tag=rafaelioppi-20&linkId=23cd7b8a960c19d0a7d1cf2cadd4ded9&language=pt_BR&ref_=as_li_ss_tl"
+            class="botao-link" target="_blank" rel="noopener noreferrer">
+            Comprar na Amazon
+          </a>
+      </article>
 
     </section>
 
@@ -81,73 +69,72 @@
       <p>💻 Site desenvolvido por <strong>Rafael Elias Ioppi</strong></p>
       <p>© 2025 Todos os direitos reservados</p>
       <p><a href="/politica-de-privacidade.html">🔒 Política de Privacidade</a></p>
-    </footer>
+   </footer>
 
  </main>
 
- 
-  <div class="aviso-seguro">
+ <div class="aviso-seguro">
     🔒 Você está em um ambiente seguro. Suas informações estão protegidas.
-  </div>
+ </div>
 </body>
 
-<script>
-  // Fade-in ao carregar
-    window.addEventListener('DOMContentLoaded', () => {
-      const hero = document.querySelector('.hero');
-      hero.classList.add('visible');
-    });
+  <script>
+    // Fade-in ao carregar
+      window.addEventListener('DOMContentLoaded', () => {
+        const hero = document.querySelector('.hero');
+        hero.classList.add('visible');
+      });
 
-    // Efeito de digitação no título
-    const titulo = document.getElementById('titulo-oferta');
-    const textoOriginal = titulo.textContent;
-    titulo.textContent = '';
-    let i = 0;
+      // Efeito de digitação no título
+      const titulo = document.getElementById('titulo-oferta');
+      const textoOriginal = titulo.textContent;
+      titulo.textContent = '';
+      let i = 0;
 
-    function digitarTitulo() {
-      if (i < textoOriginal.length) {
-        titulo.textContent += textoOriginal.charAt(i);
-        i++;
-        setTimeout(digitarTitulo, 80);
-      }
-    }
-
-    digitarTitulo();
-
-    // Parallax constante no scroll
-    window.addEventListener('scroll', () => {
-      const hero = document.querySelector('.hero');
-      const scrollY = window.scrollY;
-      const translateY = scrollY * 0.2;
-
-      // Aplica apenas o translateY sem sobrescrever outras transformações
-      hero.style.setProperty('--hero-offset', `${translateY}px`);
-    });
-
-      const nomes = ["João", "Maria", "Carlos", "Fernanda", "Rafael", "Juliana", "Lucas", "Patrícia"];
-      const cidades = ["SP", "RJ", "BH", "POA", "Curitiba", "Salvador"];
-      const produtos = ["Grill Elétrico", "Fone Bluetooth", "Smartwatch", "Air Fryer", "Teclado Gamer", "Echo Dot"];
-
-      const caixa = document.getElementById("notificacao-compra");
-
-      function mostrarNotificacao() {
-        const nome = nomes[Math.floor(Math.random() * nomes.length)];
-        const cidade = cidades[Math.floor(Math.random() * cidades.length)];
-        const produto = produtos[Math.floor(Math.random() * produtos.length)];
-
-        caixa.textContent = `${nome} de ${cidade} acabou de comprar um ${produto}!`;
-
-        // Reinicia a animação
-        caixa.style.animation = "none";
-        void caixa.offsetWidth; // força reflow
-        caixa.style.animation = "slideFadeInOut 6s ease-in-out";
-
+      function digitarTitulo() {
+        if (i < textoOriginal.length) {
+          titulo.textContent += textoOriginal.charAt(i);
+          i++;
+          setTimeout(digitarTitulo, 80);
+        }
       }
 
-      // Dispara a cada 30 segundos
-      setInterval(mostrarNotificacao, 30000);
+      digitarTitulo();
 
-      // Dispara uma logo ao carregar
-      setTimeout(mostrarNotificacao, 5000)
+      // Parallax constante no scroll
+      window.addEventListener('scroll', () => {
+        const hero = document.querySelector('.hero');
+        const scrollY = window.scrollY;
+        const translateY = scrollY * 0.2;
+
+        // Aplica apenas o translateY sem sobrescrever outras transformações
+        hero.style.setProperty('--hero-offset', `${translateY}px`);
+      });
+
+        const nomes = ["João", "Maria", "Carlos", "Fernanda", "Rafael", "Juliana", "Lucas", "Patrícia"];
+        const cidades = ["SP", "RJ", "BH", "POA", "Curitiba", "Salvador"];
+        const produtos = ["Grill Elétrico", "Fone Bluetooth", "Smartwatch", "Air Fryer", "Teclado Gamer", "Echo Dot"];
+
+        const caixa = document.getElementById("notificacao-compra");
+
+        function mostrarNotificacao() {
+          const nome = nomes[Math.floor(Math.random() * nomes.length)];
+          const cidade = cidades[Math.floor(Math.random() * cidades.length)];
+          const produto = produtos[Math.floor(Math.random() * produtos.length)];
+
+          caixa.textContent = `${nome} de ${cidade} acabou de comprar um ${produto}!`;
+
+          // Reinicia a animação
+          caixa.style.animation = "none";
+          void caixa.offsetWidth; // força reflow
+          caixa.style.animation = "slideFadeInOut 6s ease-in-out";
+
+        }
+
+        // Dispara a cada 30 segundos
+        setInterval(mostrarNotificacao, 30000);
+
+        // Dispara uma logo ao carregar
+        setTimeout(mostrarNotificacao, 5000)
   </script>
 </html>
