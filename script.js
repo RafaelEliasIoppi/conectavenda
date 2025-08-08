@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const hero = document.querySelector('.hero');
   if (hero) {
     hero.classList.add('visible');
-
     window.addEventListener('scroll', () => {
       const offset = window.scrollY * 0.2;
       hero.style.setProperty('--hero-offset', `${offset}px`);
@@ -44,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(mostrarNotificacao, 5000);
   setInterval(mostrarNotificacao, 30000);
 
-document.addEventListener('DOMContentLoaded', () => {
+  // ─── POP-UP DE E-MAIL ────────────────────────────────────────────
   const emailModal    = document.getElementById('email-modal');
   const closeEmailBtn = document.getElementById('close-email-modal');
   const emailForm     = document.getElementById('email-form');
@@ -53,13 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalKey = 'emailModalShown';
 
   if (emailModal && closeEmailBtn && emailForm && emailInput) {
-    // Verifica se o modal já foi exibido antes
-    const hasShownModal = localStorage.getItem(modalKey);
-
-    if (!hasShownModal) {
-      emailModal.classList.remove('hidden');
-      localStorage.setItem(modalKey, 'true');
-    }
+     emailModal.classList.remove("hidden"); 
 
     closeEmailBtn.addEventListener('click', () => {
       emailModal.classList.add('hidden');
@@ -74,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert(`Obrigado! Seu cupom é ${coupon}`);
       emailModal.classList.add('hidden');
 
-      fetch('https://script.google.com/macros/s/AKfycbwQNTPIMzEbp4FxLJtCgwO7Ktdkf5kGCWYY-n-2O1n4cJTloUQEOU5qkrl_mnzmgbZp/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbw1Mkd4aRbtFnDncnXvkBDdYsaMpO2Gg374xoFwOFRWzdoKpD2_ePnzgYqtN74BKm-_Gg/exec', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ email, coupon })
@@ -83,11 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(err => console.error('Erro ao enviar:', err));
     });
   } else {
-    console.error('Elementos do pop-up não encontrados: verifique os IDs');
+    console.error('Elementos do pop-up não encontrados: verifique se os IDs estão corretos.');
   }
-});
-
-
 
   // ─── CHAT SIMULADO ───────────────────────────────────────────────
   const openChatBtn  = document.getElementById('open-chat');
