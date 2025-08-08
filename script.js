@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem(modalKey, 'true');
 
       // Envia para Google Sheets via Apps Script
-      fetch('https://script.google.com/macros/s/AKfycbyVKvNGwmU77ru-6S0Boz1pOLK_VX1zCpFXyWmkQQoEQ-CfO7SvkFRAcgojOinarI3-Tw/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbwQNTPIMzEbp4FxLJtCgwO7Ktdkf5kGCWYY-n-2O1n4cJTloUQEOU5qkrl_mnzmgbZp/exec', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ email, coupon })
@@ -94,3 +94,74 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Elementos do pop-up não encontrados: verifique os IDs');
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const openChatBtn  = document.getElementById('open-chat');
+  const closeChatBtn = document.getElementById('close-chat');
+  const chatWindow   = document.getElementById('chat-window');
+  const chatInput    = document.getElementById('chat-input');
+  const sendChatBtn  = document.getElementById('send-chat');
+  const chatBody     = document.getElementById('chat-body');
+
+  // Abrir chat
+  openChatBtn.addEventListener('click', () => {
+    chatWindow.classList.remove('hidden');
+    chatInput.focus();
+  });
+
+  // Fechar chat
+  closeChatBtn.addEventListener('click', () => {
+    chatWindow.classList.add('hidden');
+  });
+
+  // Enviar mensagem
+  function enviarMensagem() {
+    const mensagem = chatInput.value.trim();
+    if (!mensagem) return;
+
+    // Adiciona mensagem do usuário
+    const userMsg = document.createElement('div');
+    userMsg.className = 'user-message';
+    userMsg.textContent = mensagem;
+    chatBody.appendChild(userMsg);
+
+    chatInput.value = '';
+
+    // Resposta automática do bot
+    setTimeout(() => {
+      const botMsg = document.createElement('div');
+      botMsg.className = 'bot-message';
+      botMsg.innerHTML = gerarResposta(mensagem); // permite HTML
+      chatBody.appendChild(botMsg);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }, 600);
+  }
+
+  // Gatilhos de envio
+  sendChatBtn.addEventListener('click', enviarMensagem);
+  chatInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') enviarMensagem();
+  });
+
+  // Respostas automáticas simples
+  function gerarResposta(msg) {
+    msg = msg.toLowerCase();
+
+    if (msg.includes('frete')) {
+      return '📦 O frete é grátis para compras acima de R$199!';
+    }
+    if (msg.includes('desconto')) {
+      return '🎉 Você pode usar o cupom PROMO10 para 10% de desconto.';
+    }
+    if (msg.includes('prazo')) {
+      return '⏱️ O prazo de entrega varia entre 3 a 7 dias úteis.';
+    }
+
+    // Resposta padrão com link para WhatsApp
+    return `🤖 Não tenho uma resposta automática para isso...<br>
+    Você pode falar diretamente com nosso atendimento pelo WhatsApp:<br>
+    👉 <a href="https://wa.me/5551983098650?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20a%20loja" target="_blank">Clique aqui para conversar</a>`;
+  }
+});
+
+
