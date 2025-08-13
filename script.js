@@ -23,17 +23,43 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
   }
 
+  // ─── CARREGAR PRODUTOS DA PLANILHA ──────────────────────────────
+  const produtosContainer = document.getElementById('produtos-container');
+  const endpointProdutos = 'https://script.google.com/macros/s/AKfycbwtUIktOO1MfhNZCM4SthI6FYMBV1ZYNFibgCeUUUNxMmXuD0WbjcwuDCVaK7Wom4wv/exec';
+
+  fetch(endpointProdutos)
+    .then(res => res.json())
+    .then(produtos => {
+      if (!produtosContainer) return;
+      produtosContainer.innerHTML = '';
+
+      produtos.forEach(produto => {
+        const card = document.createElement('article');
+        card.className = 'produto-card';
+        card.innerHTML = `
+          <div class="selo-promocao">🔥 Super Oferta</div>
+          <img src="${produto['Imagem']}" alt="${produto['Descricao']}" />
+          <h2 class="produto-titulo">${produto['Titulo']}</h2>
+          <a href="${produto['Link']}" class="botao-link" target="_blank" rel="noopener noreferrer">
+            Comprar na Amazon
+          </a>
+        `;
+        produtosContainer.appendChild(card);
+      });
+    })
+    .catch(err => console.error('Erro ao carregar produtos:', err));
+
   // ─── NOTIFICAÇÃO DE COMPRA ───────────────────────────────────────
   const nomes    = ["João","Maria","Carlos","Fernanda","Rafael","Juliana","Lucas","Patrícia"];
   const cidades  = ["SP","RJ","BH","POA","Curitiba","Salvador"];
-  const produtos = ["Grill Elétrico","Fone Bluetooth","Smartwatch","Air Fryer","Teclado Gamer","Echo Dot"];
+  const produtosFake = ["Grill Elétrico","Fone Bluetooth","Smartwatch","Air Fryer","Teclado Gamer","Echo Dot"];
   const caixa    = document.getElementById("notificacao-compra");
 
   function mostrarNotificacao() {
     if (!caixa) return;
     const nome    = nomes[Math.floor(Math.random() * nomes.length)];
     const cidade  = cidades[Math.floor(Math.random() * cidades.length)];
-    const produto = produtos[Math.floor(Math.random() * produtos.length)];
+    const produto = produtosFake[Math.floor(Math.random() * produtosFake.length)];
     caixa.textContent = `${nome} de ${cidade} acabou de comprar um ${produto}!`;
     caixa.style.animation = 'none';
     void caixa.offsetWidth;
@@ -43,41 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(mostrarNotificacao, 5000);
   setInterval(mostrarNotificacao, 30000);
 
-  // ─── POP-UP DE E-MAIL ────────────────────────────────────────────
-  const emailModal    = document.getElementById('email-modal');
-  const closeEmailBtn = document.getElementById('close-email-modal');
-  const emailForm     = document.getElementById('email-form');
-  const emailInput    = document.getElementById('email-input');
-
-  const modalKey = 'emailModalShown';
-
-  if (emailModal && closeEmailBtn && emailForm && emailInput) {
-     emailModal.classList.remove("hidden"); 
-
-    closeEmailBtn.addEventListener('click', () => {
-      emailModal.classList.add('hidden');
-    });
-
-    emailForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const email = emailInput.value.trim();
-      if (!email) return;
-
-      const coupon = 'PROMO10-' + Math.random().toString(36).substr(2, 5).toUpperCase();
-      alert(`Obrigado! Seu cupom é ${coupon}`);
-      emailModal.classList.add('hidden');
-
-      fetch('https://script.google.com/macros/s/AKfycbw1Mkd4aRbtFnDncnXvkBDdYsaMpO2Gg374xoFwOFRWzdoKpD2_ePnzgYqtN74BKm-_Gg/exec', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ email, coupon })
-      })
-      .then(() => console.log('Email enviado para o Google Sheets'))
-      .catch(err => console.error('Erro ao enviar:', err));
-    });
-  } else {
-    console.error('Elementos do pop-up não encontrados: verifique se os IDs estão corretos.');
-  }
 
   // ─── CHAT SIMULADO ───────────────────────────────────────────────
   const openChatBtn  = document.getElementById('open-chat');

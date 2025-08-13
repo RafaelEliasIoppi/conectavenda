@@ -11,104 +11,50 @@
 
 <body>
 <div id="notificacao-compra" class="notificacao-compra"></div>  
- <main class="container">
-    <!-- Cabeçalho de Oferta -->
-    <header class="hero">
-      <h1 id="titulo-oferta">💥 Ofertas Imperdíveis para Todos!</h1>
-      <p class="subtitulo-oferta">Descontos exclusivos por tempo limitado — confira agora!</p>
-    </header>
+<main class="container">
+  <!-- Cabeçalho de Oferta -->
+  <header class="hero">
+    <h1 id="titulo-oferta">💥 Ofertas Imperdíveis para Todos!</h1>
+    <p class="subtitulo-oferta">Descontos exclusivos por tempo limitado — confira agora!</p>
+  </header>
 
-    <!-- Grid de Produtos -->
-    <section class="grid-produtos">
-      <article class="produto-card">
-        <div class="selo-promocao">🔥 Super Oferta</div>
-        <img src="imagens/fone.jpg" alt="Fone Bluetooth Fuxi H3 com tecnologia moderna" />
-        <h2 class="produto-titulo">Fone Bluetooth Fuxi H3</h2>
-        <a href="https://www.amazon.com.br/dp/B0CHJXCJTW?tag=rafaelioppi-20"
-           class="botao-link" target="_blank" rel="noopener noreferrer">
-          Comprar na Amazon
-        </a>
-      </article>
+  <!-- Grid de Produtos (dinâmico) -->
+  <section class="grid-produtos" id="produtos-container">
+    <!-- Os cards serão inseridos aqui via JavaScript -->
+  </section>
 
-      <article class="produto-card">
-        <div class="selo-promocao">🔥 Super Oferta</div>
-        <img src="imagens/grill.jpg" alt="Grill Elétrico Oster 1000W com antiaderente" />
-        <h2 class="produto-titulo">Grill Elétrico Oster 1000W</h2>
-        <a href="https://www.amazon.com.br/GRILL-OSTER-1000W-220V-OGRL230/dp/B0BSP3D9ZS?tag=rafaelioppi-20"
-           class="botao-link" target="_blank" rel="noopener noreferrer">
-          Comprar na Amazon
-        </a>
-      </article>
-
-      <article class="produto-card">
-        <div class="selo-promocao">🔥 Super Oferta</div>
-        <img src="imagens/aparador.jpg" alt="Aparador e raspador OneBlade com 3 pentes, à prova d’água, Bivolt " />
-        <h2 class="produto-titulo">Aparador e raspador OneBlade com 3 pentes, à prova d’água, Bivolt</h2>
-        <a href="https://www.amazon.com.br/Aparador-raspador-OneBlade-pentes-Bivolt/dp/B0C2J8DQC1?pf_rd_r=SVJ5GTX1D3K5538C96TE&pf_rd_p=1e420414-e88d-4eac-997e-fe9da48cfd55&linkCode=ll1&tag=rafaelioppi-20&linkId=f7ac676264f52105e681b2174ae1b60a&language=pt_BR&ref_=as_li_ss_tl"
-           class="botao-link" target="_blank" rel="noopener noreferrer">
-          Comprar na Amazon
-        </a>
-      </article>
-
-      <article class="produto-card">
-          <div class="selo-promocao">🔥 Super Oferta</div>
-          <img src="imagens/creatina.jpg" alt="Creatina" />
-          <h2 class="produto-titulo">Creatina Pura Dark Lab 500g, Monohidratada 100% de Pureza. Sem sabor</h2>
-          <a href="https://www.amazon.com.br/Creatina-Monohidratada-Dark-Lab-Pureza/dp/B0CF71CJ2L?psc=1&linkCode=ll1&tag=rafaelioppi-20&linkId=23cd7b8a960c19d0a7d1cf2cadd4ded9&language=pt_BR&ref_=as_li_ss_tl"
-            class="botao-link" target="_blank" rel="noopener noreferrer">
-            Comprar na Amazon
-          </a>
-      </article>
-
-    </section>
-
-      <!-- Modal de Captura de E-mail -->
-    <div id="email-modal" class="overlay hidden">
-      <div class="modal">
-        <button class="close-btn" id="close-email-modal">&times;</button>
-        <h2>Ganhe 10% de Desconto!</h2>
-        <p>Cadastre seu e-mail e receba um cupom exclusivo na primeira compra.</p>
-        <form id="email-form">
-          <input type="email" id="email-input" placeholder="seu@email.com" required />
-          <button type="submit">Quero meu cupom</button>
-        </form>
-        <p class="small">Prometemos não enviar spam.</p>
+  
+  <!-- Widget Chatbot / WhatsApp -->
+  <div id="chat-widget">
+    <div class="chat-icon" id="open-chat">💬</div>
+    <div class="chat-window hidden" id="chat-window">
+      <div class="chat-header">
+        <span>Atendimento</span>
+        <button id="close-chat">&times;</button>
+      </div>
+      <div class="chat-body" id="chat-body">
+        <div class="bot-message">Olá! Como posso ajudar?</div>
+      </div>
+      <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Digite sua dúvida..." />
+        <button id="send-chat">→</button>
       </div>
     </div>
+  </div>
 
-    <!-- Widget Chatbot / WhatsApp -->
-    <div id="chat-widget">
-      <div class="chat-icon" id="open-chat">💬</div>
-      <div class="chat-window hidden" id="chat-window">
-        <div class="chat-header">
-          <span>Atendimento</span>
-          <button id="close-chat">&times;</button>
-        </div>
-        <div class="chat-body" id="chat-body">
-          <div class="bot-message">Olá! Como posso ajudar?</div>
-        </div>
-        <div class="chat-footer">
-          <input type="text" id="chat-input" placeholder="Digite sua dúvida..." />
-          <button id="send-chat">→</button>
-        </div>
-      </div>
-    </div>
+  <!-- Botão WhatsApp -->
+  <footer class="footer-ajuda">
+    <a href="https://wa.me/5551983098650" class="botao-link whatsapp" target="_blank">
+      📲 Precisa de Ajuda? Fale comigo no WhatsApp
+    </a>
+    <p>💻 Site desenvolvido por <strong>Rafael Elias Ioppi</strong></p>
+    <p>© 2025 Todos os direitos reservados</p>
+    <p><a href="/politica-de-privacidade.html">🔒 Política de Privacidade</a></p>
+  </footer>
+</main>
 
-    <!-- Botão WhatsApp -->
-   <footer class="footer-ajuda">
-      <a href="https://wa.me/5551983098650" class="botao-link whatsapp" target="_blank">
-        📲 Precisa de Ajuda? Fale comigo no WhatsApp
-      </a>
-      <p>💻 Site desenvolvido por <strong>Rafael Elias Ioppi</strong></p>
-      <p>© 2025 Todos os direitos reservados</p>
-      <p><a href="/politica-de-privacidade.html">🔒 Política de Privacidade</a></p>
-   </footer>
-  </main>
-
- <div class="aviso-seguro">
-    🔒 Você está em um ambiente seguro. Suas informações estão protegidas.
- </div>
+<div class="aviso-seguro">
+  🔒 Você está em um ambiente seguro. Suas informações estão protegidas.
+</div>
 </body>
-
-
 </html>
