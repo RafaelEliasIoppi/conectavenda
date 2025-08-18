@@ -24,30 +24,36 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ─── CARREGAR PRODUTOS DA PLANILHA ──────────────────────────────
-  const produtosContainer = document.getElementById('produtos-container');
-  const endpointProdutos = 'https://script.google.com/macros/s/AKfycbwtUIktOO1MfhNZCM4SthI6FYMBV1ZYNFibgCeUUUNxMmXuD0WbjcwuDCVaK7Wom4wv/exec';
+const produtosContainer = document.getElementById('produtos-container');
+const endpointProdutos = 'https://script.google.com/macros/s/AKfycbwtUIktOO1MfhNZCM4SthI6FYMBV1ZYNFibgCeUUUNxMmXuD0WbjcwuDCVaK7Wom4wv/exec';
 
-  fetch(endpointProdutos)
-    .then(res => res.json())
-    .then(produtos => {
-      if (!produtosContainer) return;
-      produtosContainer.innerHTML = '';
+fetch(endpointProdutos)
+  .then(res => res.json())
+  .then(produtos => {
+    if (!produtosContainer) return;
+    produtosContainer.innerHTML = '';
 
-      produtos.forEach(produto => {
-        const card = document.createElement('article');
-        card.className = 'produto-card';
-        card.innerHTML = `
-          <div class="selo-promocao">🔥 Super Oferta</div>
-          <img src="${produto['Imagem']}" alt="${produto['Descricao']}" />
-          <h2 class="produto-titulo">${produto['Titulo']}</h2>
-          <a href="${produto['Link']}" class="botao-link" target="_blank" rel="noopener noreferrer">
-            Comprar na Amazon
-          </a>
-        `;
-        produtosContainer.appendChild(card);
-      });
-    })
-    .catch(err => console.error('Erro ao carregar produtos:', err));
+    produtos.forEach(produto => {
+      const card = document.createElement('article');
+      card.className = 'produto-card';
+
+      const seloPromocao = produto['Promocao']?.toLowerCase() === 'sim'
+        ? '<div class="selo-promocao">🔥 Super Oferta</div>'
+        : '';
+
+      card.innerHTML = `
+        ${seloPromocao}
+        <img src="${produto['Imagem']}" alt="${produto['Descricao']}" />
+        <h2 class="produto-titulo">${produto['Titulo']}</h2>
+        <a href="${produto['Link']}" class="botao-link" target="_blank" rel="noopener noreferrer">
+          Comprar na Amazon
+        </a>
+      `;
+      produtosContainer.appendChild(card);
+    });
+  })
+  .catch(err => console.error('Erro ao carregar produtos:', err));
+
 
   // ─── NOTIFICAÇÃO DE COMPRA ───────────────────────────────────────
   const nomes    = ["João","Maria","Carlos","Fernanda","Rafael","Juliana","Lucas","Patrícia"];
