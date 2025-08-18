@@ -114,10 +114,30 @@ fetch(endpointProdutos)
       }, 600);
     }
 
+
     sendChatBtn.addEventListener('click', enviarMensagem);
     chatInput.addEventListener('keypress', e => {
       if (e.key === 'Enter') enviarMensagem();
     });
+
+    
+    document.getElementById('email-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('email-input').value;
+
+    fetch('https://script.google.com/macros/s/AKfycbw2Rs1WGvGdi7yv3buOwyyg95SKUZnf6W4XXzlGX1JuUx_8qdVMxUckPJOtQMmTUq6_9g/exec', {
+      method: 'POST',
+      body: new URLSearchParams({ email })
+    })
+    .then(res => res.text())
+    .then(msg => {
+      document.getElementById('mensagem-status').textContent = msg;
+    })
+    .catch(err => {
+      document.getElementById('mensagem-status').textContent = 'Erro ao enviar e-mail.';
+      console.error(err);
+    });
+  });
 
     function gerarResposta(msg) {
       msg = msg.toLowerCase();
