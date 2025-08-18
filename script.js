@@ -121,22 +121,45 @@ fetch(endpointProdutos)
     });
 
     
-    document.getElementById('email-form').addEventListener('submit', function(e) {
-    e.preventDefault();
+  // ─── ENVIO DE EMAIL ───────────────────────────────────────────────
+  document.getElementById('email-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const email = document.getElementById('email-input').value;
+  const status = document.getElementById('mensagem-status');
+
+  status.textContent = '⏳ Enviando e-mail...';
+
+  fetch('https://script.google.com/macros/s/AKfycbzBNAjQxXmMIGfJp-fzwQbYrxeuyjdKx6XJk9kJmQxm8sUkX3VJ5xcnAQSmI-QWm6yekg/exec', {
+    method: 'POST',
+    body: new URLSearchParams({ email })
+  })
+  .then(res => res.text())
+  .then(msg => {
+    status.textContent = '✅ E-mail enviado com sucesso!';
+  })
+  .catch(err => {
+    status.textContent = '❌ Erro ao enviar e-mail. Tente novamente.';
+    console.error(err);
+  });
+});
+
+ const form = document.getElementById('email-form');
+  const overlay = document.getElementById('overlay-email');
+  const status = document.getElementById('mensagem-status');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault(); // previne reload da página
+
     const email = document.getElementById('email-input').value;
 
-    fetch('https://script.google.com/macros/s/AKfycbzBNAjQxXmMIGfJp-fzwQbYrxeuyjdKx6XJk9kJmQxm8sUkX3VJ5xcnAQSmI-QWm6yekg/exec', {
-      method: 'POST',
-      body: new URLSearchParams({ email })
-    })
-    .then(res => res.text())
-    .then(msg => {
-      document.getElementById('mensagem-status').textContent = msg;
-    })
-    .catch(err => {
-      document.getElementById('mensagem-status').textContent = 'Erro ao enviar e-mail.';
-      console.error(err);
-    });
+    // Aqui você pode adicionar envio via API ou AJAX
+    // Simulação de envio:
+    status.textContent = "E-mail enviado com sucesso! ✅";
+
+    // Depois de 2 segundos, sumir o formulário suavemente
+    setTimeout(() => {
+      overlay.classList.add('hidden');
+    }, 2000);
   });
 
     function gerarResposta(msg) {
