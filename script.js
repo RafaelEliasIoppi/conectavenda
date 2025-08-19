@@ -227,11 +227,11 @@ overlay.addEventListener("click", (e) => {
       latido.play();
 
       // Muda imagem para coçar
-      luna.src = "https://github.com/RafaelEliasIoppi/conectavenda/blob/16f249da10d6b0153576f467e59fa9ffbb0a477c/imagens/luna5.jfif?raw=true";
+      luna.src = "https://github.com/RafaelEliasIoppi/conectavenda/blob/f8a0deabb74304244bc9fba8e40d7ef1e02c2a64/imagens/luna7.png?raw=true";
 
       // Após 3s volta para a imagem normal
       setTimeout(() => {
-        luna.src = "https://github.com/RafaelEliasIoppi/conectavenda/blob/e8bd4d0e365ab1448ed5001bae1af4840fc39fa2/imagens/luna3.jfif?raw=true";
+        luna.src = "https://github.com/RafaelEliasIoppi/conectavenda/blob/3c95ad92f1cc61c7d8e4173a2cab25c03510260f/imagens/luna6.png?raw=true";
         scratching = false;
       }, 3000);
     }
