@@ -206,27 +206,3 @@ overlay.addEventListener("click", (e) => {
 });
 
 
-
-const luna = document.getElementById('luna');
-let scratching = false;
-
-const imgCoçando = new Image();
-imgCoçando.src = "https://github.com/RafaelEliasIoppi/conectavenda/blob/1875c72b6ccb975e47fd1613356ac10bf25ab931/imagens/luna9.png?raw=true";
-
-// A cada 15s Luna se coça
-setInterval(() => {
-  if (!scratching) {
-    scratching = true;
-
-    // ativa coceira + troca imagem
-    luna.classList.add("luna-coçando");
-    luna.src = imgCoçando.src;
-
-    // volta ao normal em 3s
-    setTimeout(() => {
-      luna.classList.remove("luna-coçando");
-      luna.src = "https://github.com/RafaelEliasIoppi/conectavenda/blob/3c95ad92f1cc61c7d8e4173a2cab25c03510260f/imagens/luna6.png?raw=true";
-      scratching = false;
-    }, 3000);
-  }
-}, 1500);
