@@ -587,3 +587,33 @@ button[type="submit"]:hover {
   font-size: 0.9rem;
   color: #555;
 }
+
+ .footer-ajuda {
+    text-align: center;
+    padding: 20px;
+    background: #f9f9f9;
+    font-family: Arial, sans-serif;
+  }
+
+  .footer-ajuda p {
+    margin: 8px 0;
+    color: #333;
+  }
+
+  .caixa-seguranca {
+    margin-top: 15px;
+    display: inline-block;
+    padding: 15px 20px;
+    background: #e6f9f0;
+    color: #0a6847;
+    border: 2px solid #0a6847;
+    border-radius: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .caixa-seguranca a {
+    color: #0a6847;
+    text-decoration: underline;
+    font-weight: bold;
+  }
