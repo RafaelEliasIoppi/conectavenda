@@ -204,3 +204,19 @@ overlay.addEventListener("click", (e) => {
     }
   }
 });
+
+
+// mascote luna
+const luna = document.getElementById('luna');
+let scratching = false;
+
+setInterval(() => {
+  if (!scratching) {
+    scratching = true;
+    luna.src = "URL_DA_IMAGEM_DA_LUNA_COÇANDO"; // troca para imagem de coçar
+    setTimeout(() => {
+      luna.src = "URL_DA_IMAGEM_DA_LUNA_ANDANDO"; // volta para imagem de andar
+      scratching = false;
+    }, 3000); // tempo que ela fica se coçando
+  }
+}, 15000); // a cada 15 segundos ela se coça
