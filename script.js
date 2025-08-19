@@ -227,7 +227,7 @@ overlay.addEventListener("click", (e) => {
       latido.play();
 
       // Muda imagem para coçar
-      luna.src = "https://github.com/RafaelEliasIoppi/conectavenda/blob/f8a0deabb74304244bc9fba8e40d7ef1e02c2a64/imagens/luna7.png?raw=true";
+      luna.src = "https://github.com/RafaelEliasIoppi/conectavenda/blob/1875c72b6ccb975e47fd1613356ac10bf25ab931/imagens/luna9.png?raw=true";
 
       // Após 3s volta para a imagem normal
       setTimeout(() => {
