@@ -143,24 +143,47 @@ fetch(endpointProdutos)
   });
 });
 
- const form = document.getElementById('email-form');
-  const overlay = document.getElementById('overlay-email');
-  const status = document.getElementById('mensagem-status');
+const form = document.getElementById('email-form');
+const overlay = document.getElementById('overlay-email');
+const status = document.getElementById('mensagem-status');
+const fecharBtn = document.getElementById("fechar-overlay");
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault(); // previne reload da página
+// Função para esconder o overlay suavemente
+function esconderOverlay() {
+  overlay.classList.add('hidden');
+  // Opcional: depois da animação, remove do display
+  setTimeout(() => {
+    overlay.style.display = "none";
+  }, 300); // 300ms corresponde à duração da animação
+}
 
-    const email = document.getElementById('email-input').value;
+// Evento de envio do formulário
+form.addEventListener('submit', function(e) {
+  e.preventDefault(); // previne reload da página
 
-    // Aqui você pode adicionar envio via API ou AJAX
-    // Simulação de envio:
-    status.textContent = "E-mail enviado com sucesso! ✅";
+  const email = document.getElementById('email-input').value;
 
-    // Depois de 2 segundos, sumir o formulário suavemente
-    setTimeout(() => {
-      overlay.classList.add('hidden');
-    }, 2000);
-  });
+  // Simulação de envio
+  status.textContent = "E-mail enviado com sucesso! ✅";
+
+  // Após 2 segundos, esconder overlay
+  setTimeout(() => {
+    esconderOverlay();
+  }, 2000);
+});
+
+// Fechar clicando no botão "X"
+fecharBtn.addEventListener("click", () => {
+  esconderOverlay();
+});
+
+// Fechar clicando fora do modal
+overlay.addEventListener("click", (e) => {
+  if (e.target === overlay) {
+    esconderOverlay();
+  }
+});
+
 
     function gerarResposta(msg) {
       msg = msg.toLowerCase();
