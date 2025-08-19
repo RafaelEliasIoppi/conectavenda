@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ─── CARREGAR PRODUTOS DA PLANILHA ──────────────────────────────
 const produtosContainer = document.getElementById('produtos-container');
-const endpointProdutos = 'https://script.google.com/macros/s/AKfycbwm6ttHyr40bfZS99YANYoxAtheO54HOy_XG6kLlAxgUoEegNQ1XduUrK5wvM5WTgHOug/exec';
+const endpointProdutos = 'https://script.google.com/macros/s/AKfycbwVTzPPXJG9C7WuaGLtGEAan4cb906UvPGxKBS3W2wXuQfCV6tHuZO6saNveoHXEChOcg/exec';
 
 fetch(endpointProdutos)
   .then(res => res.json())
@@ -129,7 +129,7 @@ fetch(endpointProdutos)
 
   status.textContent = '⏳ Enviando e-mail...';
 
-  fetch('https://script.google.com/macros/s/AKfycbwm6ttHyr40bfZS99YANYoxAtheO54HOy_XG6kLlAxgUoEegNQ1XduUrK5wvM5WTgHOug/exec', {
+  fetch('https://script.google.com/macros/s/AKfycbwVTzPPXJG9C7WuaGLtGEAan4cb906UvPGxKBS3W2wXuQfCV6tHuZO6saNveoHXEChOcg/exec', {
     method: 'POST',
     body: new URLSearchParams({ email })
   })
