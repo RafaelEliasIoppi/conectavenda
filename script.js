@@ -206,17 +206,33 @@ overlay.addEventListener("click", (e) => {
 });
 
 
-// mascote luna
-const luna = document.getElementById('luna');
-let scratching = false;
+// mascote Luna
+ const luna = document.getElementById('luna');
+  const latido = document.getElementById('latido-audio');
+  let scratching = false;
 
-setInterval(() => {
-  if (!scratching) {
-    scratching = true;
-    luna.src = "URL_DA_IMAGEM_DA_LUNA_COÇANDO"; // troca para imagem de coçar
-    setTimeout(() => {
-      luna.src = "URL_DA_IMAGEM_DA_LUNA_ANDANDO"; // volta para imagem de andar
-      scratching = false;
-    }, 3000); // tempo que ela fica se coçando
-  }
-}, 15000); // a cada 15 segundos ela se coça
+  // Clique na Luna para latir
+  luna.addEventListener('click', () => {
+    latido.currentTime = 0;
+    latido.play();
+  });
+
+  // A cada 15s ela "se coça" e late
+  setInterval(() => {
+    if (!scratching) {
+      scratching = true;
+
+      // Toca latido
+      latido.currentTime = 0;
+      latido.play();
+
+      // Muda imagem para coçar
+      luna.src = "https://github.com/RafaelEliasIoppi/conectavenda/blob/16f249da10d6b0153576f467e59fa9ffbb0a477c/imagens/luna5.jfif?raw=true";
+
+      // Após 3s volta para a imagem normal
+      setTimeout(() => {
+        luna.src = "https://github.com/RafaelEliasIoppi/conectavenda/blob/e8bd4d0e365ab1448ed5001bae1af4840fc39fa2/imagens/luna3.jfif?raw=true";
+        scratching = false;
+      }, 3000);
+    }
+  }, 1500);
