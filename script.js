@@ -206,3 +206,28 @@ overlay.addEventListener("click", (e) => {
 });
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  const vitrineContainer = document.getElementById("amazon-vitrine");
+
+  if (vitrineContainer) {
+    const scriptAmazonConfig = document.createElement("script");
+    scriptAmazonConfig.type = "text/javascript";
+    scriptAmazonConfig.text = `
+      amzn_assoc_placement = "adunit0";
+      amzn_assoc_tracking_id = "rafaelioppi-20";
+      amzn_assoc_ad_mode = "search";
+      amzn_assoc_ad_type = "smart";
+      amzn_assoc_marketplace = "amazon";
+      amzn_assoc_region = "BR";
+      amzn_assoc_default_search_phrase = "eletrônicos";
+      amzn_assoc_default_category = "All";
+      amzn_assoc_linkid = "1234567890abcdef";
+    `;
+
+    const scriptAmazonLoader = document.createElement("script");
+    scriptAmazonLoader.src = "https://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=BR";
+
+    vitrineContainer.appendChild(scriptAmazonConfig);
+    vitrineContainer.appendChild(scriptAmazonLoader);
+  }
+});
