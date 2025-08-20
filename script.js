@@ -181,28 +181,30 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ─── AMAZON VITRINE ──────────────────────────────────────────────
-  const vitrineContainer = document.getElementById("amazon-vitrine");
+ const vitrineContainer = document.getElementById("amazon-vitrine");
 
   if (vitrineContainer) {
+    // Configuração Amazon Afiliados
     window.amzn_assoc_placement = "adunit0";
-    window.amzn_assoc_tracking_id = "rafaelioppi-20";
+    window.amzn_assoc_tracking_id = "rafaelioppi-20"; // seu ID afiliado
     window.amzn_assoc_ad_mode = "search";
     window.amzn_assoc_ad_type = "smart";
     window.amzn_assoc_marketplace = "amazon";
-    window.amzn_assoc_region = "US";  // Usar "US" porque "BR" não funciona no script oficial
+    window.amzn_assoc_region = "BR"; // Região Brasil
     window.amzn_assoc_default_search_phrase = "eletrônicos";
     window.amzn_assoc_default_category = "All";
-    window.amzn_assoc_linkid = "1234567890abcdef";
+    window.amzn_assoc_linkid = "1234567890abcdef"; // pode ser deixado vazio
 
+    // Carregar script da Amazon
     const existingScript = document.querySelector(
-      'script[src="https://aax-us-east.amazon-adsystem.com/widgets/onejs"]'
+      'script[src="https://z-na.amazon-adsystem.com/widgets/onejs"]'
     );
 
     if (!existingScript) {
       const scriptAmazonLoader = document.createElement("script");
-      scriptAmazonLoader.src = "https://aax-us-east.amazon-adsystem.com/widgets/onejs";
+      scriptAmazonLoader.src = "https://z-na.amazon-adsystem.com/widgets/onejs";
       scriptAmazonLoader.async = true;
       document.body.appendChild(scriptAmazonLoader);
     }
   }
-});
+  });
