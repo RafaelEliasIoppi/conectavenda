@@ -44,52 +44,36 @@
   <script>
     const slug = new URLSearchParams(location.search).get("slug");
 
-  const ASSETS_ROOT = "/static/"; // para sua estrutura atual mantenha "/static/"
+    const IMAGE_BASE_URL = "https://raw.githubusercontent.com/RafaelEliasIoppi/conectavenda/refs/heads/main/static/img/uploads/";
 
-  function resolveImagePath(path) {
-    if (!path) return "";
-    if (/^https?:\/\//i.test(path)) return path;
+    function resolveImagePath(path) {
+      if (!path) return "";
+      if (/^https?:\/\//i.test(path)) return path;
 
-    let p = String(path).trim().replace(/^\.\//, "").replace(/\/{2,}/g, "/");
+      // Remove "./" ou múltiplas barras
+      let cleanPath = String(path).trim().replace(/^\.\//, "").replace(/\/{2,}/g, "/");
 
-    // Se já vier absoluto (/algo/...), apenas normaliza
-    if (p.startsWith("/")) {
-      return new URL(p, location.origin).href;
+      return IMAGE_BASE_URL + cleanPath;
     }
-
-    // Se começar com "static/", aplica base; senão, prefixa base mesmo assim
-    if (/^static\//i.test(p)) {
-      p = p.replace(/^static\//i, ASSETS_ROOT);
-    } else {
-      p = ASSETS_ROOT + p;
-    }
-
-    return new URL(p, location.origin).href;
-  }
 
     async function carregarPost(slug) {
       const container = document.getElementById("post-content");
 
       try {
-        // Lista arquivos no repositório
         const res = await fetch(
           "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
         );
         if (!res.ok) throw new Error("Erro ao listar arquivos no GitHub");
 
         const files = await res.json();
-
-        // Encontra arquivo pelo slug
         const file = files.find(f => f.name.toLowerCase().includes(slug.toLowerCase()));
         if (!file || !file.download_url) {
           container.innerText = "Post não encontrado.";
           return;
         }
 
-        // Baixa Markdown
         const md = await fetch(file.download_url).then(r => r.text());
 
-        // Extrai frontmatter
         const frontmatterMatch = md.match(/^---\s*([\s\S]*?)\s*---/);
         const meta = {};
         let body = md;
@@ -100,19 +84,14 @@
           frontmatterMatch[1].split("\n").forEach(line => {
             const [key, ...vals] = line.split(":");
             if (!key || !vals.length) return;
-
-            let value = vals.join(":").trim().replace(/^"|"$/g, "");
-            // Não mexe no caminho aqui; o resolveImagePath cuida de tudo
-            meta[key.trim()] = value;
+            meta[key.trim()] = vals.join(":").trim().replace(/^"|"$/g, "");
           });
         }
 
-        // Corrige imagens do corpo (agora cobre caminhos relativos que NÃO começam com http/https)
         body = body.replace(/!\[([^\]]*)\]\((?!https?:\/\/)([^)]+)\)/g, (_, alt, path) => {
           return `![${alt}](${resolveImagePath(path)})`;
         });
 
-        // Monta HTML final
         const html = `
           <article>
             <h1>${meta.title || slug.replace(/-/g, " ")}</h1>
