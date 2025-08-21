@@ -236,24 +236,25 @@ main {
 
 .footer-ajuda {
   width: 100%;
-  padding: 10px 8px; /* Mais espaço interno para respirar */
-  margin-top: 0; /* Remove espaçamento extra acima */
+  padding: 16px 12px; /* Espaço interno mais confortável */
+  margin-top: 0; /* Elimina espaçamento acima */
   background-color: #f0f4f8;
   color: #2c2c2c;
-  font-size: 0.95rem; /* Leve ajuste na legibilidade */
+  font-size: 0.95rem;
   text-align: center;
   border-top: 1px solid #d0d7de;
-  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05); /* Sombra mais sutil */
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05);
   font-family: 'Segoe UI', 'Roboto', sans-serif;
 }
 
 .footer-ajuda p {
-  margin: 12px 0;
-  padding: 0 8px;
-  line-height: 1.8;
+  margin: 8px 0; /* Espaço vertical mais fluido entre parágrafos */
+  padding: 0;
+  line-height: 1.6; /* Leve redução para compactar sem perder legibilidade */
   font-weight: 400;
-  color: #444;
+  color: #3a3a3a; /* Tom um pouco mais suave que #444 */
 }
+
 
 .footer-ajuda a {
   color: #0077cc;
@@ -268,7 +269,7 @@ main {
 }
 
 .caixa-seguranca {
-  margin: 32px auto 0;
+  margin: 10px auto 0;
   display: block;
   max-width: 600px;
   padding: 20px 24px;
