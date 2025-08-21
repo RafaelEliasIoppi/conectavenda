@@ -1,9 +1,15 @@
-<!-- post.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <title>Post</title>
+  <style>
+    img.featured {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+  </style>
 </head>
 <body>
   <div id="post-content">Carregando...</div>
@@ -24,8 +30,30 @@
       }
 
       const md = await fetch(file.download_url).then((r) => r.text());
-      const body = md.replace(/^---[\s\S]*?---/, "").trim();
-      document.getElementById("post-content").innerHTML = `<h1>${slug}</h1><p>${body}</p>`;
+
+      // Extrai frontmatter
+      const frontmatterMatch = md.match(/^---([\s\S]*?)---/);
+      const metaRaw = frontmatterMatch ? frontmatterMatch[1] : "";
+      const body = frontmatterMatch ? md.replace(frontmatterMatch[0], "").trim() : md;
+
+      const meta = metaRaw.split("\n").reduce((acc, line) => {
+        const match = line.match(/^(\w+):\s*(.*)$/);
+        if (match) {
+          let [, key, value] = match;
+          value = value.replace(/^"|"$/g, "").trim();
+          acc[key] = value;
+        }
+        return acc;
+      }, {});
+
+      const html = `
+        <h1>${meta.title || slug}</h1>
+        ${meta.image ? `<img src="${meta.image}" alt="${meta.title}" class="featured" />` : ""}
+        <p><em>${new Date(meta.date).toLocaleDateString("pt-BR")}</em></p>
+        <div>${body}</div>
+      `;
+
+      document.getElementById("post-content").innerHTML = html;
     }
 
     carregarPost(slug);
