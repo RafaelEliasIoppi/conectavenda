@@ -12,21 +12,25 @@
       line-height: 1.6;
       background: #fafafa;
     }
+
     img.featured {
       max-width: 100%;
       height: auto;
       margin: 1rem 0;
       border-radius: 8px;
     }
+
     h1 {
       margin-bottom: 0.5rem;
     }
+
     time {
       color: #666;
       font-size: 0.9rem;
       display: block;
       margin-bottom: 1.5rem;
     }
+
     .loading {
       font-size: 1.2rem;
       color: #333;
@@ -47,10 +51,14 @@
 
     async function carregarPost(slug) {
       const container = document.getElementById("post-content");
+
       try {
         // Lista arquivos no repositório
-        const res = await fetch("https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main");
+        const res = await fetch(
+          "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
+        );
         if (!res.ok) throw new Error("Erro ao listar arquivos no GitHub");
+
         const files = await res.json();
 
         // Encontra arquivo pelo slug
@@ -70,9 +78,11 @@
 
         if (frontmatterMatch) {
           body = md.replace(frontmatterMatch[0], "").trim();
+
           frontmatterMatch[1].split("\n").forEach(line => {
             const [key, ...vals] = line.split(":");
             if (!key || !vals.length) return;
+
             let value = vals.join(":").trim().replace(/^"|"$/g, "");
             if (key.trim() === "image") value = value.replace(/^\/static/, "");
             meta[key.trim()] = value;
@@ -88,8 +98,16 @@
         const html = `
           <article>
             <h1>${meta.title || slug.replace(/-/g, " ")}</h1>
-            ${meta.image ? `<img src="${resolveImagePath(meta.image)}" alt="${meta.title || ''}" class="featured">` : ""}
-            ${meta.date ? `<time datetime="${meta.date}">${new Date(meta.date).toLocaleDateString("pt-BR")}</time>` : ""}
+            ${
+              meta.image
+                ? `<img src="${resolveImagePath(meta.image)}" alt="${meta.title || ''}" class="featured">`
+                : ""
+            }
+            ${
+              meta.date
+                ? `<time datetime="${meta.date}">${new Date(meta.date).toLocaleDateString("pt-BR")}</time>`
+                : ""
+            }
             <div>${marked.parse(body)}</div>
           </article>
         `;
