@@ -44,20 +44,28 @@
   <script>
     const slug = new URLSearchParams(location.search).get("slug");
 
-    function resolveImagePath(path) {
-      if (!path) return "";
-      if (/^https?:\/\//i.test(path)) return path;
+  const ASSETS_ROOT = "/static/"; // para sua estrutura atual mantenha "/static/"
 
-      // Normaliza "static/..." e garante barra inicial
-      let p = String(path).trim()
-        .replace(/^\.\//, "")          // remove "./" do começo
-        .replace(/^\/?static\//, "/"); // transforma "static/..." ou "/static/..." em "/..."
+  function resolveImagePath(path) {
+    if (!path) return "";
+    if (/^https?:\/\//i.test(path)) return path;
 
-      if (!p.startsWith("/")) p = "/" + p;
+    let p = String(path).trim().replace(/^\.\//, "").replace(/\/{2,}/g, "/");
 
-      // Gera URL absoluta corretamente
+    // Se já vier absoluto (/algo/...), apenas normaliza
+    if (p.startsWith("/")) {
       return new URL(p, location.origin).href;
     }
+
+    // Se começar com "static/", aplica base; senão, prefixa base mesmo assim
+    if (/^static\//i.test(p)) {
+      p = p.replace(/^static\//i, ASSETS_ROOT);
+    } else {
+      p = ASSETS_ROOT + p;
+    }
+
+    return new URL(p, location.origin).href;
+  }
 
     async function carregarPost(slug) {
       const container = document.getElementById("post-content");
