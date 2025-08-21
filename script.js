@@ -179,61 +179,77 @@ document.addEventListener("DOMContentLoaded", () => {
     postsContainer.innerHTML = "<p>Carregando posts…</p>";
 
     try {
-      // 1. Lista MDs no repositório
+      // 1. Lista arquivos MD via GitHub API
       const res = await fetch(
-        "https://api.github.com/repos/SEU_USUARIO/SEU_REPO/contents/content/posts"
+        "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
       );
       if (!res.ok) throw new Error("Erro ao listar posts");
       const files = await res.json();
 
-      // 2. Busca cada MD em paralelo
+      // 2. Filtra arquivos .md e busca conteúdo
       const mdFiles = files.filter((f) => f.name.endsWith(".md"));
-      const texts = await Promise.all(mdFiles.map((f) => fetch(f.download_url).then((r) => r.text())));
+      const texts = await Promise.all(
+        mdFiles.map((f) =>
+          fetch(f.download_url).then((r) => {
+            if (!r.ok) throw new Error(`Erro ao baixar ${f.name}`);
+            return r.text();
+          })
+        )
+      );
 
-      // 3. Extrai frontmatter e monta array
+      // 3. Extrai frontmatter e monta array de posts
       const posts = texts.map((md) => {
-        const parts = md.split("---").filter(Boolean);
-        const metaRaw = parts.shift();
-        const body = parts.join("---");
-        const meta = metaRaw
-          .split("\n")
-          .reduce((acc, line) => {
-            const [key, ...rest] = line.split(":");
-            acc[key.trim()] = rest.join(":").trim().replace(/^"|"$/g, "");
-            return acc;
-          }, {});
-        const slug = (meta.slug || meta.title)
+        const frontmatterMatch = md.match(/^---([\s\S]*?)---/);
+        const metaRaw = frontmatterMatch ? frontmatterMatch[1] : "";
+        const body = frontmatterMatch
+          ? md.replace(frontmatterMatch[0], "").trim()
+          : md;
+
+        const meta = metaRaw.split("\n").reduce((acc, line) => {
+          const match = line.match(/^(\w+):\s*(.*)$/);
+          if (match) {
+            let [, key, value] = match;
+            value = value.replace(/^"|"$/g, "").trim();
+            acc[key] = value;
+          }
+          return acc;
+        }, {});
+
+        const slug = (meta.slug || meta.title || "post-sem-titulo")
           .toLowerCase()
           .replace(/[^\w]+/g, "-")
           .replace(/^-+|-+$/g, "");
+
         return {
           slug,
-          title: meta.title,
-          date: new Date(meta.date),
-          excerpt: meta.excerpt,
+          title: meta.title || "Sem título",
+          date: meta.date ? new Date(meta.date) : new Date(),
+          excerpt: meta.excerpt || body.substring(0, 120) + "...",
         };
       });
 
-      // 4. Ordena e limita
+      // 4. Ordena por data e aplica limite
       posts.sort((a, b) => b.date - a.date);
       const sliced = posts.slice(0, limit);
 
-      // 5. Renderiza
-      postsContainer.innerHTML = sliced
-        .map(
-          (p) => `
-        <article class="post-card">
-          <h3><a href="post.html?slug=${p.slug}">${p.title}</a></h3>
-          <small>${p.date.toLocaleDateString()}</small>
-          <p>${p.excerpt}</p>
-          <a href="post.html?slug=${p.slug}" class="read-more">Leia mais →</a>
-        </article>`
-        )
-        .join("");
-
-      if (!sliced.length) postsContainer.innerHTML = "<p>Nenhum post encontrado.</p>";
+      // 5. Renderiza HTML dos posts
+      postsContainer.innerHTML = sliced.length
+        ? sliced
+            .map(
+              (p) => `
+          <article class="post-card">
+            <h3><a href="post.html?slug=${p.slug}">${p.title}</a></h3>
+            <time datetime="${p.date.toISOString()}">
+              ${p.date.toLocaleDateString("pt-BR")}
+            </time>
+            <p>${p.excerpt}</p>
+            <a href="post.html?slug=${p.slug}" class="read-more">Leia mais →</a>
+          </article>`
+            )
+            .join("")
+        : "<p>Nenhum post encontrado.</p>";
     } catch (err) {
-      console.error(err);
+      console.error("Erro ao carregar posts:", err);
       postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
     }
   })();
