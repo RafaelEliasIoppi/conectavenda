@@ -12,7 +12,8 @@ collections:
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
-      - {label: "Título", name: "title", widget: "string"}
-      - {label: "Data", name: "date", widget: "datetime"}
-      - {label: "Resumo", name: "excerpt", widget: "text"}
-      - {label: "Corpo do Post", name: "body", widget: "markdown"}
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Data", name: "date", widget: "datetime" }
+      - { label: "Resumo", name: "excerpt", widget: "text" }
+      - { label: "Imagem de Destaque", name: "image", widget: "image" }
+      - { label: "Corpo do Post", name: "body", widget: "markdown" }
