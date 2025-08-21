@@ -5,116 +5,67 @@
   <title>Post</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
+      font-family: sans-serif;
+      max-width: 700px;
       margin: 2rem auto;
-      padding: 0 1rem;
-      line-height: 1.6;
-      background: #fafafa;
+      padding: 1rem;
+      background: #f0f0f0;
     }
-
-    img.featured {
+    img {
       max-width: 100%;
-      height: auto;
-      margin: 1rem 0;
       border-radius: 8px;
+      margin: 1rem 0;
     }
-
-    h1 {
-      margin-bottom: 0.5rem;
-    }
-
     time {
       color: #666;
       font-size: 0.9rem;
-      display: block;
-      margin-bottom: 1.5rem;
-    }
-
-    .loading {
-      font-size: 1.2rem;
-      color: #333;
     }
   </style>
 </head>
 <body>
-  <main id="post-content" class="loading">Carregando...</main>
+  <main id="post">Carregando...</main>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     const slug = new URLSearchParams(location.search).get("slug");
-
-    const IMAGE_BASE_URL = "https://raw.githubusercontent.com/RafaelEliasIoppi/conectavenda/refs/heads/main/static/img/uploads/";
-    function resolveImagePath(filename) {
-    return `/static/img/uploads/${filename.trim()}`;
-}
+    const postEl = document.getElementById("post");
 
     async function carregarPost(slug) {
-      const container = document.getElementById("post-content");
-
       try {
-        const res = await fetch(
-          "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
-        );
-        if (!res.ok) throw new Error("Erro ao listar arquivos no GitHub");
-
+        const res = await fetch("https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main");
         const files = await res.json();
         const file = files.find(f => f.name.toLowerCase().includes(slug.toLowerCase()));
-        if (!file || !file.download_url) {
-          container.innerText = "Post não encontrado.";
-          return;
-        }
+        if (!file) return postEl.innerText = "Post não encontrado.";
 
         const md = await fetch(file.download_url).then(r => r.text());
-
-        const frontmatterMatch = md.match(/^---\s*([\s\S]*?)\s*---/);
         const meta = {};
+        const front = md.match(/^---\s*([\s\S]*?)\s*---/);
         let body = md;
 
-        if (frontmatterMatch) {
-          body = md.replace(frontmatterMatch[0], "").trim();
-
-          frontmatterMatch[1].split("\n").forEach(line => {
-            const [key, ...vals] = line.split(":");
-            if (!key || !vals.length) return;
-            meta[key.trim()] = vals.join(":").trim().replace(/^"|"$/g, "");
+        if (front) {
+          body = md.replace(front[0], "").trim();
+          front[1].split("\n").forEach(l => {
+            const [k, ...v] = l.split(":");
+            meta[k.trim()] = v.join(":").trim().replace(/^"|"$/g, "");
           });
         }
 
-        body = body.replace(/!\[([^\]]*)\]\((?!https?:\/\/)([^)]+)\)/g, (_, alt, path) => {
-          return `![${alt}](${resolveImagePath(path)})`;
-        });
+        body = body.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, path) =>
+          `![${alt}](/static/img/uploads/${path.trim()})`
+        );
 
-        const html = `
-          <article>
-            <h1>${meta.title || slug.replace(/-/g, " ")}</h1>
-            ${
-              meta.image
-                ? `<img src="${resolveImagePath(meta.image)}" alt="${meta.title || ''}" class="featured">`
-                : ""
-            }
-            ${
-              meta.date
-                ? `<time datetime="${meta.date}">${new Date(meta.date).toLocaleDateString("pt-BR")}</time>`
-                : ""
-            }
-            <div>${marked.parse(body)}</div>
-          </article>
+        postEl.innerHTML = `
+          <h1>${meta.title || slug}</h1>
+          ${meta.image ? `<img src="/static/img/uploads/${meta.image}" alt="${meta.title || ''}">` : ""}
+          ${meta.date ? `<time>${new Date(meta.date).toLocaleDateString("pt-BR")}</time>` : ""}
+          <div>${marked.parse(body)}</div>
         `;
-
-        container.innerHTML = html;
-
-      } catch (error) {
-        console.error("Erro ao carregar post:", error);
-        container.innerText = "Erro ao carregar post.";
+      } catch {
+        postEl.innerText = "Erro ao carregar post.";
       }
     }
 
-    if (slug) {
-      carregarPost(slug);
-    } else {
-      document.getElementById("post-content").innerText = "Slug não informado.";
-    }
+    slug ? carregarPost(slug) : postEl.innerText = "Slug não informado.";
   </script>
 </body>
 </html>
