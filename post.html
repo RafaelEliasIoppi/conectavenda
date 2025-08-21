@@ -4,56 +4,87 @@
   <meta charset="UTF-8" />
   <title>Post</title>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
     img.featured {
       max-width: 100%;
       height: auto;
       margin-bottom: 1rem;
+      border-radius: 8px;
+    }
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+    time {
+      color: #666;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
   <div id="post-content">Carregando...</div>
 
+  <!-- Biblioteca para converter Markdown em HTML -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
   <script>
     const params = new URLSearchParams(window.location.search);
     const slug = params.get("slug");
 
     async function carregarPost(slug) {
-      const res = await fetch(
-        "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
-      );
-      const files = await res.json();
-      const file = files.find((f) => f.name.includes(slug));
-      if (!file) {
-        document.getElementById("post-content").innerText = "Post não encontrado.";
-        return;
-      }
+      try {
+        const res = await fetch(
+          "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
+        );
+        const files = await res.json();
 
-      const md = await fetch(file.download_url).then((r) => r.text());
+        // Normaliza o slug e tenta encontrar o arquivo correspondente
+        const file = files.find((f) =>
+          f.name.toLowerCase().includes(slug.toLowerCase())
+        );
 
-      // Extrai frontmatter
-      const frontmatterMatch = md.match(/^---([\s\S]*?)---/);
-      const metaRaw = frontmatterMatch ? frontmatterMatch[1] : "";
-      const body = frontmatterMatch ? md.replace(frontmatterMatch[0], "").trim() : md;
-
-      const meta = metaRaw.split("\n").reduce((acc, line) => {
-        const match = line.match(/^(\w+):\s*(.*)$/);
-        if (match) {
-          let [, key, value] = match;
-          value = value.replace(/^"|"$/g, "").trim();
-          acc[key] = value;
+        if (!file) {
+          document.getElementById("post-content").innerText = "Post não encontrado.";
+          return;
         }
-        return acc;
-      }, {});
 
-      const html = `
-        <h1>${meta.title || slug}</h1>
-        ${meta.image ? `<img src="${meta.image}" alt="${meta.title}" class="featured" />` : ""}
-        <p><em>${new Date(meta.date).toLocaleDateString("pt-BR")}</em></p>
-        <div>${body}</div>
-      `;
+        const md = await fetch(file.download_url).then((r) => r.text());
 
-      document.getElementById("post-content").innerHTML = html;
+        // Extrai frontmatter
+        const frontmatterMatch = md.match(/^---([\s\S]*?)---/);
+        const metaRaw = frontmatterMatch ? frontmatterMatch[1] : "";
+        const body = frontmatterMatch
+          ? md.replace(frontmatterMatch[0], "").trim()
+          : md;
+
+        const meta = metaRaw.split("\n").reduce((acc, line) => {
+          const match = line.match(/^(\w+):\s*(.*)$/);
+          if (match) {
+            let [, key, value] = match;
+            value = value.replace(/^"|"$/g, "").trim();
+            acc[key] = value;
+          }
+          return acc;
+        }, {});
+
+        const htmlBody = marked.parse(body);
+
+        const html = `
+          <h1>${meta.title || slug}</h1>
+          ${meta.image ? `<img src="${meta.image}" alt="${meta.title}" class="featured" />` : ""}
+          <time datetime="${meta.date}">${new Date(meta.date).toLocaleDateString("pt-BR")}</time>
+          <div>${htmlBody}</div>
+        `;
+
+        document.getElementById("post-content").innerHTML = html;
+      } catch (err) {
+        console.error("Erro ao carregar post:", err);
+        document.getElementById("post-content").innerText = "Erro ao carregar post.";
+      }
     }
 
     carregarPost(slug);
