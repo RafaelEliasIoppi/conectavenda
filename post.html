@@ -14,14 +14,11 @@
     }
 
     img.featured {
-  max-width: 100%;
-  max-height: 400px; /* Limita a altura da imagem */
-  height: auto;
-  margin: 1rem 0;
-  border-radius: 8px;
-  object-fit: cover; /* Mantém o enquadramento agradável */
-}
-
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+      border-radius: 8px;
+    }
 
     h1 {
       margin-bottom: 0.5rem;
@@ -48,8 +45,18 @@
     const slug = new URLSearchParams(location.search).get("slug");
 
     function resolveImagePath(path) {
-      if (/^https?:\/\//.test(path)) return path;
-      return location.origin + path.replace(/^\/static/, "");
+      if (!path) return "";
+      if (/^https?:\/\//i.test(path)) return path;
+
+      // Normaliza "static/..." e garante barra inicial
+      let p = String(path).trim()
+        .replace(/^\.\//, "")          // remove "./" do começo
+        .replace(/^\/?static\//, "/"); // transforma "static/..." ou "/static/..." em "/..."
+
+      if (!p.startsWith("/")) p = "/" + p;
+
+      // Gera URL absoluta corretamente
+      return new URL(p, location.origin).href;
     }
 
     async function carregarPost(slug) {
@@ -87,13 +94,13 @@
             if (!key || !vals.length) return;
 
             let value = vals.join(":").trim().replace(/^"|"$/g, "");
-            if (key.trim() === "image") value = value.replace(/^\/static/, "");
+            // Não mexe no caminho aqui; o resolveImagePath cuida de tudo
             meta[key.trim()] = value;
           });
         }
 
-        // Corrige imagens do corpo
-        body = body.replace(/!\[([^\]]*)\]\((\/[^\)]+)\)/g, (_, alt, path) => {
+        // Corrige imagens do corpo (agora cobre caminhos relativos que NÃO começam com http/https)
+        body = body.replace(/!\[([^\]]*)\]\((?!https?:\/\/)([^)]+)\)/g, (_, alt, path) => {
           return `![${alt}](${resolveImagePath(path)})`;
         });
 
