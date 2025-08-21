@@ -71,14 +71,22 @@
             .forEach(line => {
               const [key, ...vals] = line.split(":");
               if (!key || !vals.length) return;
-              meta[key.trim()] = vals.join(":").trim().replace(/^"|"$/g, "");
+              let value = vals.join(":").trim().replace(/^"|"$/g, "");
+              // remove /static do caminho da imagem
+              if (key.trim() === "image") {
+                value = value.replace(/^\/static/, "");
+              }
+              meta[key.trim()] = value;
             });
         }
 
-        // 5. Corrige imagens com caminho relativo
+        // 5. Corrige imagens dentro do corpo (removendo /static se houver)
         body = body.replace(
           /!\[([^\]]*)\]\((\/[^\)]+)\)/g,
-          (_, alt, path) => `![${alt}](${location.origin}${path})`
+          (_, alt, path) => {
+            const cleanPath = path.replace(/^\/static/, "");
+            return `![${alt}](${location.origin}${cleanPath})`;
+          }
         );
 
         // 6. Monta HTML final
