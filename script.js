@@ -1,5 +1,6 @@
+// script.js
 document.addEventListener("DOMContentLoaded", () => {
-  // ─── FADE-IN NO HERO ─────────────────────────────────────────────
+  // ─── 1. FADE-IN NO HERO ──────────────────────────────────────────
   const hero = document.querySelector(".hero");
   if (hero) {
     hero.classList.add("visible");
@@ -9,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ─── EFEITO DE DIGITAÇÃO NO TÍTULO ──────────────────────────────
+  // ─── 2. EFEITO DE DIGITAÇÃO NO TÍTULO ────────────────────────────
   const titulo = document.getElementById("titulo-oferta");
   if (titulo) {
     const textoOriginal = titulo.textContent;
@@ -23,38 +24,40 @@ document.addEventListener("DOMContentLoaded", () => {
     })();
   }
 
-  // ─── CARREGAR PRODUTOS DA PLANILHA ──────────────────────────────
+  // ─── 3. CARREGAR PRODUTOS DA PLANILHA ───────────────────────────
   const produtosContainer = document.getElementById("produtos-container");
-  const endpointProdutos = "https://script.google.com/macros/s/AKfycbwXM1Hcjtm4DxAwUM5wzr1GfDGA9FstrQcZtqGJnUyXW-WIkijdIJYf_aKjtgtpU8ON/exec";
+  const endpointProdutos =
+    "https://script.google.com/macros/s/AKfycbwXM1Hcjtm4DxAwUM5wzr1GfDGA9FstrQcZtqGJnUyXW-WIkijdIJYf_aKjtgtpU8ON/exec";
 
-  fetch(endpointProdutos)
-    .then(res => res.json())
-    .then(produtos => {
-      if (!produtosContainer) return;
-      produtosContainer.innerHTML = "";
+  if (produtosContainer) {
+    fetch(endpointProdutos)
+      .then((res) => res.json())
+      .then((produtos) => {
+        produtosContainer.innerHTML = "";
+        produtos.forEach((produto) => {
+          const card = document.createElement("article");
+          card.className = "produto-card";
 
-      produtos.forEach(produto => {
-        const card = document.createElement("article");
-        card.className = "produto-card";
+          const seloPromocao =
+            produto["Promocao"]?.toLowerCase() === "sim"
+              ? '<div class="selo-promocao">🔥 Super Oferta</div>'
+              : "";
 
-        const seloPromocao = produto["Promocao"]?.toLowerCase() === "sim"
-          ? '<div class="selo-promocao">🔥 Super Oferta</div>'
-          : "";
+          card.innerHTML = `
+            ${seloPromocao}
+            <img src="${produto["Imagem"]}" alt="${produto["Descricao"]}" />
+            <h2 class="produto-titulo">${produto["Titulo"]}</h2>
+            <a href="${produto["Link"]}" class="botao-link" target="_blank" rel="noopener noreferrer">
+              Comprar na Amazon
+            </a>
+          `;
+          produtosContainer.appendChild(card);
+        });
+      })
+      .catch((err) => console.error("Erro ao carregar produtos:", err));
+  }
 
-        card.innerHTML = `
-          ${seloPromocao}
-          <img src="${produto["Imagem"]}" alt="${produto["Descricao"]}" />
-          <h2 class="produto-titulo">${produto["Titulo"]}</h2>
-          <a href="${produto["Link"]}" class="botao-link" target="_blank" rel="noopener noreferrer">
-            Comprar na Amazon
-          </a>
-        `;
-        produtosContainer.appendChild(card);
-      });
-    })
-    .catch(err => console.error("Erro ao carregar produtos:", err));
-
-  // ─── NOTIFICAÇÃO DE COMPRA ───────────────────────────────────────
+  // ─── 4. NOTIFICAÇÃO DE COMPRA ────────────────────────────────────
   const nomes = ["João", "Maria", "Carlos", "Fernanda", "Rafael", "Juliana", "Lucas", "Patrícia"];
   const cidades = ["SP", "RJ", "BH", "POA", "Curitiba", "Salvador"];
   const produtosFake = ["Grill Elétrico", "Fone Bluetooth", "Smartwatch", "Air Fryer", "Teclado Gamer", "Echo Dot"];
@@ -67,14 +70,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const produto = produtosFake[Math.floor(Math.random() * produtosFake.length)];
     caixa.textContent = `${nome} de ${cidade} acabou de comprar um ${produto}!`;
     caixa.style.animation = "none";
-    void caixa.offsetWidth; // Reinicia animação
+    void caixa.offsetWidth; // reinicia animação
     caixa.style.animation = "slideFadeInOut 6s ease-in-out";
   }
 
   setTimeout(mostrarNotificacao, 5000);
   setInterval(mostrarNotificacao, 30000);
 
-  // ─── CHAT SIMULADO ───────────────────────────────────────────────
+  // ─── 5. CHAT SIMULADO ───────────────────────────────────────────
   const openChatBtn = document.getElementById("open-chat");
   const closeChatBtn = document.getElementById("close-chat");
   const chatWindow = document.getElementById("chat-window");
@@ -95,14 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function enviarMensagem() {
       const mensagem = chatInput.value.trim();
       if (!mensagem) return;
-
       const userMsg = document.createElement("div");
       userMsg.className = "user-message";
       userMsg.textContent = mensagem;
       chatBody.appendChild(userMsg);
-
       chatInput.value = "";
-
       setTimeout(() => {
         const botMsg = document.createElement("div");
         botMsg.className = "bot-message";
@@ -113,98 +113,128 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     sendChatBtn.addEventListener("click", enviarMensagem);
-    chatInput.addEventListener("keypress", e => {
+    chatInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") enviarMensagem();
     });
-
-    function gerarResposta(msg) {
-      msg = msg.toLowerCase();
-
-      if (msg.includes("frete")) {
-        return "📦 O frete é grátis para compras acima de R$199!";
-      }
-      if (msg.includes("desconto")) {
-        return "🎉 Você pode usar o cupom PROMO10 para 10% de desconto.";
-      }
-      if (msg.includes("prazo")) {
-        return "⏱️ O prazo de entrega varia entre 3 a 7 dias úteis.";
-      }
-
-      return `🤖 Não tenho uma resposta automática para isso...<br>
-      Você pode falar diretamente com nosso atendimento pelo WhatsApp:<br>
-      👉 <a href="https://wa.me/5551983098650?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20a%20loja" target="_blank">Clique aqui para conversar</a>`;
-    }
   }
 
-  // ─── ENVIO DE EMAIL ───────────────────────────────────────────────
+  function gerarResposta(msg) {
+    msg = msg.toLowerCase();
+    if (msg.includes("frete")) {
+      return "📦 O frete é grátis para compras acima de R$199!";
+    }
+    if (msg.includes("desconto")) {
+      return "🎉 Você pode usar o cupom PROMO10 para 10% de desconto.";
+    }
+    if (msg.includes("prazo")) {
+      return "⏱️ O prazo de entrega varia entre 3 a 7 dias úteis.";
+    }
+    return `🤖 Não tenho uma resposta automática para isso...<br>
+      Você pode falar diretamente com nosso atendimento pelo WhatsApp:<br>
+      👉 <a href="https://wa.me/5551983098650?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20a%20loja" target="_blank">Clique aqui para conversar</a>`;
+  }
+
+  // ─── 6. ENVIO DE EMAIL ──────────────────────────────────────────
   const form = document.getElementById("email-form");
   const overlay = document.getElementById("overlay-email");
   const status = document.getElementById("mensagem-status");
   const fecharBtn = document.getElementById("fechar-overlay");
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const email = document.getElementById("email-input").value;
-
-    status.textContent = "⏳ Enviando e-mail...";
-
-    fetch("https://script.google.com/macros/s/AKfycbwXM1Hcjtm4DxAwUM5wzr1GfDGA9FstrQcZtqGJnUyXW-WIkijdIJYf_aKjtgtpU8ON/exec", {
-      method: "POST",
-      body: new URLSearchParams({ email })
-    })
-      .then(res => res.text())
-      .then(msg => {
-        status.textContent = "✅ E-mail enviado com sucesso!";
-        setTimeout(() => esconderOverlay(), 2000);
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email-input").value;
+      status.textContent = "⏳ Enviando e-mail...";
+      fetch(endpointProdutos, {
+        method: "POST",
+        body: new URLSearchParams({ email }),
       })
-      .catch(err => {
-        status.textContent = "❌ Erro ao enviar e-mail. Tente novamente.";
-        console.error(err);
-      });
-  });
+        .then((res) => res.text())
+        .then(() => {
+          status.textContent = "✅ E-mail enviado com sucesso!";
+          setTimeout(() => esconderOverlay(), 2000);
+        })
+        .catch((err) => {
+          status.textContent = "❌ Erro ao enviar e-mail. Tente novamente.";
+          console.error(err);
+        });
+    });
+
+    fecharBtn.addEventListener("click", esconderOverlay);
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) esconderOverlay();
+    });
+  }
 
   function esconderOverlay() {
     overlay.classList.add("hidden");
-    setTimeout(() => {
-      overlay.style.display = "none";
-    }, 300);
+    setTimeout(() => (overlay.style.display = "none"), 300);
   }
 
-  fecharBtn.addEventListener("click", () => {
-    esconderOverlay();
-  });
+  // ─── 7. CARREGAR POSTS DO BLOG ─────────────────────────────────
+  (async function loadPosts({ limit = 6 } = {}) {
+    const postsContainer = document.getElementById("posts-grid");
+    if (!postsContainer) return;
 
-  overlay.addEventListener("click", (e) => {
-    if (e.target === overlay) {
-      esconderOverlay();
+    postsContainer.innerHTML = "<p>Carregando posts…</p>";
+
+    try {
+      // 1. Lista MDs no repositório
+      const res = await fetch(
+        "https://api.github.com/repos/SEU_USUARIO/SEU_REPO/contents/content/posts"
+      );
+      if (!res.ok) throw new Error("Erro ao listar posts");
+      const files = await res.json();
+
+      // 2. Busca cada MD em paralelo
+      const mdFiles = files.filter((f) => f.name.endsWith(".md"));
+      const texts = await Promise.all(mdFiles.map((f) => fetch(f.download_url).then((r) => r.text())));
+
+      // 3. Extrai frontmatter e monta array
+      const posts = texts.map((md) => {
+        const parts = md.split("---").filter(Boolean);
+        const metaRaw = parts.shift();
+        const body = parts.join("---");
+        const meta = metaRaw
+          .split("\n")
+          .reduce((acc, line) => {
+            const [key, ...rest] = line.split(":");
+            acc[key.trim()] = rest.join(":").trim().replace(/^"|"$/g, "");
+            return acc;
+          }, {});
+        const slug = (meta.slug || meta.title)
+          .toLowerCase()
+          .replace(/[^\w]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+        return {
+          slug,
+          title: meta.title,
+          date: new Date(meta.date),
+          excerpt: meta.excerpt,
+        };
+      });
+
+      // 4. Ordena e limita
+      posts.sort((a, b) => b.date - a.date);
+      const sliced = posts.slice(0, limit);
+
+      // 5. Renderiza
+      postsContainer.innerHTML = sliced
+        .map(
+          (p) => `
+        <article class="post-card">
+          <h3><a href="post.html?slug=${p.slug}">${p.title}</a></h3>
+          <small>${p.date.toLocaleDateString()}</small>
+          <p>${p.excerpt}</p>
+          <a href="post.html?slug=${p.slug}" class="read-more">Leia mais →</a>
+        </article>`
+        )
+        .join("");
+
+      if (!sliced.length) postsContainer.innerHTML = "<p>Nenhum post encontrado.</p>";
+    } catch (err) {
+      console.error(err);
+      postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
     }
-  });
-
-  // ─── AMAZON VITRINE ──────────────────────────────────────────────
- const vitrineContainer = document.getElementById("amazon-vitrine");
-
-  if (vitrineContainer) {
-    // Configuração Amazon Afiliados
-    window.amzn_assoc_placement = "adunit0";
-    window.amzn_assoc_tracking_id = "rafaelioppi-20"; // seu ID afiliado
-    window.amzn_assoc_ad_mode = "search";
-    window.amzn_assoc_ad_type = "smart";
-    window.amzn_assoc_marketplace = "amazon";
-    window.amzn_assoc_region = "BR"; // Região Brasil
-    window.amzn_assoc_default_search_phrase = "eletrônicos";
-    window.amzn_assoc_default_category = "All";
-    window.amzn_assoc_linkid = "1234567890abcdef"; // pode ser deixado vazio
-
-    // Carregar script da Amazon
-    const existingScript = document.querySelector(
-      'script[src="https://z-na.amazon-adsystem.com/widgets/onejs"]'
-    );
-
-    if (!existingScript) {
-      const scriptAmazonLoader = document.createElement("script");
-      scriptAmazonLoader.src = "https://z-na.amazon-adsystem.com/widgets/onejs";
-      scriptAmazonLoader.async = true;
-      document.body.appendChild(scriptAmazonLoader);
-    }
-  }
-  });
+  })();
+});
