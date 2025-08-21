@@ -14,9 +14,14 @@
     }
     img.featured {
       max-width: 100%;
+      max-height: 400px; /* 🔹 limite de altura */
       height: auto;
       margin: 1rem 0;
       border-radius: 8px;
+      object-fit: contain; /* 🔹 mantém proporção sem cortar */
+      display: block;
+      margin-left: auto;
+      margin-right: auto; /* 🔹 centraliza */
     }
     h1 {
       margin-bottom: 0.5rem;
@@ -39,6 +44,11 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     const slug = new URLSearchParams(location.search).get("slug");
+
+    function resolveImagePath(path) {
+      if (/^https?:\/\//.test(path)) return path;
+      return location.origin + path.replace(/^\/static/, "");
+    }
 
     async function carregarPost(slug) {
       const container = document.getElementById("post-content");
@@ -76,16 +86,14 @@
 
         // Corrige imagens do corpo
         body = body.replace(/!\[([^\]]*)\]\((\/[^\)]+)\)/g, (_, alt, path) => {
-          if (/^https?:\/\//.test(path)) return `![${alt}](${path})`;
-          const cleanPath = path.replace(/^\/static/, "");
-          return `![${alt}](${location.origin}${cleanPath})`;
+          return `![${alt}](${resolveImagePath(path)})`;
         });
 
         // Monta HTML final
         const html = `
           <article>
             <h1>${meta.title || slug.replace(/-/g, " ")}</h1>
-            ${meta.image ? `<img src="${/^https?:\/\//.test(meta.image) ? meta.image : location.origin + meta.image}" alt="${meta.title || ''}" class="featured">` : ""}
+            ${meta.image ? `<img src="${resolveImagePath(meta.image)}" alt="${meta.title || ''}" class="featured">` : ""}
             ${meta.date ? `<time datetime="${meta.date}">${new Date(meta.date).toLocaleDateString("pt-BR")}</time>` : ""}
             <div>${marked.parse(body)}</div>
           </article>
