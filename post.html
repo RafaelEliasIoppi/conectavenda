@@ -27,10 +27,14 @@
       display: block;
       margin-bottom: 1.5rem;
     }
+    .loading {
+      font-size: 1.2rem;
+      color: #333;
+    }
   </style>
 </head>
 <body>
-  <main id="post-content">Carregando...</main>
+  <main id="post-content" class="loading">Carregando...</main>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
@@ -38,68 +42,57 @@
 
     async function carregarPost(slug) {
       const container = document.getElementById("post-content");
-
       try {
-        // 1. Lista todos os arquivos no repositório
-        const res = await fetch(
-          "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
-        );
-        if (!res.ok) throw new Error("Erro ao listar arquivos");
+        // Lista arquivos no repositório
+        const res = await fetch("https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main");
+        if (!res.ok) throw new Error("Erro ao listar arquivos no GitHub");
         const files = await res.json();
 
-        // 2. Encontra o arquivo correspondente ao slug
-        const file = files.find(f =>
-          f.name.toLowerCase().includes(slug.toLowerCase())
-        );
+        // Encontra arquivo pelo slug
+        const file = files.find(f => f.name.toLowerCase().includes(slug.toLowerCase()));
         if (!file || !file.download_url) {
           container.innerText = "Post não encontrado.";
           return;
         }
 
-        // 3. Baixa o Markdown
+        // Baixa Markdown
         const md = await fetch(file.download_url).then(r => r.text());
 
-        // 4. Extrai frontmatter (YAML simples)
-        const frontmatterMatch = md.match(/^---([\s\S]*?)---/);
+        // Extrai frontmatter
+        const frontmatterMatch = md.match(/^---\s*([\s\S]*?)\s*---/);
         const meta = {};
         let body = md;
 
         if (frontmatterMatch) {
           body = md.replace(frontmatterMatch[0], "").trim();
-          frontmatterMatch[1]
-            .split("\n")
-            .forEach(line => {
-              const [key, ...vals] = line.split(":");
-              if (!key || !vals.length) return;
-              let value = vals.join(":").trim().replace(/^"|"$/g, "");
-              // remove /static do caminho da imagem
-              if (key.trim() === "image") {
-                value = value.replace(/^\/static/, "");
-              }
-              meta[key.trim()] = value;
-            });
+          frontmatterMatch[1].split("\n").forEach(line => {
+            const [key, ...vals] = line.split(":");
+            if (!key || !vals.length) return;
+            let value = vals.join(":").trim().replace(/^"|"$/g, "");
+            if (key.trim() === "image") value = value.replace(/^\/static/, "");
+            meta[key.trim()] = value;
+          });
         }
 
-        // 5. Corrige imagens dentro do corpo (removendo /static se houver)
-        body = body.replace(
-          /!\[([^\]]*)\]\((\/[^\)]+)\)/g,
-          (_, alt, path) => {
-            const cleanPath = path.replace(/^\/static/, "");
-            return `![${alt}](${location.origin}${cleanPath})`;
-          }
-        );
+        // Corrige imagens do corpo
+        body = body.replace(/!\[([^\]]*)\]\((\/[^\)]+)\)/g, (_, alt, path) => {
+          if (/^https?:\/\//.test(path)) return `![${alt}](${path})`;
+          const cleanPath = path.replace(/^\/static/, "");
+          return `![${alt}](${location.origin}${cleanPath})`;
+        });
 
-        // 6. Monta HTML final
+        // Monta HTML final
         const html = `
           <article>
-            <h1>${meta.title || slug}</h1>
-            ${meta.image ? `<img src="${location.origin}${meta.image}" alt="${meta.title || ''}" class="featured">` : ""}
+            <h1>${meta.title || slug.replace(/-/g, " ")}</h1>
+            ${meta.image ? `<img src="${/^https?:\/\//.test(meta.image) ? meta.image : location.origin + meta.image}" alt="${meta.title || ''}" class="featured">` : ""}
             ${meta.date ? `<time datetime="${meta.date}">${new Date(meta.date).toLocaleDateString("pt-BR")}</time>` : ""}
             <div>${marked.parse(body)}</div>
           </article>
         `;
 
         container.innerHTML = html;
+
       } catch (error) {
         console.error("Erro ao carregar post:", error);
         container.innerText = "Erro ao carregar post.";
