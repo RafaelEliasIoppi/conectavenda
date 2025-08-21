@@ -10,75 +10,69 @@
 </head>
 
 <body>
-<div id="notificacao-compra" class="notificacao-compra"></div>  
-<main class="container">
-  <!-- Cabeçalho de Oferta -->
-  <header class="hero">
-    <h1 id="titulo-oferta">💥 Ofertas Imperdíveis para Todos!</h1>
-    <p class="subtitulo-oferta">Descontos exclusivos por tempo limitado — confira agora!</p>
-  </header>
+  <div id="notificacao-compra" class="notificacao-compra"></div>  
+  <main class="container">
+    <!-- Cabeçalho de Oferta -->
+    <header class="hero">
+      <h1 id="titulo-oferta">💥 Ofertas Imperdíveis para Todos!</h1>
+      <p class="subtitulo-oferta">Descontos exclusivos por tempo limitado — confira agora!</p>
+    </header>
 
-  <!-- Grid de Produtos (dinâmico) -->
-  <section class="grid-produtos" id="produtos-container">
-    <!-- Os cards serão inseridos aqui via JavaScript -->
-  </section>
- <section class="grid-produtos" id="produtos-afiliados">
-  <h2>🛍️ Produtos em destaque</h2>
-  <div id="amazon-vitrine"></div>
-</section>
-  
-  <!-- Widget Chatbot / WhatsApp -->
-  <div id="chat-widget">
-    <div class="chat-icon" id="open-chat">💬</div>
-    <div class="chat-window hidden" id="chat-window">
-      <div class="chat-header">
-        <span>Atendimento</span>
-        <button id="close-chat">&times;</button>
-      </div>
-      <div class="chat-body" id="chat-body">
-        <div class="bot-message">Olá! Como posso ajudar?</div>
-      </div>
-      <div class="chat-footer">
-        <input type="text" id="chat-input" placeholder="Digite sua dúvida..." />
-        <button id="send-chat">→</button>
-      </div>
-    </div>
-  </div>
-
-<!-- Overlay para centralizar o formulário -->
-  <div class="overlay overlay-email" id="overlay-email">
-    <section class="email-captura">
-      <!-- Botão fechar -->
-      <button class="fechar-overlay" id="fechar-overlay">✖</button>
-
-      <h2>📧 Receba nossas ofertas por e-mail</h2>
-      <form id="email-form">
-        <input type="email" id="email-input" placeholder="Digite seu e-mail" required />
-        <button type="submit">Receber ofertas</button>
-      </form>
-      <div id="mensagem-status"></div>
+    <!-- Grid de Produtos (dinâmico) -->
+    <section class="grid-produtos" id="produtos-container">
+      <!-- Os cards serão inseridos aqui via JavaScript -->
     </section>
-  </div>
-
-  <footer class="footer-ajuda">
-    <a href="https://wa.me/5551983098650" class="botao-link whatsapp" target="_blank">
-      📲 Precisa de Ajuda? Fale comigo no WhatsApp
-    </a>
-
-    <p>💻 Site desenvolvido por <strong>Rafael Elias Ioppi</strong></p>
-    <p>© 2025 Todos os direitos reservados</p>
-    <p><a href="/politica-de-privacidade.html">🔒 Política de Privacidade</a></p>
-
-    <!-- Caixa de segurança -->
-    <div class="caixa-seguranca">
-      🛡️ <strong>Compra 100% Segura:</strong><br>
-      Todas as vendas e entregas são realizadas exclusivamente pela 
-      <a href="https://www.amazon.com.br/" target="_blank" rel="noopener noreferrer">Amazon</a>.
+    <!-- Widget Chatbot / WhatsApp -->
+    <div id="chat-widget">
+      <div class="chat-icon" id="open-chat">💬</div>
+      <div class="chat-window hidden" id="chat-window">
+        <div class="chat-header">
+          <span>Atendimento</span>
+          <button id="close-chat">&times;</button>
+        </div>
+        <div class="chat-body" id="chat-body">
+          <div class="bot-message">Olá! Como posso ajudar?</div>
+        </div>
+        <div class="chat-footer">
+          <input type="text" id="chat-input" placeholder="Digite sua dúvida..." />
+          <button id="send-chat">→</button>
+        </div>
+      </div>
     </div>
-</footer>
 
-<div class="aviso-seguro">
-  🔒 Você está em um ambiente seguro. Suas informações estão protegidas.
-</div>
+  <!-- Overlay para centralizar o formulário -->
+    <div class="overlay overlay-email" id="overlay-email">
+      <section class="email-captura">
+        <!-- Botão fechar -->
+        <button class="fechar-overlay" id="fechar-overlay">✖</button>
+
+        <h2>📧 Receba nossas ofertas por e-mail</h2>
+        <form id="email-form">
+          <input type="email" id="email-input" placeholder="Digite seu e-mail" required />
+          <button type="submit">Receber ofertas</button>
+        </form>
+        <div id="mensagem-status"></div>
+      </section>
+    </div>
+
+    <footer class="footer-ajuda">
+      <!-- Caixa de segurança -->
+      <div class="caixa-seguranca">
+        🛡️ <strong>Compra 100% Segura:</strong><br>
+        Todas as vendas e entregas são realizadas exclusivamente pela 
+        <a href="https://www.amazon.com.br/" target="_blank" rel="noopener noreferrer">Amazon</a>.
+      </div>
+     <p><a href="https://wa.me/5551983098650" class="botao-link whatsapp" target="_blank">
+        📲 Precisa de Ajuda? Fale comigo no WhatsApp
+      </a>
+      </p> 
+      <p>💻 Site desenvolvido por <strong>Rafael Elias Ioppi</strong></p>
+      <p>© 2025 Todos os direitos reservados</p>
+      <p><a href="/politica-de-privacidade.html">🔒 Política de Privacidade</a></p>
+
+            
+  </footer>
+
+  <div class="aviso-seguro">🔒 Você está em um ambiente seguro. Suas informações estão protegidas.</div>
 </body>
 </html>

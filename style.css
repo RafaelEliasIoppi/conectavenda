@@ -235,31 +235,65 @@ main {
 }
 
 .footer-ajuda {
-  max-width: 100%;
-  padding: 32px 24px;
-  margin-top: 48px;
-  color: #333;
-  font-size: 1rem;
+  width: 100%;
+  padding: 10px 8px; /* Mais espaço interno para respirar */
+  margin-top: 0; /* Remove espaçamento extra acima */
+  background-color: #f0f4f8;
+  color: #2c2c2c;
+  font-size: 0.95rem; /* Leve ajuste na legibilidade */
   text-align: center;
+  border-top: 1px solid #d0d7de;
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.05); /* Sombra mais sutil */
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
 }
 
 .footer-ajuda p {
   margin: 12px 0;
-  line-height: 1.6;
+  line-height: 1.8;
   font-weight: 400;
-  color: inherit;
+  color: #444;
 }
 
 .footer-ajuda a {
   color: #0077cc;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 .footer-ajuda a:hover {
   color: #005fa3;
+  text-decoration: underline;
 }
+
+.caixa-seguranca {
+  margin: 32px auto 0;
+  display: block;
+  max-width: 600px;
+  padding: 20px 24px;
+  background: #e6f9f0;
+  color: #0a6847;
+  border: 2px solid #0a6847;
+  border-radius: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.caixa-seguranca a {
+  display: inline-block;
+  margin-top: -10px;
+  color: #0a6847;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+  .caixa-seguranca a {
+    color: #0a6847;
+    text-decoration: underline;
+    font-weight: bold;
+  }
 
 .notificacao-compra {
   position: fixed;
@@ -588,37 +622,18 @@ button[type="submit"]:hover {
   color: #555;
 }
 
- .footer-ajuda {
-    text-align: center;
-    padding: 20px;
-    background: #f9f9f9;
-    font-family: Arial, sans-serif;
-  }
 
-  .footer-ajuda p {
-    margin: 8px 0;
-    color: #333;
-  }
 
-  .caixa-seguranca {
-    margin-top: 15px;
-    display: inline-block;
-    padding: 15px 20px;
-    background: #e6f9f0;
-    color: #0a6847;
-    border: 2px solid #0a6847;
-    border-radius: 12px;
-    font-weight: bold;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-
-  .caixa-seguranca a {
-    color: #0a6847;
-    text-decoration: underline;
-    font-weight: bold;
-  }
-
-  .overlay {
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
   transition: opacity 0.3s ease;
 }
 
@@ -632,9 +647,11 @@ button[type="submit"]:hover {
   font-weight: bold;
   cursor: pointer;
   color: #555;
-  z-index: 10; /
-};
-fechar-overlay:hover {
+  z-index: 10;
+}
+
+.fechar-overlay:hover {
   color: #000;
 }
+
 
