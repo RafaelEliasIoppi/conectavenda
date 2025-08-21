@@ -172,11 +172,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   
-  function resolveImagePath(filename) {
-  const BASE_URL = "https://raw.githubusercontent.com/RafaelEliasIoppi/conectavenda/refs/heads/main/static/img/uploads/";
-  if (!filename) return "";
-  return BASE_URL + filename.trim();
+function resolveImagePath(filename) {
+  return `/static/img/uploads/${filename.trim()}`;
 }
+
 
  (async function loadPosts({ limit = 6 } = {}) {
     const postsContainer = document.getElementById("posts-grid");
