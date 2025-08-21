@@ -1,0 +1,34 @@
+<!-- post.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Post</title>
+</head>
+<body>
+  <div id="post-content">Carregando...</div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("slug");
+
+    async function carregarPost(slug) {
+      const res = await fetch(
+        "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
+      );
+      const files = await res.json();
+      const file = files.find((f) => f.name.includes(slug));
+      if (!file) {
+        document.getElementById("post-content").innerText = "Post não encontrado.";
+        return;
+      }
+
+      const md = await fetch(file.download_url).then((r) => r.text());
+      const body = md.replace(/^---[\s\S]*?---/, "").trim();
+      document.getElementById("post-content").innerHTML = `<h1>${slug}</h1><p>${body}</p>`;
+    }
+
+    carregarPost(slug);
+  </script>
+</body>
+</html>
