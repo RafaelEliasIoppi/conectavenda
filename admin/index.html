@@ -2,12 +2,24 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CMS Admin</title>
+
+  <!-- Widget de Identity (opcional, mas recomendado se você usa login) -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+
+  <!-- Estilos básicos do CMS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.css"
+  />
 </head>
+
 <body>
-  <!-- A Netlify CMS injeta aqui o seu painel -->
+  <!-- É fundamental ter esse elemento para o CMS montar a interface -->
+  <div id="nc-root"></div>
+
+  <!-- Script principal do Netlify CMS -->
+  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
 </body>
 </html>

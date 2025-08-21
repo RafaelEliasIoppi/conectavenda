@@ -1,11 +1,11 @@
-[build]
-  publish = "public"
-  command = "eleventy"
+build:
+  publish: public
+  command: eleventy
 
-[dev]
-  command = "eleventy --serve"
+dev:
+  command: eleventy --serve
 
-[[redirects]]
-  from = "/admin"
-  to = "/admin/index.html"
-  status = 200
+redirects:
+  - from: /admin
+    to: /admin/index.html
+    status: 200
