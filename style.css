@@ -719,7 +719,7 @@ post-card img {
 /* Imagem destacada do post (featured) */
 img.featured {
   width: 100%;           /* ocupa toda a largura do container */
-  max-width: 800px;      /* limite máximo opcional */
+  max-width: 500px;      /* limite máximo opcional */
   height: auto;          /* mantém proporção original */
   object-fit: contain;   /* mantém a imagem inteira */
   border-radius: 12px;   /* bordas arredondadas */
