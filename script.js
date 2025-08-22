@@ -197,16 +197,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
 (async function loadPosts({ limit = 6 } = {}) {
   const postsContainer = document.getElementById("posts-grid");
   if (!postsContainer) return;
 
   postsContainer.innerHTML = "<p>Carregando posts…</p>";
 
-  // Função auxiliar para resolver caminho da imagem
+  // 🔹 Função única para normalizar imagens
   function resolveImagePath(path) {
     if (!path) return "";
-    return path.startsWith("http") ? path : `/static/img/uploads/${path}`;
+    path = path.trim();
+
+    if (path.startsWith("http")) return path;              // já é link externo
+    if (path.startsWith("static/img/uploads/")) return "/" + path; // já contém static
+    return `/static/img/uploads/${path}`;                  // relativo simples
   }
 
   // Função para parsear o frontmatter de um arquivo Markdown
@@ -219,12 +224,11 @@ document.addEventListener("DOMContentLoaded", () => {
       body = mdContent.replace(fmMatch[0], "").trim();
       fmMatch[1].split("\n").forEach((line) => {
         const separatorIndex = line.indexOf(":");
-        if (separatorIndex === -1) return; // Ignora linhas sem ":"
+        if (separatorIndex === -1) return;
 
         const key = line.substring(0, separatorIndex).trim();
         let value = line.substring(separatorIndex + 1).trim();
 
-        // Remove aspas de strings
         if (value.startsWith('"') && value.endsWith('"')) {
           value = value.substring(1, value.length - 1);
         }
@@ -245,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 2) Filtra arquivos .md
     const mdFiles = files.filter((f) => f.name.endsWith(".md"));
 
-    // 3) Baixa conteúdos e monta objetos já com slug = nome do arquivo
+    // 3) Baixa conteúdos e monta objetos
     const posts = await Promise.all(
       mdFiles.map(async (file) => {
         const mdContent = await fetch(file.download_url).then((r) => {
@@ -255,7 +259,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const { meta, body } = parseFrontmatter(mdContent);
 
-        // Validação e atribuição de valores padrão
         const title = meta.title || "Sem título";
         const date = meta.date ? new Date(meta.date) : new Date();
         const excerpt = meta.excerpt || (body.substring(0, 140).trim() + "...");
@@ -263,21 +266,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const slug = file.name.replace(/\.md$/i, "");
 
-        return {
-          slug,
-          title,
-          date,
-          excerpt,
-          image,
-        };
+        return { slug, title, date, excerpt, image };
       })
     );
 
-    // 4) Ordena por data (mais recente primeiro) e aplica limite
+    // 4) Ordena por data e aplica limite
     posts.sort((a, b) => b.date - a.date);
     const sliced = posts.slice(0, limit);
 
-    // 5) Renderiza HTML dos posts
+    // 5) Renderiza HTML
     if (sliced.length === 0) {
       postsContainer.innerHTML = "<p>Nenhum post encontrado.</p>";
     } else {
