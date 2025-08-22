@@ -70,11 +70,21 @@
           });
         }
 
-        // 5. Corrige imagens relativas no body
+       // 5. Corrige imagens relativas no body
         body = body.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, path) => {
-          if (path.startsWith("http")) return `![${alt}](${path})`;
-          return `![${alt}](/static/img/uploads/${path.trim()})`;
+          path = path.trim();
+
+          if (path.startsWith("http")) {
+            return `![${alt}](${path})`; // mantém link externo
+          }
+
+          if (path.includes("static/img/uploads/")) {
+            return `![${alt}](/${path})`; // já está no caminho certo
+          }
+
+          return `![${alt}](/static/img/uploads/${path})`; // só prefixa se for relativo
         });
+
 
         // 6. Renderiza
         postEl.innerHTML = `
