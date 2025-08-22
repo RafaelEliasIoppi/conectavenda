@@ -672,7 +672,7 @@ button[type="submit"]:hover {
 /* ------------------------------------------------------------
    2. Estilo do Card do Post
    ------------------------------------------------------------ */
-.post-card {
+post-card {
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -680,8 +680,11 @@ button[type="submit"]:hover {
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
 
+  width: 100%;       /* ocupa toda a largura possível do grid */
+  max-width: 400px;  /* limite máximo do card */
+  margin: 0 auto;    /* centraliza se houver espaço sobrando */
+}
 .post-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
