@@ -31,16 +31,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (produtosContainer) {
     fetch(endpointProdutos)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
       .then((produtos) => {
         produtosContainer.innerHTML = "";
+        if (produtos.length === 0) {
+          produtosContainer.innerHTML = "<p>Nenhum produto encontrado.</p>";
+          return;
+        }
         produtos.forEach((produto) => {
           const card = document.createElement("article");
           card.className = "produto-card";
 
           const seloPromocao =
             produto["Promocao"]?.toLowerCase() === "sim"
-              ? '<div class="selo-promocao">🔥 Super Oferta</div>'
+              ? 	'<div class="selo-promocao">🔥 Super Oferta</div>'
               : "";
 
           card.innerHTML = `
@@ -54,7 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
           produtosContainer.appendChild(card);
         });
       })
-      .catch((err) => console.error("Erro ao carregar produtos:", err));
+      .catch((err) => {
+        console.error("Erro ao carregar produtos:", err);
+        produtosContainer.innerHTML = "<p>Erro ao carregar produtos.</p>";
+      });
   }
 
   // ─── 4. NOTIFICAÇÃO DE COMPRA ────────────────────────────────────
@@ -74,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     caixa.style.animation = "slideFadeInOut 6s ease-in-out";
   }
 
+  // Inicia a notificação após 5 segundos e repete a cada 30 segundos
   setTimeout(mostrarNotificacao, 5000);
   setInterval(mostrarNotificacao, 30000);
 
@@ -141,23 +152,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const fecharBtn = document.getElementById("fechar-overlay");
 
   if (form) {
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("email-input").value;
+      const emailInput = document.getElementById("email-input");
+      const email = emailInput.value.trim();
+
+      if (!email) {
+        status.textContent = "❌ Por favor, insira um e-mail válido.";
+        return;
+      }
+
       status.textContent = "⏳ Enviando e-mail...";
-      fetch(endpointProdutos, {
-        method: "POST",
-        body: new URLSearchParams({ email }),
-      })
-        .then((res) => res.text())
-        .then(() => {
-          status.textContent = "✅ E-mail enviado com sucesso!";
-          setTimeout(() => esconderOverlay(), 2000);
-        })
-        .catch((err) => {
-          status.textContent = "❌ Erro ao enviar e-mail. Tente novamente.";
-          console.error(err);
+      try {
+        const res = await fetch(endpointProdutos, {
+          method: "POST",
+          body: new URLSearchParams({ email }),
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
         });
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        status.textContent = "✅ E-mail enviado com sucesso!";
+        emailInput.value = ""; // Limpa o campo de e-mail
+        setTimeout(() => esconderOverlay(), 2000);
+      } catch (err) {
+        status.textContent = "❌ Erro ao enviar e-mail. Tente novamente.";
+        console.error("Erro ao enviar e-mail:", err);
+      }
     });
 
     fecharBtn.addEventListener("click", esconderOverlay);
@@ -170,87 +195,109 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.classList.add("hidden");
     setTimeout(() => (overlay.style.display = "none"), 300);
   }
+});
 
-  
-function resolveImagePath(filename) {
-  return `/static/img/uploads/${filename.trim()}`;
-}
+(async function loadPosts({ limit = 6 } = {}) {
+  const postsContainer = document.getElementById("posts-grid");
+  if (!postsContainer) return;
 
+  postsContainer.innerHTML = "<p>Carregando posts…</p>";
 
- (async function loadPosts({ limit = 6 } = {}) {
-    const postsContainer = document.getElementById("posts-grid");
-    if (!postsContainer) return;
+  // Função auxiliar para resolver caminho da imagem
+  function resolveImagePath(path) {
+    if (!path) return "";
+    return path.startsWith("http") ? path : `/static/img/uploads/${path}`;
+  }
 
-    postsContainer.innerHTML = "<p>Carregando posts…</p>";
+  // Função para parsear o frontmatter de um arquivo Markdown
+  function parseFrontmatter(mdContent) {
+    const fmMatch = mdContent.match(/^---\s*([\s\S]*?)\s*---/);
+    let meta = {};
+    let body = mdContent;
 
-    try {
-      // 1) Lista arquivos MD via GitHub API
-      const res = await fetch(
-        "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
-      );
-      if (!res.ok) throw new Error("Erro ao listar posts");
-      const files = await res.json();
+    if (fmMatch) {
+      body = mdContent.replace(fmMatch[0], "").trim();
+      fmMatch[1].split("\n").forEach((line) => {
+        const separatorIndex = line.indexOf(":");
+        if (separatorIndex === -1) return; // Ignora linhas sem ":"
 
-      // 2) Filtra arquivos .md
-      const mdFiles = files.filter((f) => f.name.endsWith(".md"));
+        const key = line.substring(0, separatorIndex).trim();
+        let value = line.substring(separatorIndex + 1).trim();
 
-      // 3) Baixa conteúdos e monta objetos já com slug = nome do arquivo
-      const posts = await Promise.all(
-        mdFiles.map(async (file) => {
-          const md = await fetch(file.download_url).then((r) => {
-            if (!r.ok) throw new Error(`Erro ao baixar ${file.name}`);
-            return r.text();
-          });
+        // Remove aspas de strings
+        if (value.startsWith('"') && value.endsWith('"')) {
+          value = value.substring(1, value.length - 1);
+        }
+        meta[key] = value;
+      });
+    }
+    return { meta, body };
+  }
 
-          // Frontmatter
-          const fm = md.match(/^---\s*([\s\S]*?)\s*---/);
-          let meta = {};
-          let body = md;
-          if (fm) {
-            body = md.replace(fm[0], "").trim();
-            fm[1].split("\n").forEach((line) => {
-              const [k, ...vals] = line.split(":");
-              if (!k || !vals.length) return;
-              meta[k.trim()] = vals.join(":").trim().replace(/^"|"$/g, "");
-            });
-          }
+  try {
+    // 1) Lista arquivos MD via GitHub API
+    const res = await fetch(
+      "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
+    );
+    if (!res.ok) throw new Error(`Erro ao listar posts: ${res.statusText}`);
+    const files = await res.json();
 
-          const slug = file.name.replace(/\.md$/i, ""); // slug = nome do arquivo
+    // 2) Filtra arquivos .md
+    const mdFiles = files.filter((f) => f.name.endsWith(".md"));
 
-          return {
-            slug,
-            title: meta.title || "Sem título",
-            date: meta.date ? new Date(meta.date) : new Date(),
-            excerpt: meta.excerpt || (body.substring(0, 140).trim() + "..."),
-            image: meta.image ? resolveImagePath(meta.image) : ""
-          };
-        })
-      );
+    // 3) Baixa conteúdos e monta objetos já com slug = nome do arquivo
+    const posts = await Promise.all(
+      mdFiles.map(async (file) => {
+        const mdContent = await fetch(file.download_url).then((r) => {
+          if (!r.ok) throw new Error(`Erro ao baixar ${file.name}: ${r.statusText}`);
+          return r.text();
+        });
 
-      // 4) Ordena por data (mais recente primeiro) e aplica limite
-      posts.sort((a, b) => b.date - a.date);
-      const sliced = posts.slice(0, limit);
+        const { meta, body } = parseFrontmatter(mdContent);
 
-      // 5) Renderiza HTML dos posts
-      if (sliced.length === 0) {
-        postsContainer.innerHTML = "<p>Nenhum post encontrado.</p>";
-      } else {
-        postsContainer.innerHTML = sliced
-          .map(
-            (p) => `
+        // Validação e atribuição de valores padrão
+        const title = meta.title || "Sem título";
+        const date = meta.date ? new Date(meta.date) : new Date();
+        const excerpt = meta.excerpt || (body.substring(0, 140).trim() + "...");
+        const image = meta.image ? resolveImagePath(meta.image) : "";
+
+        const slug = file.name.replace(/\.md$/i, "");
+
+        return {
+          slug,
+          title,
+          date,
+          excerpt,
+          image,
+        };
+      })
+    );
+
+    // 4) Ordena por data (mais recente primeiro) e aplica limite
+    posts.sort((a, b) => b.date - a.date);
+    const sliced = posts.slice(0, limit);
+
+    // 5) Renderiza HTML dos posts
+    if (sliced.length === 0) {
+      postsContainer.innerHTML = "<p>Nenhum post encontrado.</p>";
+    } else {
+      postsContainer.innerHTML = sliced
+        .map((p) => {
+          return `
             <article class="post-card">
               ${p.image ? `<img class="featured" src="${p.image}" alt="${p.title}">` : ""}
               <h3><a href="post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a></h3>
               <time datetime="${p.date.toISOString()}">${p.date.toLocaleDateString("pt-BR")}</time>
               <p>${p.excerpt}</p>
               <a href="post.html?slug=${encodeURIComponent(p.slug)}" class="read-more">Leia mais →</a>
-            </article>`
-          )
-          .join("");
-      }
-    } catch (err) {
-      console.error("Erro ao carregar posts:", err);
-      postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
+            </article>
+          `;
+        })
+        .join("");
     }
-  })();
-  }); 
+  } catch (err) {
+    console.error("Erro ao carregar posts:", err);
+    postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
+  }
+})();
+
