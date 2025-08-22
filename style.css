@@ -698,13 +698,14 @@ post-card {
 }
 
 img.featured {
-  width: 100%;           /* ocupa toda a largura do card */
+  width: 0%;           /* ocupa toda a largura do card */
   max-width: 400px;      /* limite máximo compatível com o card */
   height: auto;          /* mantém proporção */
   border-radius: 12px;
+  padding: 10px;
   display: block;
   margin: 1rem auto;     /* centraliza a imagem */
-  object-fit: contain;   /* mantém toda a imagem visível sem cortar */
+
 }
 
 /* Conteúdo do Card */
