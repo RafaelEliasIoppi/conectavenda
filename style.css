@@ -714,7 +714,15 @@ button[type="submit"]:hover {
   object-fit: contain;   /* mantém a imagem inteira */
   border-radius: 12px 12px 0 0;
 }
-
+img.featured {
+  width: 100%;        /* ocupa toda a largura do container */
+  max-width: 800px;   /* limite máximo opcional */
+  height: auto;       /* mantém proporção original */
+  border-radius: 12px;
+  display: block;
+  margin: 1rem auto;  /* centraliza e dá espaçamento vertical */
+  object-fit: contain; /* mantém imagem inteira sem cortar */
+}
 /* Conteúdo do Card */
 .post-card h3 {
   font-size: 1.25rem;
