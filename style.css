@@ -710,7 +710,7 @@ button[type="submit"]:hover {
 post-card img {
   width: 100%;
   height: auto;          /* mantém proporção */
-  max-height: 220px;     /* altura máxima do card */
+  max-height: 100px;     /* altura máxima do card */
   object-fit: contain;   /* mantém a imagem inteira sem cortar */
   border-radius: 12px 12px 0 0; /* apenas bordas superiores arredondadas */
   display: block;
