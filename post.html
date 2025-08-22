@@ -33,75 +33,75 @@
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
-    const slug = new URLSearchParams(location.search).get("slug");
-    const postEl = document.getElementById("post");
+  const slug = new URLSearchParams(location.search).get("slug");
+  const postEl = document.getElementById("post");
 
-    async function carregarPost(slug) {
-      try {
-        // 1. Busca lista de arquivos
-        const res = await fetch("https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main");
-        if (!res.ok) throw new Error("Erro ao listar posts");
-        const files = await res.json();
+  // Função para normalizar caminhos de imagens
+  function resolveImagePath(path) {
+    if (!path) return "";
+    path = path.trim();
 
-        // 2. Procura arquivo exato (nome sem extensão = slug)
-        const file = files.find(f => f.name.replace(/\.md$/i, "") === slug);
-        if (!file) {
-          postEl.innerText = "Post não encontrado.";
-          return;
-        }
+    if (path.startsWith("http")) return path; // já é link externo
+    if (path.startsWith("static/img/uploads/")) return "/" + path; // já contém static
+    return `/static/img/uploads/${path}`; // relativo simples
+  }
 
-        // 3. Busca conteúdo do Markdown
-        const md = await fetch(file.download_url).then(r => {
-          if (!r.ok) throw new Error("Erro ao baixar post");
-          return r.text();
-        });
+  async function carregarPost(slug) {
+    try {
+      // 1. Busca lista de arquivos
+      const res = await fetch("https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main");
+      if (!res.ok) throw new Error("Erro ao listar posts");
+      const files = await res.json();
 
-        // 4. Extrai frontmatter
-        const meta = {};
-        const front = md.match(/^---\s*([\s\S]*?)\s*---/);
-        let body = md;
-
-        if (front) {
-          body = md.replace(front[0], "").trim();
-          front[1].split("\n").forEach(l => {
-            const [k, ...v] = l.split(":");
-            if (!k || !v.length) return;
-            meta[k.trim()] = v.join(":").trim().replace(/^"|"$/g, "");
-          });
-        }
-
-       // 5. Corrige imagens relativas no body
-        body = body.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, path) => {
-          path = path.trim();
-
-          if (path.startsWith("http")) {
-            return `![${alt}](${path})`; // mantém link externo
-          }
-
-          if (path.includes("static/img/uploads/")) {
-            return `![${alt}](/${path})`; // já está no caminho certo
-          }
-
-          return `![${alt}](/static/img/uploads/${path})`; // só prefixa se for relativo
-        });
-
-
-        // 6. Renderiza
-        postEl.innerHTML = `
-          <article>
-            <h1>${meta.title || slug}</h1>
-            ${meta.image ? `<img src="/static/img/uploads/${meta.image}" alt="${meta.title || ""}">` : ""}
-            ${meta.date ? `<time datetime="${meta.date}">${new Date(meta.date).toLocaleDateString("pt-BR")}</time>` : ""}
-            <div>${marked.parse(body)}</div>
-          </article>
-        `;
-      } catch (err) {
-        console.error(err);
-        postEl.innerText = "Erro ao carregar post.";
+      // 2. Procura arquivo exato (nome sem extensão = slug)
+      const file = files.find(f => f.name.replace(/\.md$/i, "") === slug);
+      if (!file) {
+        postEl.innerText = "Post não encontrado.";
+        return;
       }
-    }
 
-    slug ? carregarPost(slug) : postEl.innerText = "Slug não informado.";
-  </script>
+      // 3. Busca conteúdo do Markdown
+      const md = await fetch(file.download_url).then(r => {
+        if (!r.ok) throw new Error("Erro ao baixar post");
+        return r.text();
+      });
+
+      // 4. Extrai frontmatter
+      const meta = {};
+      const front = md.match(/^---\s*([\s\S]*?)\s*---/);
+      let body = md;
+
+      if (front) {
+        body = md.replace(front[0], "").trim();
+        front[1].split("\n").forEach(l => {
+          const [k, ...v] = l.split(":");
+          if (!k || !v.length) return;
+          meta[k.trim()] = v.join(":").trim().replace(/^"|"$/g, "");
+        });
+      }
+
+      // 5. Corrige imagens relativas no body
+      body = body.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, path) => {
+        return `![${alt}](${resolveImagePath(path)})`;
+      });
+
+      // 6. Renderiza
+      postEl.innerHTML = `
+        <article>
+          <h1>${meta.title || slug}</h1>
+          ${meta.image ? `<img src="${resolveImagePath(meta.image)}" alt="${meta.title || ""}">` : ""}
+          ${meta.date ? `<time datetime="${meta.date}">${new Date(meta.date).toLocaleDateString("pt-BR")}</time>` : ""}
+          <div>${marked.parse(body)}</div>
+        </article>
+      `;
+    } catch (err) {
+      console.error(err);
+      postEl.innerText = "Erro ao carregar post.";
+    }
+  }
+
+  slug ? carregarPost(slug) : postEl.innerText = "Slug não informado.";
+</script>
+
 </body>
 </html>
