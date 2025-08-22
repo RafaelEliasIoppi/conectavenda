@@ -707,21 +707,24 @@ button[type="submit"]:hover {
 }
 
 /* Imagem do Post */
-.post-card img {
-   width: 100%;
-  height: auto;          /* altura automática */
-  max-height: 220px;     /* limite opcional */
-  object-fit: contain;   /* mantém a imagem inteira */
-  border-radius: 12px 12px 0 0;
-}
-img.featured {
-  width: 100%;        /* ocupa toda a largura do container */
-  max-width: 800px;   /* limite máximo opcional */
-  height: auto;       /* mantém proporção original */
-  border-radius: 12px;
+post-card img {
+  width: 100%;
+  height: auto;          /* mantém proporção */
+  max-height: 220px;     /* altura máxima do card */
+  object-fit: contain;   /* mantém a imagem inteira sem cortar */
+  border-radius: 12px 12px 0 0; /* apenas bordas superiores arredondadas */
   display: block;
-  margin: 1rem auto;  /* centraliza e dá espaçamento vertical */
-  object-fit: contain; /* mantém imagem inteira sem cortar */
+}
+
+/* Imagem destacada do post (featured) */
+img.featured {
+  width: 100%;           /* ocupa toda a largura do container */
+  max-width: 800px;      /* limite máximo opcional */
+  height: auto;          /* mantém proporção original */
+  object-fit: contain;   /* mantém a imagem inteira */
+  border-radius: 12px;   /* bordas arredondadas */
+  display: block;
+  margin: 1rem auto;     /* centraliza e adiciona espaçamento vertical */
 }
 /* Conteúdo do Card */
 .post-card h3 {
