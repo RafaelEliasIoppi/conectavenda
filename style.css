@@ -706,26 +706,27 @@ button[type="submit"]:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Imagem do Post */
-post-card img {
+/* Imagem do post-card (cards da grid) */
+.post-card img {
   width: 100%;
   height: auto;          /* mantém proporção */
-  max-height: 100px;     /* altura máxima do card */
+  max-height: 160px;     /* altura menor para cards */
   object-fit: contain;   /* mantém a imagem inteira sem cortar */
-  border-radius: 12px 12px 0 0; /* apenas bordas superiores arredondadas */
+  border-radius: 12px 12px 0 0;
   display: block;
 }
 
 /* Imagem destacada do post (featured) */
 img.featured {
-  width: 100%;           /* ocupa toda a largura do container */
-  max-width: 500px;      /* limite máximo opcional */
-  height: auto;          /* mantém proporção original */
-  object-fit: contain;   /* mantém a imagem inteira */
-  border-radius: 12px;   /* bordas arredondadas */
+  width: 100%;           
+  max-width: 600px;      /* reduz o tamanho máximo da imagem */
+  height: auto;          
+  object-fit: contain;   
+  border-radius: 12px;   
   display: block;
-  margin: 1rem auto;     /* centraliza e adiciona espaçamento vertical */
+  margin: 1rem auto;     
 }
+
 /* Conteúdo do Card */
 .post-card h3 {
   font-size: 1.25rem;
