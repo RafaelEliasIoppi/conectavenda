@@ -818,6 +818,33 @@ button[type="submit"]:hover {
   color: #555555;
 }
 
+/* Estilo padrão para .a */
+.a {
+  font-size: 1rem;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ajustes para telas pequenas */
+@media (max-width: 600px) {
+  .a {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+}
+
+/* Ajustes para telas muito grandes */
+@media (min-width: 1200px) {
+  .a {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
 /* ------------------------------------------------------------
    4. Responsividade
    ------------------------------------------------------------ */
