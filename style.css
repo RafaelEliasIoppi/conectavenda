@@ -744,6 +744,30 @@ button[type="submit"]:hover {
   color: #005bb5;
 }
 
+.blog-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.blog-header h2 {
+  font-size: 2rem;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.blog-header .emoji {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.blog-header .subtitle {
+  font-size: 1rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
 
 /* ------------------------------------------------------------
    3. Estilo do Corpo do Post (detalhe)
