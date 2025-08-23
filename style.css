@@ -238,6 +238,7 @@ main {
   width: 100%;
   padding: 16px 12px; /* Espaço interno mais confortável */
   margin-top: 0; /* Elimina espaçamento acima */
+  margin-bottom: 1cap;
   background-color: #f0f4f8;
   color: #2c2c2c;
   font-size: 0.95rem;
