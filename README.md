@@ -254,3 +254,8 @@ O projeto segue as melhores práticas de:
 - **Issues:** GitHub Issues deste repositório
 
 ## 📄 Licença
+Este projeto está sob licença ISC. Veja o arquivo `LICENSE` para mais detalhes.
+
+---
+
+**Desenvolvido por Rafael Elias Ioppi** | © 2025 Todos os direitos reservados
