@@ -765,6 +765,15 @@ post-card img {
   color: #0073e6;
 }
 
+.data-com-padding {
+  padding: 6px 12px;
+  margin-bottom: 3px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #333;
+  display: inline-block;
+}
 /* Excerpt */
 .post-card p {
   margin: 0 1rem 1rem;
