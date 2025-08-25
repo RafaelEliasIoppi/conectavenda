@@ -215,28 +215,38 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Função para parsear o frontmatter de um arquivo Markdown
-  function parseFrontmatter(mdContent) {
-    const fmMatch = mdContent.match(/^---\s*([\s\S]*?)\s*---/);
-    let meta = {};
-    let body = mdContent;
+function parseFrontmatter(mdContent) {
+  const fmMatch = mdContent.match(/^---\s*([\s\S]*?)\s*---/);
+  let meta = {};
+  let body = mdContent;
 
-    if (fmMatch) {
-      body = mdContent.replace(fmMatch[0], "").trim();
-      fmMatch[1].split("\n").forEach((line) => {
-        const separatorIndex = line.indexOf(":");
-        if (separatorIndex === -1) return;
+  if (fmMatch) {
+    body = mdContent.replace(fmMatch[0], "").trim();
 
-        const key = line.substring(0, separatorIndex).trim();
-        let value = line.substring(separatorIndex + 1).trim();
+    fmMatch[1].split("\n").forEach((line) => {
+      const separatorIndex = line.indexOf(":");
+      if (separatorIndex === -1) return;
 
-        if (value.startsWith('"') && value.endsWith('"')) {
-          value = value.substring(1, value.length - 1);
-        }
-        meta[key] = value;
-      });
-    }
-    return { meta, body };
+      const key = line.substring(0, separatorIndex).trim();
+      let value = line.substring(separatorIndex + 1).trim();
+
+      // Remove aspas caso existam
+      if (value.startsWith('"') && value.endsWith('"')) {
+        value = value.substring(1, value.length - 1);
+      }
+
+      // 🔹 Sanitização: limpa caracteres inválidos se for data
+      if (key === "date") {
+        value = value.replace(/[^0-9T:\-Z.]/g, ""); // mantém apenas caracteres válidos ISO8601
+      }
+
+      meta[key] = value;
+    });
   }
+
+  return { meta, body };
+}
+
 
   try {
     // 1) Lista arquivos MD via GitHub API
@@ -261,7 +271,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const title = meta.title || "Sem título";
         const date = meta.date ? new Date(meta.date) : new Date();
-        const excerpt = meta.excerpt || (body.substring(0, 140).trim() + "...");
+        const excerpt = meta.excerpt || (body
+                  .substring(0, 140)
+                  .replace(/[^\wÀ-ÿ0-9\s.,!?-]+$/g, "") // remove símbolos estranhos no final
+                  .trim() + "..."
+              );
         const image = meta.image ? resolveImagePath(meta.image) : "";
 
         const slug = file.name.replace(/\.md$/i, "");
@@ -279,22 +293,27 @@ document.addEventListener("DOMContentLoaded", () => {
       postsContainer.innerHTML = "<p>Nenhum post encontrado.</p>";
     } else {
       postsContainer.innerHTML = sliced
-        .map((p) => {
-          return `
-            <article class="post-card">
-              ${p.image ? `<img class="featured" src="${p.image}" alt="${p.title}">` : ""}
-              <h3><a href="post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a></h3>
-              <time datetime="${p.date.toISOString()}">${p.date.toLocaleDateString("pt-BR")}</time>
-              <p>${p.excerpt}</p>
-              <a href="post.html?slug=${encodeURIComponent(p.slug)}" class="read-more">Leia mais →</a>
-            </article>
-          `;
-        })
-        .join("");
-    }
-  } catch (err) {
-    console.error("Erro ao carregar posts:", err);
-    postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
-  }
+  .map((p) => {
+    // 🔹 Sanitiza a data antes de renderizar
+    const cleanDate = new Date(p.date);
+    const isoDate = !isNaN(cleanDate) ? cleanDate.toISOString() : "";
+    const brDate = !isNaN(cleanDate) ? cleanDate.toLocaleDateString("pt-BR") : "";
+
+    return `
+      <article class="post-card">
+        ${p.image ? `<img class="featured" src="${p.image}" alt="${p.title}">` : ""}
+        <h3><a href="post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a></h3>
+        ${isoDate ? `<time datetime="${isoDate}">${brDate}</time>` : ""}
+        <p>${p.excerpt}</p>
+        <a href="post.html?slug=${encodeURIComponent(p.slug)}" class="read-more">Leia mais →</a>
+      </article>
+    `;
+  })
+  .join("");
+}
+      } catch (err) {
+        console.error("Erro ao carregar posts:", err);
+        postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
+      }
 })();
 

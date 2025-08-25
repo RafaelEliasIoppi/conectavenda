@@ -151,14 +151,24 @@
       });
 
       // 6. Renderiza
-      postEl.innerHTML = `
-        <article>
-          <h1>${meta.title || slug}</h1>
-          ${meta.image ? `<img src="${resolveImagePath(meta.image)}" alt="${meta.title || ""}">` : ""}
-          ${meta.date ? `<time datetime="${meta.date}">${new Date(meta.date).toLocaleDateString("pt-BR")}</time>` : ""}
-          <div>${marked.parse(body)}</div>
-        </article>
-      `;
+postEl.innerHTML = `
+  <article>
+    <h1>${meta.title || slug}</h1>
+    ${meta.image ? `<img src="${resolveImagePath(meta.image)}" alt="${meta.title || ""}">` : ""}
+    ${
+      meta.date
+        ? (() => {
+            // 🔹 Remove caracteres inválidos da data (qualquer coisa que não pertença a um ISO8601)
+            const cleanDate = meta.date.replace(/[^0-9T:\-Z.]/g, "");
+            const d = new Date(cleanDate);
+            return `<time datetime="${d.toISOString()}">${d.toLocaleDateString("pt-BR")}</time>`;
+          })()
+        : ""
+    }
+    <div>${marked.parse(body)}</div>
+  </article>
+`;
+
 
     } catch (err) {
       console.error(err);
