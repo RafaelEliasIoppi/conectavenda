@@ -1,14 +1,14 @@
 {
-  "name": "Meu Site Incrível",
-  "short_name": "Site",
+  "name": "ConectaVenda",
+  "short_name": "Conecta",
   "icons": [
     {
-      "src": "imagens/android-chrome-192x192.png",
+      "src": "https://raw.githubusercontent.com/RafaelEliasIoppi/conectavenda/30fd62e0257939a4ce86b77d42aaaebaf4bd96b7/imagens/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "imagens/android-chrome-512x512.png",
+      "src": "https://raw.githubusercontent.com/RafaelEliasIoppi/conectavenda/30fd62e0257939a4ce86b77d42aaaebaf4bd96b7/imagens/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
@@ -17,3 +17,5 @@
   "background_color": "#ffffff",
   "display": "standalone"
 }
+
+
