@@ -108,7 +108,7 @@ main {
 /* Emoji com espaçamento */
 .emoji {
   margin-right: 10px;
-  font-size: 1em;
+  font-size: 0.5em;
   vertical-align: middle;
 }
 
