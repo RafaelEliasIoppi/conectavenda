@@ -223,9 +223,11 @@ function parseFrontmatter(mdContent) {
   if (fmMatch) {
     body = mdContent.replace(fmMatch[0], "").trim();
 
-    fmMatch[1].split("\n").forEach((line) => {
+    const lines = fmMatch[1].split("\n");
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
       const separatorIndex = line.indexOf(":");
-      if (separatorIndex === -1) return;
+      if (separatorIndex === -1) continue;
 
       const key = line.substring(0, separatorIndex).trim();
       let value = line.substring(separatorIndex + 1).trim();
@@ -235,17 +237,30 @@ function parseFrontmatter(mdContent) {
         value = value.substring(1, value.length - 1);
       }
 
+      // 🔹 Trata folded block (>, >-) do YAML
+      if (value === ">" || value === ">-") {
+        value = "";
+        i++; // próxima linha do bloco
+        while (i < lines.length && lines[i].startsWith("  ")) {
+          value += lines[i].trim() + " "; // concatena com espaço
+          i++;
+        }
+        value = value.trim();
+        i--; // ajusta índice para o for
+      }
+
       // 🔹 Sanitização: limpa caracteres inválidos se for data
       if (key === "date") {
         value = value.replace(/[^0-9T:\-Z.]/g, ""); // mantém apenas caracteres válidos ISO8601
       }
 
       meta[key] = value;
-    });
+    }
   }
 
   return { meta, body };
 }
+
 
 
   try {
