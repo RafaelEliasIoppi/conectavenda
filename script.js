@@ -109,18 +109,76 @@ document.addEventListener("DOMContentLoaded", () => {
     function enviarMensagem() {
       const mensagem = chatInput.value.trim();
       if (!mensagem) return;
+      
+      // Adiciona mensagem do usuário
       const userMsg = document.createElement("div");
       userMsg.className = "user-message";
       userMsg.textContent = mensagem;
       chatBody.appendChild(userMsg);
       chatInput.value = "";
+      
+      // Scroll para o final
+      chatBody.scrollTop = chatBody.scrollHeight;
+      
+      // Mostra indicador de digitação
+      const typingIndicator = document.createElement("div");
+      typingIndicator.className = "bot-message typing-indicator";
+      typingIndicator.innerHTML = `
+        <div class="typing-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <small>Assistente está digitando...</small>
+      `;
+      chatBody.appendChild(typingIndicator);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      
+      // Simula tempo de resposta mais realista
+      const tempoResposta = Math.random() * 1000 + 800; // 800ms a 1800ms
+      
       setTimeout(() => {
+        // Remove indicador de digitação
+        chatBody.removeChild(typingIndicator);
+        
+        // Adiciona resposta do bot
         const botMsg = document.createElement("div");
         botMsg.className = "bot-message";
         botMsg.innerHTML = gerarResposta(mensagem);
         chatBody.appendChild(botMsg);
+        
+        // Scroll para o final
         chatBody.scrollTop = chatBody.scrollHeight;
-      }, 600);
+        
+        // Adiciona sugestões rápidas se for a primeira mensagem
+        if (chatBody.children.length <= 3) {
+          adicionarSugestoesRapidas();
+        }
+      }, tempoResposta);
+    }
+    
+    function adicionarSugestoesRapidas() {
+      const suggestionsContainer = document.createElement("div");
+      suggestionsContainer.className = "chat-suggestions";
+      suggestionsContainer.innerHTML = `
+        <div class="suggestions-title">Perguntas frequentes:</div>
+        <button class="suggestion-btn" data-msg="Como funciona o frete?">📦 Frete</button>
+        <button class="suggestion-btn" data-msg="Quais são os descontos?">🎉 Descontos</button>
+        <button class="suggestion-btn" data-msg="Formas de pagamento">💳 Pagamento</button>
+        <button class="suggestion-btn" data-msg="Contato WhatsApp">📞 Contato</button>
+      `;
+      chatBody.appendChild(suggestionsContainer);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      
+      // Adiciona event listeners para as sugestões
+      suggestionsContainer.querySelectorAll('.suggestion-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const msg = btn.getAttribute('data-msg');
+          chatInput.value = msg;
+          enviarMensagem();
+          suggestionsContainer.remove();
+        });
+      });
     }
 
     sendChatBtn.addEventListener("click", enviarMensagem);
@@ -131,17 +189,98 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function gerarResposta(msg) {
     msg = msg.toLowerCase();
-    if (msg.includes("frete")) {
-      return "📦 O frete é grátis para compras acima de R$199!";
+    
+    // Saudações
+    if (msg.includes("oi") || msg.includes("olá") || msg.includes("bom dia") || msg.includes("boa tarde") || msg.includes("boa noite")) {
+      return "👋 Olá! Seja bem-vindo(a) ao ConectaVenda! Como posso te ajudar hoje?";
     }
-    if (msg.includes("desconto")) {
-      return "🎉 Você pode usar o cupom PROMO10 para 10% de desconto.";
+    
+    // Informações sobre frete
+    if (msg.includes("frete") || msg.includes("entrega") || msg.includes("envio")) {
+      return `📦 <strong>Informações sobre frete:</strong><br>
+        • Frete GRÁTIS para compras acima de R$ 199<br>
+        • Entrega em todo o Brasil<br>
+        • Prazo: 3 a 7 dias úteis<br>
+        • Rastreamento incluído`;
     }
-    if (msg.includes("prazo")) {
-      return "⏱️ O prazo de entrega varia entre 3 a 7 dias úteis.";
+    
+    // Descontos e promoções
+    if (msg.includes("desconto") || msg.includes("promoção") || msg.includes("cupom") || msg.includes("oferta")) {
+      return `🎉 <strong>Promoções ativas:</strong><br>
+        • PROMO10: 10% de desconto<br>
+        • FRETEGRATIS: Frete grátis em qualquer valor<br>
+        • PRIMEIRA: 15% OFF na primeira compra<br>
+        📧 Cadastre seu e-mail para ofertas exclusivas!`;
     }
-    return `🤖 Não tenho uma resposta automática para isso...<br>
-      Você pode falar diretamente com nosso atendimento pelo WhatsApp:<br>
+    
+    // Prazo de entrega
+    if (msg.includes("prazo") || msg.includes("quando chega") || msg.includes("demora")) {
+      return `⏱️ <strong>Prazos de entrega:</strong><br>
+        • Região Sudeste: 2-4 dias úteis<br>
+        • Região Sul: 3-5 dias úteis<br>
+        • Demais regiões: 5-7 dias úteis<br>
+        📍 Informe seu CEP para cálculo exato!`;
+    }
+    
+    // Pagamento
+    if (msg.includes("pagamento") || msg.includes("pagar") || msg.includes("cartão") || msg.includes("pix") || msg.includes("boleto")) {
+      return `💳 <strong>Formas de pagamento:</strong><br>
+        • PIX (desconto de 5%)<br>
+        • Cartão de crédito (até 12x)<br>
+        • Boleto bancário<br>
+        🔒 Pagamento 100% seguro pela Amazon`;
+    }
+    
+    // Produtos
+    if (msg.includes("produto") || msg.includes("item") || msg.includes("comprar")) {
+      return `🛍️ <strong>Nossos produtos:</strong><br>
+        • Eletrônicos e gadgets<br>
+        • Casa e cozinha<br>
+        • Moda e acessórios<br>
+        📱 Todos os produtos são vendidos pela Amazon`;
+    }
+    
+    // Suporte/Ajuda
+    if (msg.includes("ajuda") || msg.includes("suporte") || msg.includes("problema") || msg.includes("dúvida")) {
+      return `🆘 <strong>Como posso te ajudar:</strong><br>
+        • Informações sobre produtos<br>
+        • Dúvidas sobre entrega<br>
+        • Promoções e descontos<br>
+        • Suporte técnico<br>
+        💬 Continue conversando ou fale no WhatsApp!`;
+    }
+    
+    // Contato
+    if (msg.includes("contato") || msg.includes("telefone") || msg.includes("whatsapp")) {
+      return `📞 <strong>Nossos canais de atendimento:</strong><br>
+        • WhatsApp: <a href="https://wa.me/5551983098650" target="_blank">+55 51 9 8309-8650</a><br>
+        • Horário: Segunda a sexta, 9h às 18h<br>
+        • E-mail: Através do formulário do site<br>
+        ⚡ Resposta rápida garantida!`;
+    }
+    
+    // Agradecimento
+    if (msg.includes("obrigad") || msg.includes("valeu") || msg.includes("thanks")) {
+      return `😊 <strong>De nada!</strong><br>
+        Fico feliz em ajudar! Se precisar de mais alguma coisa, é só chamar.<br>
+        🎯 Aproveite nossas ofertas especiais!`;
+    }
+    
+    // Despedida
+    if (msg.includes("tchau") || msg.includes("bye") || msg.includes("até logo") || msg.includes("adeus")) {
+      return `👋 <strong>Até mais!</strong><br>
+        Obrigado pela visita! Volte sempre ao ConectaVenda.<br>
+        💌 Não esqueça de se cadastrar para receber ofertas exclusivas!`;
+    }
+    
+    // Resposta padrão mais inteligente
+    return `🤖 <strong>Interessante pergunta!</strong><br>
+      Ainda estou aprendendo sobre isso. Mas posso te ajudar com:<br>
+      • 📦 Frete e entrega<br>
+      • 🎉 Descontos e promoções<br>
+      • 💳 Formas de pagamento<br>
+      • 🛍️ Informações sobre produtos<br><br>
+      💬 Para dúvidas específicas, fale no WhatsApp:<br>
       👉 <a href="https://wa.me/5551983098650?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20a%20loja" target="_blank">Clique aqui para conversar</a>`;
   }
 
@@ -296,5 +435,159 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Erro ao carregar posts:", err);
     postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
   }
+})();
+
+// ─── 7. SISTEMA DE BUSCA DO BLOG ────────────────────────────────────
+(function initBlogSearch() {
+  const searchInput = document.getElementById('blog-search-input');
+  const resultsCount = document.getElementById('search-results-count');
+  const postsContainer = document.getElementById('posts-grid');
+  let allPosts = []; // Armazena todos os posts carregados
+  
+  if (!searchInput || !postsContainer) return;
+  
+  // Observa mudanças no container de posts para capturar posts carregados
+  const observer = new MutationObserver(() => {
+    captureLoadedPosts();
+  });
+  
+  observer.observe(postsContainer, { childList: true });
+  
+  function captureLoadedPosts() {
+    // Captura todos os posts carregados
+    const postCards = postsContainer.querySelectorAll('.post-card');
+    allPosts = Array.from(postCards).map(card => {
+      const title = card.querySelector('h3')?.textContent || '';
+      const excerpt = card.querySelector('p')?.textContent || '';
+      const content = title + ' ' + excerpt;
+      return {
+        element: card,
+        content: content.toLowerCase(),
+        title: title,
+        excerpt: excerpt
+      };
+    });
+    
+    if (allPosts.length > 0) {
+      updateResultsCount(allPosts.length, allPosts.length);
+    }
+  }
+  
+  function updateResultsCount(shown, total) {
+    if (total === 0) {
+      resultsCount.textContent = '';
+    } else if (shown === total) {
+      resultsCount.textContent = `📄 ${total} artigo${total !== 1 ? 's' : ''} encontrado${total !== 1 ? 's' : ''}`;
+    } else {
+      resultsCount.textContent = `🔍 ${shown} de ${total} artigo${total !== 1 ? 's' : ''} encontrado${total !== 1 ? 's' : ''}`;
+    }
+  }
+  
+  function performSearch(query) {
+    query = query.toLowerCase().trim();
+    
+    if (!query) {
+      // Mostra todos os posts
+      allPosts.forEach(post => {
+        post.element.style.display = '';
+      });
+      updateResultsCount(allPosts.length, allPosts.length);
+      return;
+    }
+    
+    let visibleCount = 0;
+    
+    allPosts.forEach(post => {
+      const isMatch = post.content.includes(query);
+      
+      if (isMatch) {
+        post.element.style.display = '';
+        highlightSearchTerms(post.element, query);
+        visibleCount++;
+      } else {
+        post.element.style.display = 'none';
+      }
+    });
+    
+    updateResultsCount(visibleCount, allPosts.length);
+    
+    // Mostra mensagem se nenhum resultado
+    if (visibleCount === 0 && allPosts.length > 0) {
+      if (!document.querySelector('.no-search-results')) {
+        const noResults = document.createElement('div');
+        noResults.className = 'no-search-results';
+        noResults.innerHTML = `
+          <div style="text-align: center; padding: 40px; color: #666;">
+            <p style="font-size: 1.2rem; margin-bottom: 10px;">🔍 Nenhum artigo encontrado</p>
+            <p style="font-size: 0.9rem;">Tente palavras-chave diferentes ou remova filtros</p>
+          </div>
+        `;
+        postsContainer.appendChild(noResults);
+      }
+    } else {
+      // Remove mensagem de "nenhum resultado"
+      const noResults = document.querySelector('.no-search-results');
+      if (noResults) {
+        noResults.remove();
+      }
+    }
+  }
+  
+  function highlightSearchTerms(postElement, query) {
+    // Remove highlights anteriores
+    const highlighted = postElement.querySelectorAll('.search-highlight');
+    highlighted.forEach(el => {
+      el.outerHTML = el.innerHTML;
+    });
+    
+    // Adiciona novos highlights
+    const titleEl = postElement.querySelector('h3 a');
+    const excerptEl = postElement.querySelector('p');
+    
+    if (titleEl) {
+      titleEl.innerHTML = highlightText(titleEl.textContent, query);
+    }
+    
+    if (excerptEl) {
+      excerptEl.innerHTML = highlightText(excerptEl.textContent, query);
+    }
+  }
+  
+  function highlightText(text, query) {
+    if (!query || !text) return text;
+    
+    const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+    return text.replace(regex, '<span class="search-highlight">$1</span>');
+  }
+  
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+  
+  // Event listeners
+  let searchTimeout;
+  searchInput.addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      performSearch(e.target.value);
+    }, 300); // Debounce de 300ms
+  });
+  
+  // Limpa busca com Escape
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      searchInput.value = '';
+      performSearch('');
+      searchInput.blur();
+    }
+  });
+  
+  // Foco inicial no campo se não há posts carregados
+  setTimeout(() => {
+    if (postsContainer.textContent.includes('Erro ao carregar posts')) {
+      searchInput.placeholder = '🔍 Busca disponível após carregar artigos...';
+      searchInput.disabled = true;
+    }
+  }, 2000);
 })();
 
