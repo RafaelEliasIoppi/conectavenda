@@ -318,7 +318,7 @@ function parseFrontmatter(mdContent) {
       <article class="post-card">
         ${p.image ? `<img class="featured" src="${p.image}" alt="${p.title}">` : ""}
         <h3><a href="post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a></h3>
-        ${isoDate ? `<time datetime="${isoDate}">${brDate}</time>` : ""}
+        ${isoDate ? `<time datetime="${isoDate}" class="data-com-padding">${brDate}</time>` : ""}
         <p>${p.excerpt}</p>
         <a href="post.html?slug=${encodeURIComponent(p.slug)}" class="read-more">Leia mais →</a>
       </article>
