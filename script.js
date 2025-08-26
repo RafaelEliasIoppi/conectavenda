@@ -330,4 +330,42 @@ function parseFrontmatter(mdContent) {
         postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
       }
 })();
+// 📤 Rastreamento de links externos
+document.querySelectorAll('a[href^="http"]').forEach(link => {
+  if (!link.href.includes(location.hostname)) {
+    link.addEventListener('click', () => {
+      plausible('Outbound Link: Click', {props: {url: link.href}});
+    });
+  }
+});
+
+// 📁 Downloads de arquivos
+document.querySelectorAll('a[href$=".pdf"], a[href$=".zip"], a[href$=".docx"]').forEach(link => {
+  link.addEventListener('click', () => {
+    plausible('File Download', {props: {file: link.href}});
+  });
+});
+
+// 🚫 Página 404 (supondo que o título contenha "404")
+if (document.title.includes('404')) {
+  plausible('404 Error', {props: {path: window.location.pathname}});
+}
+
+// 🔒 Hash na URL
+if (window.location.hash) {
+  plausible('Hashed Page Path', {props: {hash: window.location.hash}});
+}
+
+// 🎯 Evento personalizado (exemplo: clique em botão de compra)
+document.querySelectorAll('.btn-comprar').forEach(btn => {
+  btn.addEventListener('click', () => {
+    plausible('Compra Iniciada', {props: {produto: btn.dataset.produto}});
+  });
+});
+
+// 🧩 Propriedades personalizadas
+plausible('User Type', {props: {tipo: 'visitante'}});
+
+// 💰 Receita de ecommerce (exemplo fictício)
+plausible('Ecommerce Revenue', {props: {valor: 'R$199.90', produto: 'Curso Online'}});
 
