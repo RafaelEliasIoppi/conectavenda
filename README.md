@@ -1,5 +1,7 @@
 # ConectaVenda 🛒
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8a6bb895-1ce2-48fe-b7ce-a38b6d740379/deploy-status)](https://app.netlify.com/projects/vendasonliners/deploys)[![Netlify Status](https://api.netlify.com/api/v1/badges/8a6bb895-1ce2-48fe-b7ce-a38b6d740379/deploy-status)](https://app.netlify.com/projects/vendasonliners/deploys)
+
 > Uma plataforma brasileira de marketing e vendas com blog integrado e funcionalidades de conversão
 
 ## 📋 O que é este projeto?
