@@ -5,22 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CMS Admin</title>
 
-  <!-- Widget de Identity (opcional, mas recomendado se você usa login) -->
+  <!-- Widget de Identity (recomendado se você usa login via Netlify) -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
-  <!-- Estilos básicos do CMS -->
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@netlify-cms/theme-default@^2.10/dist/netlify-cms.css"
-/>
-
-</head> 
+</head>
 
 <body>
-  <!-- É fundamental ter esse elemento para o CMS montar a interface -->
+  <!-- Elemento raiz onde o CMS será montado -->
   <div id="nc-root"></div>
 
-  <!-- Script principal do Netlify CMS -->
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+  <!-- Script principal do Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@3.8.3/dist/decap-cms.js"></script>
+
+  <!-- Inicialização do Netlify Identity -->
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.reload();
+          });
+        }
+      });
+      window.netlifyIdentity.init();
+    }
+  </script>
 </body>
 </html>
