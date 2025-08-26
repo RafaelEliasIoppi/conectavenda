@@ -617,13 +617,13 @@ main {
 
 /* Formulário de captura */
 .email-captura {
-  background: white;
+  background: #ffffff;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   text-align: center;
   max-width: 400px;
-  width: 90%;
+  width: 100%;
   animation: fadeIn 1s ease-in-out;
   position: relative; /* importante para o botão fechar */
 }
@@ -631,7 +631,9 @@ main {
 .email-captura h2 {
   margin-bottom: 1rem;
   color: #333;
+  text-align: center;
 }
+
 
 /* Formulário interno */
 #email-form {
