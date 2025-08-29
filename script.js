@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ─── 3. CARREGAR PRODUTOS DA PLANILHA ───────────────────────────
   const produtosContainer = document.getElementById("produtos-container");
-  const endpointProdutos = "https://script.google.com/macros/s/AKfycbxMk4zxUeNfGDO9A7iBgCOb8KcHMparCFEWe7D4LY-snX18rOF2fzx-1K8_-IDJMFWzNg/exec";
+  const endpointProdutos = "https://script.google.com/macros/s/AKfycbwPisbd_s2myWf73zdZyFMuTPDun5DUxOH4tVFSL0SVy8BkoKokBC-5ZBECBGlt4o4esw/exec";
 
   if (produtosContainer) {
     fetch(endpointProdutos)
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
       userMsg.className = "user-message";
       userMsg.textContent = mensagem;
       chatBody.appendChild(userMsg);
-      chatInput.value = "";
+      chatInput.value = ""; 
       setTimeout(() => {
         const botMsg = document.createElement("div");
         botMsg.className = "bot-message";
