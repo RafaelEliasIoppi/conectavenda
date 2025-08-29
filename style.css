@@ -712,16 +712,23 @@ button[type="submit"]:hover {
 }
 
 
+.post-card .featured {
+  width: 100%;             /* ocupa toda a largura do card */
+  height: 500px;           /* altura fixa para uniformidade */
+  object-fit: contain;       /* preenche o espaço sem distorcer */
+  border-radius: 8px;      /* bordas suaves para estética */
+  display: block;
+  margin-bottom: 10px;     /* espaçamento abaixo da imagem */
+  padding: 10px;
+}
 
-
-/* Grid de posts */
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr; /* força uma única coluna */
   gap: 1.5rem;
   margin: 2rem auto;
   padding: 0 1rem;
-  max-width: 900px
+  max-width: 900px;
 }
 
 
