@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
             produto["Promocao"]?.toLowerCase() === "sim"
               ? 	'<div class="selo-promocao">🔥 Super Oferta</div>'
               : "";
-
           card.innerHTML = `
             ${seloPromocao}
             <img src="${produto["Imagem"]}" alt="${produto["Descricao"]}" />
