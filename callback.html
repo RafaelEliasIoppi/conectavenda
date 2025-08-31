@@ -1,0 +1,26 @@
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get("code");
+
+  if (code) {
+    fetch("https://api.mercadolibre.com/oauth/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        grant_type: "authorization_code",
+        client_id: "7159101551123966",
+        client_secret: "0pLGC0C3UbFKnk8Uf3UVG1yO8PFAExcq",
+        code: code,
+        redirect_uri: "https://vendasonliners.netlify.app/callback"
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Access Token:", data.access_token);
+      // Aqui você pode salvar o token ou fazer chamadas à API
+    })
+    .catch(err => console.error("Erro ao obter token:", err));
+  }
+</script>

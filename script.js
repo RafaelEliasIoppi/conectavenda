@@ -372,7 +372,7 @@ plausible('Ecommerce Revenue', {props: {valor: 'R$199.90', produto: 'Curso Onlin
 
 document.getElementById("login-ml").addEventListener("click", function () {
   const clientId = "7159101551123966";
-  const redirectUri = "https://seusite.com.br/callback"; // Substitua pela sua URL de retorno
+  const redirectUri = "https://vendasonliners.netlify.app/callback/"; // Substitua pela sua URL de retorno
   const authUrl = `https://auth.mercadolivre.com.br/authorization?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
   window.location.href = authUrl;
 });
@@ -389,9 +389,9 @@ if (code) {
     body: new URLSearchParams({
       grant_type: "authorization_code",
       client_id: "7159101551123966",
-      client_secret: "SUA_CHAVE_SECRETA",
+      client_secret: "0pLGC0C3UbFKnk8Uf3UVG1yO8PFAExcq",
       code: code,
-      redirect_uri: "https://seusite.com.br/callback"
+      redirect_uri: "http://vendasonliners.netlify.app/callback/"
     })
   })
   .then(res => res.json())
