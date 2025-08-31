@@ -370,7 +370,8 @@ plausible('Ecommerce Revenue', {props: {valor: 'R$199.90', produto: 'Curso Onlin
 
 
 
-document.getElementById("login-ml").addEventListener("click", function () {
+
+  document.getElementById("login-ml").addEventListener("click", function () {
     const clientId = "7159101551123966";
     const redirectUri = "https://vendasonliners.netlify.app/callback"; // sem barra no final
     const authUrl = `https://auth.mercadolivre.com.br/authorization?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
@@ -389,15 +390,18 @@ document.getElementById("login-ml").addEventListener("click", function () {
       body: new URLSearchParams({
         grant_type: "authorization_code",
         client_id: "7159101551123966",
-        client_secret: "0pLGC0C3UbFKnk8Uf3UVG1yO8PFAExcq", // ⚠️ Ideal mover para backend
+        client_secret: "0pLGC0C3UbFKnk8Uf3UVG1yO8PFAExcq", // ⚠️ NÃO deixe isso no frontend!
         code: code,
-        redirect_uri: "https://vendasonliners.netlify.app/callback" // igual ao usado na autorização
+        redirect_uri: "https://vendasonliners.netlify.app/callback" // igual ao anterior
       })
     })
     .then(res => res.json())
     .then(data => {
       console.log("Access Token:", data.access_token);
-      // Aqui você pode salvar o token ou fazer chamadas à API do Mercado Livre
+      // Aqui você pode salvar o token em localStorage ou enviar para o backend
     })
-    .catch(err => console.error("Erro ao obter token:", err));
+    .catch(err => {
+      console.error("Erro ao obter token:", err);
+      alert("Não foi possível conectar sua conta. Tente novamente.");
+    });
   }
