@@ -368,3 +368,36 @@ plausible('User Type', {props: {tipo: 'visitante'}});
 // 💰 Receita de ecommerce (exemplo fictício)
 plausible('Ecommerce Revenue', {props: {valor: 'R$199.90', produto: 'Curso Online'}});
 
+
+
+document.getElementById("login-ml").addEventListener("click", function () {
+  const clientId = "7159101551123966";
+  const redirectUri = "https://seusite.com.br/callback"; // Substitua pela sua URL de retorno
+  const authUrl = `https://auth.mercadolivre.com.br/authorization?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+  window.location.href = authUrl;
+});
+
+const urlParams = new URLSearchParams(window.location.search);
+const code = urlParams.get("code");
+
+if (code) {
+  fetch("https://api.mercadolibre.com/oauth/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: new URLSearchParams({
+      grant_type: "authorization_code",
+      client_id: "7159101551123966",
+      client_secret: "SUA_CHAVE_SECRETA",
+      code: code,
+      redirect_uri: "https://seusite.com.br/callback"
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("Access Token:", data.access_token);
+    // Aqui você pode salvar o token ou fazer chamadas à API
+  })
+  .catch(err => console.error("Erro ao obter token:", err));
+}

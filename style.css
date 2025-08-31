@@ -931,3 +931,17 @@ post-card img {
     padding: 0 2rem;
   }
 }
+.botao-oferta {
+  background-color: #ff5722;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.botao-oferta:hover {
+  background-color: #e64a19;
+}

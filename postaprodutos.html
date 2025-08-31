@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ofertas da Semana</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f9fa;
+      padding: 20px;
+      color: #063D1E;
+    }
+
+    h1 {
+      text-align: center;
+      color: #d10000;
+    }
+
+    .produtos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .produto {
+      background: #fff;
+      border: 2px solid #69B8A5;
+      border-radius: 12px;
+      padding: 20px;
+      width: 280px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .produto img {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .produto h2 {
+      color: #25D366;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .produto p {
+      font-size: 0.95rem;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .produto a {
+      display: inline-block;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #69B8A5, #063D1E);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .produto a:hover {
+      background: linear-gradient(135deg, #063D1E, #69B8A5);
+    }
+  </style>
+</head>
+<body>
+  <h1>🔥 Ofertas da Semana</h1>
+  <div class="produtos" id="produtos">Carregando produtos...</div>
+
+  <script>
+    async function carregarProdutos() {
+      try {
+        const res = await fetch("https://raw.githubusercontent.com/RafaelEliasIoppi/conectavenda/main/src/data/produtos.json");
+        if (!res.ok) throw new Error("Erro ao carregar produtos");
+        const produtos = await res.json();
+
+        const container = document.getElementById("produtos");
+        container.innerHTML = produtos.map(p => `
+          <div class="produto">
+            <img src="${p.Imagem}" alt="${p.Titulo}" />
+            <h2>${p.Titulo}</h2>
+            <p>${p.Descricao.length > 120 ? p.Descricao.substring(0, 117) + "..." : p.Descricao}</p>
+            <a href="${p.Link}" target="_blank">Ver Produto</a>
+          </div>
+        `).join("");
+      } catch (err) {
+        console.error(err);
+        document.getElementById("produtos").innerText = "Erro ao carregar produtos.";
+      }
+    }
+
+    carregarProdutos();
+  </script>
+</body>
+</html>
