@@ -391,7 +391,7 @@ if (code) {
       client_id: "7159101551123966",
       client_secret: "0pLGC0C3UbFKnk8Uf3UVG1yO8PFAExcq",
       code: code,
-      redirect_uri: "http://vendasonliners.netlify.app/callback/"
+      redirect_uri: "http://vendasonliners.netlify.app/callback"
     })
   })
   .then(res => res.json())
