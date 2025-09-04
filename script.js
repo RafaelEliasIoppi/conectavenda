@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ─── 3. CARREGAR PRODUTOS DA PLANILHA ───────────────────────────
   const produtosContainer = document.getElementById("produtos-container");
-  const endpointProdutos = "https://script.google.com/macros/s/AKfycbyLO47bTPH0PxABP-KR3O6zFHqFgV21eWknyk0wpRyGrEgI7o1WJ90Bb5soE9Z5upEH/exec";
+  const endpointProdutos = "https://script.google.com/macros/s/AKfycbx1XYK82pxyeFDvzF3pYLjlk8wGht1CNXMwybomQ9oqS5zVXBvy-DsZ7mCaSx5EevYH/exec";
 
   if (produtosContainer) {
     fetch(endpointProdutos)
