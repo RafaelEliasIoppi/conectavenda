@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meu Perfil - Ofertas Especiais</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Gerencie seu perfil e preferências de ofertas" />
+  <meta name="keywords" content="perfil, usuário, conta, configurações" />
+  <meta name="author" content="Rafael Elias Ioppi" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Ofertas Especiais" />
+
+  <!-- Ícones -->
+  <link rel="apple-touch-icon" sizes="180x180" href="imagens/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="imagens/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="imagens/favicon-16x16.png" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .profile-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .profile-header {
+      text-align: center;
+      padding: 30px 0;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      margin: 0 auto 20px;
+      color: white;
+    }
+
+    .profile-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .profile-email {
+      color: #666;
+      font-size: 16px;
+    }
+
+    .profile-section {
+      padding: 30px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .profile-section:last-child {
+      border-bottom: none;
+    }
+
+    .profile-section h2 {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .profile-info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .profile-info-label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .profile-info-value {
+      color: #333;
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .btn-profile {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+      transform: translateY(-2px);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin: 20px;
+      color: #28a745;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .profile-container {
+        margin: 20px;
+      }
+
+      .profile-info-row {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .profile-actions {
+        flex-direction: column;
+      }
+
+      .btn-profile {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">← Voltar para a página inicial</a>
+
+    <div class="profile-container">
+      <div class="profile-header">
+        <div class="profile-avatar" id="profile-avatar">👤</div>
+        <h1 class="profile-name" id="profile-name">Visitante</h1>
+        <p class="profile-email" id="profile-email">Faça login para ver suas informações</p>
+      </div>
+
+      <div class="profile-section">
+        <h2>📋 Informações da Conta</h2>
+        <div class="profile-info-row">
+          <span class="profile-info-label">Status:</span>
+          <span class="profile-info-value" id="profile-status">Não conectado</span>
+        </div>
+        <div class="profile-info-row">
+          <span class="profile-info-label">Membro desde:</span>
+          <span class="profile-info-value" id="profile-since">-</span>
+        </div>
+        <div class="profile-info-row">
+          <span class="profile-info-label">Newsletter:</span>
+          <span class="profile-info-value" id="profile-newsletter">Não inscrito</span>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h2>⚙️ Ações</h2>
+        <div class="profile-actions">
+          <button class="btn-profile btn-primary" id="btn-edit-profile">✏️ Editar Perfil</button>
+          <button class="btn-profile btn-secondary" id="btn-preferences">🔔 Preferências</button>
+          <a href="index.html" class="btn-profile btn-secondary">🏠 Início</a>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h2>🔗 Integrações</h2>
+        <div class="profile-info-row">
+          <span class="profile-info-label">Mercado Livre:</span>
+          <span class="profile-info-value" id="ml-status">Não conectado</span>
+        </div>
+        <div class="profile-actions">
+          <button class="btn-profile btn-primary" id="btn-connect-ml">🔐 Conectar com Mercado Livre</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="footer-ajuda">
+      <div class="caixa-seguranca">
+        🛡️ <strong>Compra 100% Segura:</strong><br>
+        Todas as vendas e entregas são realizadas exclusivamente pela 
+        <a href="https://www.amazon.com.br/" target="_blank" rel="noopener noreferrer">Amazon</a>.
+      </div>
+      <p>
+        <a href="https://wa.me/5551983098650" class="botao-link whatsapp" target="_blank" rel="noopener noreferrer">
+          📲 Precisa de Ajuda? Fale comigo no WhatsApp
+        </a>
+      </p> 
+      <p>💻 Site desenvolvido por <strong>Vendassonliners</strong></p>
+      <p>© 2025 Todos os direitos reservados</p>
+      <p><a href="/politica-de-privacidade.html">🔒 Política de Privacidade</a></p>
+    </footer>
+
+    <div class="aviso-seguro" role="contentinfo">🔒 Você está em um ambiente seguro. Suas informações estão protegidas.</div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Check for stored user data
+      const storedEmail = localStorage.getItem('userEmail');
+      const storedDate = localStorage.getItem('memberSince');
+
+      if (storedEmail) {
+        document.getElementById('profile-email').textContent = storedEmail;
+        document.getElementById('profile-name').textContent = storedEmail.split('@')[0];
+        document.getElementById('profile-status').textContent = 'Ativo';
+        document.getElementById('profile-newsletter').textContent = 'Inscrito';
+        document.getElementById('profile-avatar').textContent = storedEmail.charAt(0).toUpperCase();
+      }
+
+      if (storedDate) {
+        const date = new Date(storedDate);
+        document.getElementById('profile-since').textContent = date.toLocaleDateString('pt-BR');
+      }
+
+      // Edit profile button
+      document.getElementById('btn-edit-profile').addEventListener('click', () => {
+        alert('Funcionalidade de edição de perfil em breve!');
+      });
+
+      // Preferences button
+      document.getElementById('btn-preferences').addEventListener('click', () => {
+        alert('Configurações de preferências em breve!');
+      });
+
+      // Mercado Livre connection button
+      document.getElementById('btn-connect-ml').addEventListener('click', () => {
+        const clientId = "7159101551123966";
+        const redirectUri = "https://vendasonliners.netlify.app/callback";
+        const authUrl = `https://auth.mercadolivre.com.br/authorization?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+        window.location.href = authUrl;
+      });
+
+      // Check for Mercado Livre token
+      const mlToken = localStorage.getItem('ml_access_token');
+      if (mlToken) {
+        document.getElementById('ml-status').textContent = 'Conectado ✓';
+        document.getElementById('btn-connect-ml').textContent = '🔄 Atualizar conexão';
+      }
+    });
+  </script>
+</body>
+</html>

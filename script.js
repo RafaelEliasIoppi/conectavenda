@@ -175,6 +175,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         status.textContent = "✅ E-mail enviado com sucesso!";
+        // Store email and registration date in localStorage
+        localStorage.setItem('userEmail', email);
+        if (!localStorage.getItem('memberSince')) {
+          localStorage.setItem('memberSince', new Date().toISOString());
+        }
         emailInput.value = ""; // Limpa o campo de e-mail
         setTimeout(() => esconderOverlay(), 2000);
       } catch (err) {
@@ -398,7 +403,14 @@ plausible('Ecommerce Revenue', {props: {valor: 'R$199.90', produto: 'Curso Onlin
     .then(res => res.json())
     .then(data => {
       console.log("Access Token:", data.access_token);
-      // Aqui você pode salvar o token em localStorage ou enviar para o backend
+      // Save token in localStorage
+      if (data.access_token) {
+        localStorage.setItem('ml_access_token', data.access_token);
+        localStorage.setItem('ml_connected_date', new Date().toISOString());
+        alert('Conectado ao Mercado Livre com sucesso!');
+        // Redirect to profile page
+        window.location.href = 'perfil.html';
+      }
     })
     .catch(err => {
       console.error("Erro ao obter token:", err);
