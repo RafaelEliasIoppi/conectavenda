@@ -195,135 +195,116 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
+// carregar 
 (async function loadPosts({ limit = 6 } = {}) {
   const postsContainer = document.getElementById("posts-grid");
   if (!postsContainer) return;
 
   postsContainer.innerHTML = "<p>Carregando posts…</p>";
 
-  // 🔹 Função única para normalizar imagens
   function resolveImagePath(path) {
     if (!path) return "";
     path = path.trim();
-
-    if (path.startsWith("http")) return path;              // já é link externo
-    if (path.startsWith("static/img/uploads/")) return "/" + path; // já contém static
-    return `/static/img/uploads/${path}`;                  // relativo simples
+    if (path.startsWith("http")) return path;
+    if (path.startsWith("static/img/uploads/")) return "/" + path;
+    return `/static/img/uploads/${path}`;
   }
 
-  // Função para parsear o frontmatter de um arquivo Markdown
-function parseFrontmatter(mdContent) {
-  const fmMatch = mdContent.match(/^---\s*([\s\S]*?)\s*---/);
-  let meta = {};
-  let body = mdContent;
+  function parseFrontmatter(mdContent) {
+    const fmMatch = mdContent.match(/^---\s*([\s\S]*?)\s*---/);
+    let meta = {};
+    let body = mdContent;
 
-  if (fmMatch) {
-    body = mdContent.replace(fmMatch[0], "").trim();
-
-    const lines = fmMatch[1].split("\n");
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      const separatorIndex = line.indexOf(":");
-      if (separatorIndex === -1) continue;
-
-      const key = line.substring(0, separatorIndex).trim();
-      let value = line.substring(separatorIndex + 1).trim();
-
-      // Remove aspas caso existam
-      if (value.startsWith('"') && value.endsWith('"')) {
-        value = value.substring(1, value.length - 1);
-      }
-
-      // 🔹 Trata folded block (>, >-) do YAML
-      if (value === ">" || value === ">-") {
-        value = "";
-        i++; // próxima linha do bloco
-        while (i < lines.length && lines[i].startsWith("  ")) {
-          value += lines[i].trim() + " "; // concatena com espaço
-          i++;
+    if (fmMatch) {
+      body = mdContent.replace(fmMatch[0], "").trim();
+      const lines = fmMatch[1].split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const separatorIndex = line.indexOf(":");
+        if (separatorIndex === -1) continue;
+        const key = line.substring(0, separatorIndex).trim();
+        let value = line.substring(separatorIndex + 1).trim();
+        if (value.startsWith('"') && value.endsWith('"')) {
+          value = value.substring(1, value.length - 1);
         }
-        value = value.trim();
-        i--; // ajusta índice para o for
+        if (value === ">" || value === ">-") {
+          value = "";
+          i++;
+          while (i < lines.length && lines[i].startsWith("  ")) {
+            value += lines[i].trim() + " ";
+            i++;
+          }
+          value = value.trim();
+          i--;
+        }
+        if (key === "date") {
+          value = value.replace(/[^0-9T:\-Z.]/g, "");
+        }
+        meta[key] = value;
       }
+    }
 
-      // 🔹 Sanitização: limpa caracteres inválidos se for data
-      if (key === "date") {
-        value = value.replace(/[^0-9T:\-Z.]/g, ""); // mantém apenas caracteres válidos ISO8601
+    return { meta, body };
+  }
+
+  try {
+    const res = await fetch("https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main");
+    if (!res.ok) throw new Error(`Erro ao listar posts: ${res.statusText}`);
+    const files = await res.json();
+    const mdFiles = files.filter((f) => f.name.endsWith(".md"));
+
+    const posts = [];
+    for (const file of mdFiles) {
+      try {
+        const apiUrl = `https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts/${file.name}?ref=main`;
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error(`Erro ao baixar ${file.name}: ${response.statusText}`);
+        const fileData = await response.json();
+        const mdContent = atob(fileData.content);
+
+        const { meta, body } = parseFrontmatter(mdContent);
+        const title = meta.title || "Sem título";
+        const date = meta.date ? new Date(meta.date) : new Date();
+        const excerpt = meta.excerpt || (body.substring(0, 140).replace(/[^\wÀ-ÿ0-9\s.,!?-]+$/g, "").trim() + "...");
+        const image = meta.image ? resolveImagePath(meta.image) : "";
+        const slug = file.name.replace(/\.md$/i, "");
+
+        posts.push({ slug, title, date, excerpt, image });
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      } catch (err) {
+        console.error(`Erro ao baixar ${file.name}:`, err);
       }
-
-      meta[key] = value;
     }
-  }
 
-  return { meta, body };
-}
+    posts.sort((a, b) => b.date - a.date);
+    const sliced = posts.slice(0, limit);
 
+    if (sliced.length === 0) {
+      postsContainer.innerHTML = "<p>Nenhum post encontrado.</p>";
+    } else {
+      postsContainer.innerHTML = sliced
+        .map((p) => {
+          const cleanDate = new Date(p.date);
+          const isoDate = !isNaN(cleanDate) ? cleanDate.toISOString() : "";
+          const brDate = !isNaN(cleanDate) ? cleanDate.toLocaleDateString("pt-BR") : "";
 
-
- try {
-  // 1) Lista arquivos MD via GitHub API
-  const res = await fetch(
-    "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
-  );
-  if (!res.ok) throw new Error(`Erro ao listar posts: ${res.statusText}`);
-  const files = await res.json();
-
-  // 2) Filtra arquivos .md
-  const mdFiles = files.filter((f) => f.name.endsWith(".md"));
-
-  // 3) Baixa conteúdos com atraso entre requisições
-  const posts = [];
-  for (const file of mdFiles) {
-    try {
-      const response = await fetch(file.download_url);
-      if (!response.ok) throw new Error(`Erro ao baixar ${file.name}: ${response.statusText}`);
-      const mdContent = await response.text();
-      const { meta, body } = parseFrontmatter(mdContent);
-
-      const title = meta.title || "Sem título";
-      const date = meta.date ? new Date(meta.date) : new Date();
-      const excerpt = meta.excerpt || (body.substring(0, 140).replace(/[^\wÀ-ÿ0-9\s.,!?-]+$/g, "").trim() + "...");
-      const image = meta.image ? resolveImagePath(meta.image) : "";
-      const slug = file.name.replace(/\.md$/i, "");
-
-      posts.push({ slug, title, date, excerpt, image });
-
-      await new Promise((resolve) => setTimeout(resolve, 500)); // espera 500ms entre requisições
-    } catch (err) {
-      console.error(`Erro ao baixar ${file.name}:`, err);
+          return `
+            <article class="post-card">
+              ${p.image ? `<img class="featured" src="${p.image}" alt="${p.title}">` : ""}
+              <h3><a href="post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a></h3>
+              ${isoDate ? `<time datetime="${isoDate}" class="data-com-padding">${brDate}</time>` : ""}
+              <p>${p.excerpt}</p>
+              <a href="post.html?slug=${encodeURIComponent(p.slug)}" class="read-more">Leia mais →</a>
+            </article>
+          `;
+        })
+        .join("");
     }
+  } catch (err) {
+    console.error("Erro ao carregar posts:", err);
+    postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
   }
-
-  // 4) Ordena por data e aplica limite
-  posts.sort((a, b) => b.date - a.date);
-  const sliced = posts.slice(0, limit);
-
-  // 5) Renderiza HTML
-  if (sliced.length === 0) {
-    postsContainer.innerHTML = "<p>Nenhum post encontrado.</p>";
-  } else {
-    postsContainer.innerHTML = sliced
-      .map((p) => {
-        const cleanDate = new Date(p.date);
-        const isoDate = !isNaN(cleanDate) ? cleanDate.toISOString() : "";
-        const brDate = !isNaN(cleanDate) ? cleanDate.toLocaleDateString("pt-BR") : "";
-
-        return `
-          <article class="post-card">
-            ${p.image ? `<img class="featured" src="${p.image}" alt="${p.title}">` : ""}
-            <h3><a href="post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a></h3>
-            ${isoDate ? `<time datetime="${isoDate}" class="data-com-padding">${brDate}</time>` : ""}
-            <p>${p.excerpt}</p>
-            <a href="post.html?slug=${encodeURIComponent(p.slug)}" class="read-more">Leia mais →</a>
-          </article>
-        `;
-      })
-      .join("");
-  }
-} catch (err) {
-  console.error("Erro ao carregar posts:", err);
-  postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
 }
 
 // 📁 Downloads de arquivos
@@ -359,37 +340,4 @@ plausible('Ecommerce Revenue', {props: {valor: 'R$199.90', produto: 'Curso Onlin
 
 
 
-  document.getElementById("login-ml").addEventListener("click", function () {
-    const clientId = "7159101551123966";
-    const redirectUri = "https://vendasonliners.netlify.app/callback"; // sem barra no final
-    const authUrl = `https://auth.mercadolivre.com.br/authorization?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
-    window.location.href = authUrl;
-  });
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get("code");
-
-  if (code) {
-    fetch("https://api.mercadolibre.com/oauth/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: new URLSearchParams({
-        grant_type: "authorization_code",
-        client_id: "7159101551123966",
-        client_secret: "0pLGC0C3UbFKnk8Uf3UVG1yO8PFAExcq", // ⚠️ NÃO deixe isso no frontend!
-        code: code,
-        redirect_uri: "https://vendasonliners.netlify.app/callback" // igual ao anterior
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log("Access Token:", data.access_token);
-      // Aqui você pode salvar o token em localStorage ou enviar para o backend
-    })
-    .catch(err => {
-      console.error("Erro ao obter token:", err);
-      alert("Não foi possível conectar sua conta. Tente novamente.");
-    });
-  }
+  
