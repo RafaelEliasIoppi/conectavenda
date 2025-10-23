@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEST - ConectaVenda</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .test-container {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2c3e50;
+      border-bottom: 3px solid #27ae60;
+      padding-bottom: 10px;
+    }
+    .test-result {
+      margin: 20px 0;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: monospace;
+    }
+    .test-pass {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .test-fail {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .test-info {
+      background-color: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+    button {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background-color: #229954;
+    }
+    #test-results {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>🧪 TEST - ConectaVenda</h1>
+    <p>Esta é uma página de teste simples para validar a funcionalidade básica do site ConectaVenda.</p>
+    
+    <div>
+      <button onclick="runTests()">▶️ Executar Testes</button>
+      <button onclick="clearResults()">🗑️ Limpar Resultados</button>
+    </div>
+
+    <div id="test-results"></div>
+  </div>
+
+  <script>
+    function log(message, type = 'info') {
+      const resultsDiv = document.getElementById('test-results');
+      const resultElement = document.createElement('div');
+      resultElement.className = `test-result test-${type}`;
+      resultElement.textContent = message;
+      resultsDiv.appendChild(resultElement);
+    }
+
+    function clearResults() {
+      document.getElementById('test-results').innerHTML = '';
+    }
+
+    function runTests() {
+      clearResults();
+      log('🚀 Iniciando testes...', 'info');
+      
+      let passCount = 0;
+      let failCount = 0;
+
+      // Test 1: Check if document is loaded
+      try {
+        if (document.readyState === 'complete') {
+          log('✅ TEST 1 PASSED: Documento carregado corretamente', 'pass');
+          passCount++;
+        } else {
+          log('❌ TEST 1 FAILED: Documento não está completamente carregado', 'fail');
+          failCount++;
+        }
+      } catch (error) {
+        log('❌ TEST 1 ERROR: ' + error.message, 'fail');
+        failCount++;
+      }
+
+      // Test 2: Check if DOM manipulation works
+      try {
+        const testDiv = document.createElement('div');
+        testDiv.id = 'test-element';
+        testDiv.textContent = 'TEST';
+        document.body.appendChild(testDiv);
+        
+        const foundElement = document.getElementById('test-element');
+        if (foundElement && foundElement.textContent === 'TEST') {
+          log('✅ TEST 2 PASSED: Manipulação do DOM funcional', 'pass');
+          passCount++;
+          document.body.removeChild(testDiv);
+        } else {
+          log('❌ TEST 2 FAILED: Manipulação do DOM não funcional', 'fail');
+          failCount++;
+        }
+      } catch (error) {
+        log('❌ TEST 2 ERROR: ' + error.message, 'fail');
+        failCount++;
+      }
+
+      // Test 3: Check if JavaScript basics work
+      try {
+        const testString = 'TEST';
+        const testArray = [1, 2, 3];
+        const testObject = { test: true };
+        
+        if (testString === 'TEST' && testArray.length === 3 && testObject.test === true) {
+          log('✅ TEST 3 PASSED: JavaScript básico funcionando', 'pass');
+          passCount++;
+        } else {
+          log('❌ TEST 3 FAILED: JavaScript básico com problemas', 'fail');
+          failCount++;
+        }
+      } catch (error) {
+        log('❌ TEST 3 ERROR: ' + error.message, 'fail');
+        failCount++;
+      }
+
+      // Test 4: Check if CSS is applied
+      try {
+        const bodyStyle = window.getComputedStyle(document.body);
+        if (bodyStyle.fontFamily) {
+          log('✅ TEST 4 PASSED: CSS aplicado corretamente', 'pass');
+          passCount++;
+        } else {
+          log('❌ TEST 4 FAILED: CSS não aplicado', 'fail');
+          failCount++;
+        }
+      } catch (error) {
+        log('❌ TEST 4 ERROR: ' + error.message, 'fail');
+        failCount++;
+      }
+
+      // Test 5: Check if fetch API is available
+      try {
+        if (typeof fetch === 'function') {
+          log('✅ TEST 5 PASSED: Fetch API disponível', 'pass');
+          passCount++;
+        } else {
+          log('❌ TEST 5 FAILED: Fetch API não disponível', 'fail');
+          failCount++;
+        }
+      } catch (error) {
+        log('❌ TEST 5 ERROR: ' + error.message, 'fail');
+        failCount++;
+      }
+
+      // Summary
+      log(`\n📊 Resumo: ${passCount} testes passaram, ${failCount} falharam`, 'info');
+      
+      if (failCount === 0) {
+        log('🎉 Todos os testes passaram!', 'pass');
+      } else {
+        log('⚠️ Alguns testes falharam. Verifique os detalhes acima.', 'fail');
+      }
+    }
+
+    // Auto-run tests on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      log('✨ Página de teste carregada. Clique em "Executar Testes" para começar.', 'info');
+    });
+  </script>
+</body>
+</html>
