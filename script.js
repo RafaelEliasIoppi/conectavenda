@@ -198,6 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // carregar 
 // O código deve terminar com o fechamento da função e a sua execução imediata.
 // O ';' é vital para que o JS saiba que a expressão anterior terminou.
+// carregar 
 (async function loadPosts({ limit = 6 } = {}) {
   const postsContainer = document.getElementById("posts-grid");
   if (!postsContainer) return;
@@ -250,13 +251,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   try {
+    // 1. Lista os arquivos
     const res = await fetch("https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main");
     if (!res.ok) throw new Error(`Erro ao listar posts: ${res.statusText}`);
     const files = await res.json();
     const mdFiles = files.filter((f) => f.name.endsWith(".md"));
-
-    const posts = [];
-    for (const file of mdFiles) {
+    
+    // 2. Cria um array de Promises para buscar o conteúdo de todos os posts em paralelo
+    const postPromises = mdFiles.map(async (file) => {
       try {
         const apiUrl = `https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts/${file.name}?ref=main`;
         const response = await fetch(apiUrl);
@@ -271,15 +273,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const image = meta.image ? resolveImagePath(meta.image) : "";
         const slug = file.name.replace(/\.md$/i, "");
 
-        posts.push({ slug, title, date, excerpt, image });
-
-        // Adiciona um pequeno delay para respeitar o limite de taxa do GitHub
-        await new Promise((resolve) => setTimeout(resolve, 500)); 
+        return { slug, title, date, excerpt, image };
       } catch (err) {
         console.error(`Erro ao baixar ${file.name}:`, err);
+        return null; // Retorna null para posts com erro
       }
-    }
+    });
 
+    // 3. Executa todas as buscas em paralelo e filtra os posts nulos
+    const rawPosts = await Promise.all(postPromises);
+    const posts = rawPosts.filter(p => p !== null);
+
+    // Continua a lógica de ordenação e renderização
     posts.sort((a, b) => b.date - a.date);
     const sliced = posts.slice(0, limit);
 
@@ -308,7 +313,6 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Erro ao carregar posts:", err);
     postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
   }
-// ESTE FECHAMENTO E INVOCAÇÃO É CRUCIAL.
 })();
 
 // 📁 Downloads de arquivos
