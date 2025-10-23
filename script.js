@@ -261,80 +261,70 @@ function parseFrontmatter(mdContent) {
 
 
 
-  try {
-    // 1) Lista arquivos MD via GitHub API
-    const res = await fetch(
-      "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
-    );
-    if (!res.ok) throw new Error(`Erro ao listar posts: ${res.statusText}`);
-    const files = await res.json();
+ try {
+  // 1) Lista arquivos MD via GitHub API
+  const res = await fetch(
+    "https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main"
+  );
+  if (!res.ok) throw new Error(`Erro ao listar posts: ${res.statusText}`);
+  const files = await res.json();
 
-    // 2) Filtra arquivos .md
-    const mdFiles = files.filter((f) => f.name.endsWith(".md"));
+  // 2) Filtra arquivos .md
+  const mdFiles = files.filter((f) => f.name.endsWith(".md"));
 
-    // 3) Baixa conteúdos e monta objetos
-const posts = [];
-for (const file of mdFiles) {
-  try {
-    const response = await fetch(file.download_url);
-    if (!response.ok) throw new Error(`Erro ao baixar ${file.name}: ${response.statusText}`);
-    const mdContent = await response.text();
-    const { meta, body } = parseFrontmatter(mdContent);
+  // 3) Baixa conteúdos com atraso entre requisições
+  const posts = [];
+  for (const file of mdFiles) {
+    try {
+      const response = await fetch(file.download_url);
+      if (!response.ok) throw new Error(`Erro ao baixar ${file.name}: ${response.statusText}`);
+      const mdContent = await response.text();
+      const { meta, body } = parseFrontmatter(mdContent);
 
-    const title = meta.title || "Sem título";
-    const date = meta.date ? new Date(meta.date) : new Date();
-    const excerpt = meta.excerpt || (body.substring(0, 140).replace(/[^\wÀ-ÿ0-9\s.,!?-]+$/g, "").trim() + "...");
-    const image = meta.image ? resolveImagePath(meta.image) : "";
-    const slug = file.name.replace(/\.md$/i, "");
+      const title = meta.title || "Sem título";
+      const date = meta.date ? new Date(meta.date) : new Date();
+      const excerpt = meta.excerpt || (body.substring(0, 140).replace(/[^\wÀ-ÿ0-9\s.,!?-]+$/g, "").trim() + "...");
+      const image = meta.image ? resolveImagePath(meta.image) : "";
+      const slug = file.name.replace(/\.md$/i, "");
 
-    posts.push({ slug, title, date, excerpt, image });
+      posts.push({ slug, title, date, excerpt, image });
 
-    await new Promise((resolve) => setTimeout(resolve, 500)); // espera 500ms entre requisições
-  } catch (err) {
-    console.error(`Erro ao baixar ${file.name}:`, err);
+      await new Promise((resolve) => setTimeout(resolve, 500)); // espera 500ms entre requisições
+    } catch (err) {
+      console.error(`Erro ao baixar ${file.name}:`, err);
+    }
   }
-}
 
-    // 4) Ordena por data e aplica limite
-    posts.sort((a, b) => b.date - a.date);
-    const sliced = posts.slice(0, limit);
+  // 4) Ordena por data e aplica limite
+  posts.sort((a, b) => b.date - a.date);
+  const sliced = posts.slice(0, limit);
 
-    // 5) Renderiza HTML
-    if (sliced.length === 0) {
-      postsContainer.innerHTML = "<p>Nenhum post encontrado.</p>";
-    } else {
-      postsContainer.innerHTML = sliced
-  .map((p) => {
-    // 🔹 Sanitiza a data antes de renderizar
-    const cleanDate = new Date(p.date);
-    const isoDate = !isNaN(cleanDate) ? cleanDate.toISOString() : "";
-    const brDate = !isNaN(cleanDate) ? cleanDate.toLocaleDateString("pt-BR") : "";
+  // 5) Renderiza HTML
+  if (sliced.length === 0) {
+    postsContainer.innerHTML = "<p>Nenhum post encontrado.</p>";
+  } else {
+    postsContainer.innerHTML = sliced
+      .map((p) => {
+        const cleanDate = new Date(p.date);
+        const isoDate = !isNaN(cleanDate) ? cleanDate.toISOString() : "";
+        const brDate = !isNaN(cleanDate) ? cleanDate.toLocaleDateString("pt-BR") : "";
 
-    return `
-      <article class="post-card">
-        ${p.image ? `<img class="featured" src="${p.image}" alt="${p.title}">` : ""}
-        <h3><a href="post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a></h3>
-        ${isoDate ? `<time datetime="${isoDate}" class="data-com-padding">${brDate}</time>` : ""}
-        <p>${p.excerpt}</p>
-        <a href="post.html?slug=${encodeURIComponent(p.slug)}" class="read-more">Leia mais →</a>
-      </article>
-    `;
-  })
-  .join("");
-}
-      } catch (err) {
-        console.error("Erro ao carregar posts:", err);
-        postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
-      }
-})();
-// 📤 Rastreamento de links externos
-document.querySelectorAll('a[href^="http"]').forEach(link => {
-  if (!link.href.includes(location.hostname)) {
-    link.addEventListener('click', () => {
-      plausible('Outbound Link: Click', {props: {url: link.href}});
-    });
+        return `
+          <article class="post-card">
+            ${p.image ? `<img class="featured" src="${p.image}" alt="${p.title}">` : ""}
+            <h3><a href="post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a></h3>
+            ${isoDate ? `<time datetime="${isoDate}" class="data-com-padding">${brDate}</time>` : ""}
+            <p>${p.excerpt}</p>
+            <a href="post.html?slug=${encodeURIComponent(p.slug)}" class="read-more">Leia mais →</a>
+          </article>
+        `;
+      })
+      .join("");
   }
-});
+} catch (err) {
+  console.error("Erro ao carregar posts:", err);
+  postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
+}
 
 // 📁 Downloads de arquivos
 document.querySelectorAll('a[href$=".pdf"], a[href$=".zip"], a[href$=".docx"]').forEach(link => {
