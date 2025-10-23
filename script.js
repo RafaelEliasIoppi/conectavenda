@@ -196,6 +196,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // carregar 
+// O código deve terminar com o fechamento da função e a sua execução imediata.
+// O ';' é vital para que o JS saiba que a expressão anterior terminou.
 (async function loadPosts({ limit = 6 } = {}) {
   const postsContainer = document.getElementById("posts-grid");
   if (!postsContainer) return;
@@ -260,27 +262,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error(`Erro ao baixar ${file.name}: ${response.statusText}`);
         const fileData = await response.json();
-        // O conteúdo do arquivo na API do GitHub é codificado em Base64, então precisa ser decodificado.
-        const mdContent = atob(fileData.content); 
+        const mdContent = atob(fileData.content);
 
         const { meta, body } = parseFrontmatter(mdContent);
         const title = meta.title || "Sem título";
         const date = meta.date ? new Date(meta.date) : new Date();
-        // Cria um resumo (excerpt) se não existir no frontmatter
         const excerpt = meta.excerpt || (body.substring(0, 140).replace(/[^\wÀ-ÿ0-9\s.,!?-]+$/g, "").trim() + "...");
         const image = meta.image ? resolveImagePath(meta.image) : "";
         const slug = file.name.replace(/\.md$/i, "");
 
         posts.push({ slug, title, date, excerpt, image });
 
-        // Adiciona um pequeno delay para evitar hitting the GitHub API rate limit rapidamente
+        // Adiciona um pequeno delay para respeitar o limite de taxa do GitHub
         await new Promise((resolve) => setTimeout(resolve, 500)); 
       } catch (err) {
         console.error(`Erro ao baixar ${file.name}:`, err);
       }
     }
 
-    posts.sort((a, b) => b.date - a.date); // Ordena posts do mais novo para o mais antigo
+    posts.sort((a, b) => b.date - a.date);
     const sliced = posts.slice(0, limit);
 
     if (sliced.length === 0) {
@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Erro ao carregar posts:", err);
     postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
   }
-// Fecha a função assíncrona autoexecutável
+// ESTE FECHAMENTO E INVOCAÇÃO É CRUCIAL.
 })();
 
 // 📁 Downloads de arquivos
