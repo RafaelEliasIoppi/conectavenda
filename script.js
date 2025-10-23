@@ -260,24 +260,27 @@ document.addEventListener("DOMContentLoaded", () => {
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error(`Erro ao baixar ${file.name}: ${response.statusText}`);
         const fileData = await response.json();
-        const mdContent = atob(fileData.content);
+        // O conteúdo do arquivo na API do GitHub é codificado em Base64, então precisa ser decodificado.
+        const mdContent = atob(fileData.content); 
 
         const { meta, body } = parseFrontmatter(mdContent);
         const title = meta.title || "Sem título";
         const date = meta.date ? new Date(meta.date) : new Date();
+        // Cria um resumo (excerpt) se não existir no frontmatter
         const excerpt = meta.excerpt || (body.substring(0, 140).replace(/[^\wÀ-ÿ0-9\s.,!?-]+$/g, "").trim() + "...");
         const image = meta.image ? resolveImagePath(meta.image) : "";
         const slug = file.name.replace(/\.md$/i, "");
 
         posts.push({ slug, title, date, excerpt, image });
 
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Adiciona um pequeno delay para evitar hitting the GitHub API rate limit rapidamente
+        await new Promise((resolve) => setTimeout(resolve, 500)); 
       } catch (err) {
         console.error(`Erro ao baixar ${file.name}:`, err);
       }
     }
 
-    posts.sort((a, b) => b.date - a.date);
+    posts.sort((a, b) => b.date - a.date); // Ordena posts do mais novo para o mais antigo
     const sliced = posts.slice(0, limit);
 
     if (sliced.length === 0) {
@@ -305,7 +308,8 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Erro ao carregar posts:", err);
     postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
   }
-}
+// Fecha a função assíncrona autoexecutável
+})();
 
 // 📁 Downloads de arquivos
 document.querySelectorAll('a[href$=".pdf"], a[href$=".zip"], a[href$=".docx"]').forEach(link => {
