@@ -273,29 +273,27 @@ function parseFrontmatter(mdContent) {
     const mdFiles = files.filter((f) => f.name.endsWith(".md"));
 
     // 3) Baixa conteúdos e monta objetos
-    const posts = await Promise.all(
-      mdFiles.map(async (file) => {
-        const mdContent = await fetch(file.download_url).then((r) => {
-          if (!r.ok) throw new Error(`Erro ao baixar ${file.name}: ${r.statusText}`);
-          return r.text();
-        });
+const posts = [];
+for (const file of mdFiles) {
+  try {
+    const response = await fetch(file.download_url);
+    if (!response.ok) throw new Error(`Erro ao baixar ${file.name}: ${response.statusText}`);
+    const mdContent = await response.text();
+    const { meta, body } = parseFrontmatter(mdContent);
 
-        const { meta, body } = parseFrontmatter(mdContent);
+    const title = meta.title || "Sem título";
+    const date = meta.date ? new Date(meta.date) : new Date();
+    const excerpt = meta.excerpt || (body.substring(0, 140).replace(/[^\wÀ-ÿ0-9\s.,!?-]+$/g, "").trim() + "...");
+    const image = meta.image ? resolveImagePath(meta.image) : "";
+    const slug = file.name.replace(/\.md$/i, "");
 
-        const title = meta.title || "Sem título";
-        const date = meta.date ? new Date(meta.date) : new Date();
-        const excerpt = meta.excerpt || (body
-                  .substring(0, 140)
-                  .replace(/[^\wÀ-ÿ0-9\s.,!?-]+$/g, "") // remove símbolos estranhos no final
-                  .trim() + "..."
-              );
-        const image = meta.image ? resolveImagePath(meta.image) : "";
+    posts.push({ slug, title, date, excerpt, image });
 
-        const slug = file.name.replace(/\.md$/i, "");
-
-        return { slug, title, date, excerpt, image };
-      })
-    );
+    await new Promise((resolve) => setTimeout(resolve, 500)); // espera 500ms entre requisições
+  } catch (err) {
+    console.error(`Erro ao baixar ${file.name}:`, err);
+  }
+}
 
     // 4) Ordena por data e aplica limite
     posts.sort((a, b) => b.date - a.date);
