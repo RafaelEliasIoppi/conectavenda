@@ -106,21 +106,13 @@
       return `/static/img/uploads/${path}`;
     }
 
-   async function carregarPost(slug) {
-  try {
-    const cdnUrl = `https://cdn.jsdelivr.net/gh/RafaelEliasIoppi/conectavenda/content/posts/${slug}.md`;
-    const md = await fetch(cdnUrl).then(r => {
-      if (!r.ok) throw new Error("Erro ao baixar post");
-      return r.text();
-    });
-
-    // ... restante do código para extrair frontmatter e renderizar
-  } catch (err) {
-    console.error(err);
-    postEl.innerText = "Erro ao carregar post.";
-  }
-
-
+    async function carregarPost(slug) {
+      try {
+        const cdnUrl = `https://cdn.jsdelivr.net/gh/RafaelEliasIoppi/conectavenda/content/posts/${slug}.md`;
+        const md = await fetch(cdnUrl).then(r => {
+          if (!r.ok) throw new Error("Erro ao baixar post");
+          return r.text();
+        });
 
         const meta = {};
         const front = md.match(/^---\s*([\s\S]*?)\s*---/);
@@ -166,5 +158,6 @@
     slug ? carregarPost(slug) : postEl.innerText = "Slug não informado.";
   </script>
 </body>
+
 
 </html>
