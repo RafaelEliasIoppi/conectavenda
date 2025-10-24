@@ -197,9 +197,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // carregar 
 // O código deve terminar com o fechamento da função e a sua execução imediata.
-// O ';' é vital para que o JS saiba que a expressão anterior terminou.
-// carregar 
-
 (async function loadPosts({ limit = 6 } = {}) {
   const postsContainer = document.getElementById("posts-grid");
   if (!postsContainer) return;
@@ -296,10 +293,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
           return `
             <article class="post-card">
-              ${p.image ? `<img class="featured"           <h3><a hrefml?slug=${encodeURIComponent(p.slug)}${p.title}</a></h3>
+              ${p.image ? `<img class="featured" src="${p.image}" alt="${p.title}">` : ""}
+              <h3><a href="post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a></h3>
               ${isoDate ? `<time datetime="${isoDate}" class="data-com-padding">${brDate}</time>` : ""}
               <p>${p.excerpt}</p>
-              post.html?slug=${encodeURIComponent(p.slug)}Leia mais →</a>
+              <a href="post.html?slug=${encodeURIComponent(p.slug)}">Leia mais →</a>
             </article>
           `;
         })
@@ -310,6 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
     postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
   }
 })();
+
 
 
 // 📁 Downloads de arquivos
