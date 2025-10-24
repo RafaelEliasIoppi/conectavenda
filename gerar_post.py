@@ -16,18 +16,13 @@ frases = [
     "Simplifique o checkout: menos cliques, mais vendas."
 ]
 
-# Lista de imagens disponíveis no repositório
+# Lista real de imagens disponíveis no repositório
 imagens = [
-    "frete-gratis.png",
-    "checkout-simples.png",
-    "video-produto.jpg",
-    "whatsapp-resposta.jpg",
-    "depoimentos-clientes.jpg",
-    "cupom-desconto.png",
-    "grupos-divulgacao.jpg",
-    "teste-ab.jpg",
-    "oferta-limitada.png",
-    "produtos-qualidade.jpg"
+    "Cafeteira.jpg", "Chaleira.jpg", "NexGard2.jpg", "Scalibor.jpg", "Seresto.jpg", "air.jpg",
+    "android-chrome-192x192.png", "android-chrome-512x512.png", "aparador.jpg", "apple-touch-icon.png",
+    "bravecto.jpg", "confort pads.jpg", "creatina.jpg", "favicon-16x16.png", "favicon-32x32.png",
+    "favicon.ico", "favicon.png", "fone.jpg", "fone2.jpg", "grill.jpg", "liquidificador.jpg",
+    "luna6.png", "luna9.png", "macaco.jpg", "nexxt.jpg", "tapete.jpg"
 ]
 
 # Seleciona frase e imagem aleatória
