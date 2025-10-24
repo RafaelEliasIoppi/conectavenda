@@ -3,9 +3,8 @@ name: Post Diário
 
 'on':
   schedule:
-    # Executa todos os dias às 9h UTC (6h BRT)
-    - cron: '0 9 * * *'
-  workflow_dispatch:  # Permite execução manual
+    - cron: '0 9 * * *'  # Executa todos os dias às 9h UTC (6h BRT)
+  workflow_dispatch:
 
 jobs:
   criar-post:
@@ -15,7 +14,8 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # Não usamos o GITHUB_TOKEN aqui, pois o push será feito manualmente
+          persist-credentials: false
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -27,13 +27,13 @@ jobs:
 
       - name: Configurar Git
         run: |
-          git config --local user.email \
-            "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/RafaelEliasIoppi/conectavenda.git
 
       - name: Commit e push do novo post
         run: |
           git add content/posts/
           git diff --staged --quiet || \
             git commit -m "Post diário automático - $(date +'%Y-%m-%d')"
-          git push
+          git push origin main
