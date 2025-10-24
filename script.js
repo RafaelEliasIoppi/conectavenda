@@ -199,6 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // O código deve terminar com o fechamento da função e a sua execução imediata.
 // O ';' é vital para que o JS saiba que a expressão anterior terminou.
 // carregar 
+
 (async function loadPosts({ limit = 6 } = {}) {
   const postsContainer = document.getElementById("posts-grid");
   if (!postsContainer) return;
@@ -251,13 +252,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   try {
-    // 1. Lista os arquivos
     const res = await fetch("https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main");
     if (!res.ok) throw new Error(`Erro ao listar posts: ${res.statusText}`);
     const files = await res.json();
     const mdFiles = files.filter((f) => f.name.endsWith(".md"));
-    
-    // 2. Cria um array de Promises para buscar o conteúdo de todos os posts em paralelo
+
     const postPromises = mdFiles.map(async (file) => {
       try {
         const apiUrl = `https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts/${file.name}?ref=main`;
@@ -276,15 +275,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return { slug, title, date, excerpt, image };
       } catch (err) {
         console.error(`Erro ao baixar ${file.name}:`, err);
-        return null; // Retorna null para posts com erro
+        return null;
       }
     });
 
-    // 3. Executa todas as buscas em paralelo e filtra os posts nulos
     const rawPosts = await Promise.all(postPromises);
     const posts = rawPosts.filter(p => p !== null);
 
-    // Continua a lógica de ordenação e renderização
     posts.sort((a, b) => b.date - a.date);
     const sliced = posts.slice(0, limit);
 
@@ -299,11 +296,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
           return `
             <article class="post-card">
-              ${p.image ? `<img class="featured" src="${p.image}" alt="${p.title}">` : ""}
-              <h3><a href="post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a></h3>
+              ${p.image ? `<img class="featured"           <h3><a hrefml?slug=${encodeURIComponent(p.slug)}${p.title}</a></h3>
               ${isoDate ? `<time datetime="${isoDate}" class="data-com-padding">${brDate}</time>` : ""}
               <p>${p.excerpt}</p>
-              <a href="post.html?slug=${encodeURIComponent(p.slug)}" class="read-more">Leia mais →</a>
+              post.html?slug=${encodeURIComponent(p.slug)}Leia mais →</a>
             </article>
           `;
         })
@@ -314,6 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
     postsContainer.innerHTML = "<p>Erro ao carregar posts.</p>";
   }
 })();
+
 
 // 📁 Downloads de arquivos
 document.querySelectorAll('a[href$=".pdf"], a[href$=".zip"], a[href$=".docx"]').forEach(link => {
