@@ -38,8 +38,8 @@ hora = agora.strftime("%H%M")
 # Slug da dica para nome do arquivo
 slug = re.sub(r'\W+', '-', dica[:30].lower()).strip('-')
 
-# Caminho relativo para uso no site
-imagem_url = f"/imagens/{imagem}"
+# Caminho relativo para uso no site (ajustado para conectavenda/imagens)
+imagem_url = f"/conectavenda/imagens/{imagem}"
 
 # Gera conteúdo do post
 titulo = f"Dica do dia - {data}"
