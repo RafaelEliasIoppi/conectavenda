@@ -106,22 +106,21 @@
       return `/static/img/uploads/${path}`;
     }
 
-    async function carregarPost(slug) {
-      try {
-        const res = await fetch("https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main");
-        if (!res.ok) throw new Error("Erro ao listar posts");
-        const files = await res.json();
+   async function carregarPost(slug) {
+  try {
+    const cdnUrl = `https://cdn.jsdelivr.net/gh/RafaelEliasIoppi/conectavenda/content/posts/${slug}.md`;
+    const md = await fetch(cdnUrl).then(r => {
+      if (!r.ok) throw new Error("Erro ao baixar post");
+      return r.text();
+    });
 
-        const file = files.find(f => f.name.replace(/\.md$/i, "") === slug);
-        if (!file) {
-          postEl.innerText = "Post não encontrado.";
-          return;
-        }
+    // ... restante do código para extrair frontmatter e renderizar
+  } catch (err) {
+    console.error(err);
+    postEl.innerText = "Erro ao carregar post.";
+  }
+}
 
-        const md = await fetch(file.download_url).then(r => {
-          if (!r.ok) throw new Error("Erro ao baixar post");
-          return r.text();
-        });
 
         const meta = {};
         const front = md.match(/^---\s*([\s\S]*?)\s*---/);
