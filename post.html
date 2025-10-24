@@ -4,180 +4,165 @@
   <meta charset="UTF-8" />
   <title>Post</title>
   <style>
-     /* Estilo base */
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    max-width: 700px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background: #f0f0f0;
-    color: #333;
-  }
-
-  main {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  article {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    line-height: 1.6;
-  }
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #222;
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin: 1rem 0;
-    display: block;
-  }
-
-  time {
-    display: block;
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-  }
-
-  /* Responsividade para telas menores */
-  @media (max-width: 600px) {
     body {
-      margin: 1rem;
-      padding: 0.5rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
 
     article {
-      padding: 1rem;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      line-height: 1.6;
     }
 
     h1 {
-      font-size: 1.5rem;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #222;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 1rem 0;
+      display: block;
     }
 
     time {
-      font-size: 0.85rem;
+      display: block;
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
     }
-  }
 
-  /* Estilo para links e markdown */
-  article a {
-    color: #0077cc;
-    text-decoration: none;
-  }
+    @media (max-width: 600px) {
+      body {
+        margin: 1rem;
+        padding: 0.5rem;
+      }
 
-  article a:hover {
-    text-decoration: underline;
-  }
+      article {
+        padding: 1rem;
+      }
 
-  article ul, article ol {
-    padding-left: 1.5rem;
-    margin: 1rem 0;
-  }
+      h1 {
+        font-size: 1.5rem;
+      }
 
-  article blockquote {
-    border-left: 4px solid #ccc;
-    padding-left: 1rem;
-    color: #555;
-    margin: 1rem 0;
-    font-style: italic;
-  }
+      time {
+        font-size: 0.85rem;
+      }
+    }
+
+    article a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+
+    article a:hover {
+      text-decoration: underline;
+    }
+
+    article ul, article ol {
+      padding-left: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    article blockquote {
+      border-left: 4px solid #ccc;
+      padding-left: 1rem;
+      color: #555;
+      margin: 1rem 0;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
   <main id="post">Carregando...</main>
 
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  https://cdn.jsdelivr.net/npm/marked/marked.min.js
   <script>
-  const slug = new URLSearchParams(location.search).get("slug");
-  const postEl = document.getElementById("post");
+    const slug = new URLSearchParams(location.search).get("slug");
+    const postEl = document.getElementById("post");
 
-  // Função para normalizar caminhos de imagens
-  function resolveImagePath(path) {
-    if (!path) return "";
-    path = path.trim();
+    function resolveImagePath(path) {
+      if (!path) return "";
+      path = path.trim();
 
-    if (path.startsWith("http")) return path; // já é link externo
-    if (path.startsWith("static/img/uploads/")) return "/" + path; // já contém static
-    return `/static/img/uploads/${path}`; // relativo simples
-  }
+      if (path.startsWith("http")) return path;
+      if (path.startsWith("static/img/uploads/")) return "/" + path;
+      return `/static/img/uploads/${path}`;
+    }
 
-  async function carregarPost(slug) {
-    try {
-      // 1. Busca lista de arquivos
-      const res = await fetch("https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main");
-      if (!res.ok) throw new Error("Erro ao listar posts");
-      const files = await res.json();
+    async function carregarPost(slug) {
+      try {
+        const res = await fetch("https://api.github.com/repos/RafaelEliasIoppi/conectavenda/contents/content/posts?ref=main");
+        if (!res.ok) throw new Error("Erro ao listar posts");
+        const files = await res.json();
 
-      // 2. Procura arquivo exato (nome sem extensão = slug)
-      const file = files.find(f => f.name.replace(/\.md$/i, "") === slug);
-      if (!file) {
-        postEl.innerText = "Post não encontrado.";
-        return;
-      }
+        const file = files.find(f => f.name.replace(/\.md$/i, "") === slug);
+        if (!file) {
+          postEl.innerText = "Post não encontrado.";
+          return;
+        }
 
-      // 3. Busca conteúdo do Markdown
-      const md = await fetch(file.download_url).then(r => {
-        if (!r.ok) throw new Error("Erro ao baixar post");
-        return r.text();
-      });
-
-      // 4. Extrai frontmatter
-      const meta = {};
-      const front = md.match(/^---\s*([\s\S]*?)\s*---/);
-      let body = md;
-
-      if (front) {
-        body = md.replace(front[0], "").trim();
-        front[1].split("\n").forEach(l => {
-          const [k, ...v] = l.split(":");
-          if (!k || !v.length) return;
-          meta[k.trim()] = v.join(":").trim().replace(/^"|"$/g, "");
+        const md = await fetch(file.download_url).then(r => {
+          if (!r.ok) throw new Error("Erro ao baixar post");
+          return r.text();
         });
+
+        const meta = {};
+        const front = md.match(/^---\s*([\s\S]*?)\s*---/);
+        let body = md;
+
+        if (front) {
+          body = md.replace(front[0], "").trim();
+          front[1].split("\n").forEach(l => {
+            const [k, ...v] = l.split(":");
+            if (!k || !v.length) return;
+            meta[k.trim()] = v.join(":").trim().replace(/^"|"$/g, "");
+          });
+        }
+
+        body = body.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, path) => {
+          return `${resolveImagePath(path})`;
+        });
+
+        postEl.innerHTML = `
+          <article>
+            <h1>${meta.title || slug}</h1>
+            ${meta.image ? `<img src="${resolveImagePath(meta.image)}" alt="${meta.title || ""}">` : ""}
+
+                ? (() => {
+                    const cleanDate = meta.date.replace(/[^0-9T:\-Z.]/g, "");
+                    const d = new Date(cleanDate);
+                    return `<time datetime="${d.toISOString()}">${d.toLocaleDateString("pt-BR")}</time>`;
+                  })()
+                : ""
+            }
+            <div>${marked.parse(body)}</div>
+          </article>
+        `;
+      } catch (err) {
+        console.error(err);
+        postEl.innerText = "Erro ao carregar post.";
       }
-
-      // 5. Corrige imagens relativas no body
-      body = body.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, path) => {
-        return `![${alt}](${resolveImagePath(path)})`;
-      });
-
-      // 6. Renderiza
-postEl.innerHTML = `
-  <article>
-    <h1>${meta.title || slug}</h1>
-    ${meta.image ? `<img src="${resolveImagePath(meta.image)}" alt="${meta.title || ""}">` : ""}
-    ${
-      meta.date
-        ? (() => {
-            // 🔹 Remove caracteres inválidos da data (qualquer coisa que não pertença a um ISO8601)
-            const cleanDate = meta.date.replace(/[^0-9T:\-Z.]/g, "");
-            const d = new Date(cleanDate);
-            return `<time datetime="${d.toISOString()}">${d.toLocaleDateString("pt-BR")}</time>`;
-          })()
-        : ""
     }
-    <div>${marked.parse(body)}</div>
-  </article>
-`;
 
-
-    } catch (err) {
-      console.error(err);
-      postEl.innerText = "Erro ao carregar post.";
-    }
-  }
-
-  slug ? carregarPost(slug) : postEl.innerText = "Slug não informado.";
-</script>
-
+    slug ? carregarPost(slug) : postEl.innerText = "Slug não informado.";
+  </script>
 </body>
 </html>
