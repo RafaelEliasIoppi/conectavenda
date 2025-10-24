@@ -17,7 +17,7 @@ frases = [
     "Simplifique o checkout: menos cliques, mais vendas."
 ]
 
-# Lista de imagens reais da pasta conectavenda/imagens
+# Lista de imagens reais da pasta static/imagens/
 imagens = [
     "Cafeteira.jpg", "Chaleira.jpg", "NexGard2.jpg", "Scalibor.jpg", "Seresto.jpg", "air.jpg",
     "android-chrome-192x192.png", "android-chrome-512x512.png", "aparador.jpg", "apple-touch-icon.png",
@@ -38,8 +38,8 @@ hora = agora.strftime("%H%M")
 # Slug da dica para nome do arquivo
 slug = re.sub(r'\W+', '-', dica[:30].lower()).strip('-')
 
-# Caminho relativo para uso no site (ajustado para conectavenda/imagens)
-imagem_url = f"/conectavenda/imagens/{imagem}"
+# Caminho relativo para uso no site (ajustado para static/imagens/)
+imagem_url = f"/static/imagens/{imagem}"
 
 # Gera conteúdo do post
 titulo = f"Dica do dia - {data}"
