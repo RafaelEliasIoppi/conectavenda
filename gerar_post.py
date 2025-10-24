@@ -17,7 +17,7 @@ frases = [
     "Simplifique o checkout: menos cliques, mais vendas."
 ]
 
-# Lista de imagens reais da pasta imagens/
+# Lista de imagens reais da pasta static/img/uploads/
 imagens = [
     "Cafeteira.jpg", "Chaleira.jpg", "NexGard2.jpg", "Scalibor.jpg", "Seresto.jpg", "air.jpg",
     "android-chrome-192x192.png", "android-chrome-512x512.png", "aparador.jpg", "apple-touch-icon.png",
@@ -39,7 +39,7 @@ hora = agora.strftime("%H%M")
 slug = re.sub(r'\W+', '-', dica[:30].lower()).strip('-')
 
 # Caminho público da imagem
-imagem_url = f"/imagens/{imagem}"
+imagem_url = f"/img/uploads/{imagem}"
 
 # Gera conteúdo do post
 titulo = f"Dica do dia - {data}"
