@@ -93,7 +93,7 @@
 <body>
   <main id="post">Carregando...</main>
 
-  https://cdn.jsdelivr.net/npm/marked/marked.min.js
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     const slug = new URLSearchParams(location.search).get("slug");
     const postEl = document.getElementById("post");
@@ -101,7 +101,6 @@
     function resolveImagePath(path) {
       if (!path) return "";
       path = path.trim();
-
       if (path.startsWith("http")) return path;
       if (path.startsWith("static/img/uploads/")) return "/" + path;
       return `/static/img/uploads/${path}`;
@@ -137,22 +136,25 @@
           });
         }
 
+        // Corrige imagens Markdown para <img>
         body = body.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, path) => {
-          return `${resolveImagePath(path})`;
+          return `<img src="${resolveImagePath(path)}" alt="${alt}">`;
         });
+
+        let dateHTML = "";
+        if (meta.date) {
+          const cleanDate = meta.date.replace(/[^0-9T:\-Z.]/g, "");
+          const d = new Date(cleanDate);
+          if (!isNaN(d)) {
+            dateHTML = `<time datetime="${d.toISOString()}">${d.toLocaleDateString("pt-BR")}</time>`;
+          }
+        }
 
         postEl.innerHTML = `
           <article>
             <h1>${meta.title || slug}</h1>
             ${meta.image ? `<img src="${resolveImagePath(meta.image)}" alt="${meta.title || ""}">` : ""}
-
-                ? (() => {
-                    const cleanDate = meta.date.replace(/[^0-9T:\-Z.]/g, "");
-                    const d = new Date(cleanDate);
-                    return `<time datetime="${d.toISOString()}">${d.toLocaleDateString("pt-BR")}</time>`;
-                  })()
-                : ""
-            }
+            ${dateHTML}
             <div>${marked.parse(body)}</div>
           </article>
         `;
@@ -165,4 +167,5 @@
     slug ? carregarPost(slug) : postEl.innerText = "Slug não informado.";
   </script>
 </body>
+
 </html>
