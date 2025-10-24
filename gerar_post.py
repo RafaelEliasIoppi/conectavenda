@@ -16,7 +16,7 @@ frases = [
     "Simplifique o checkout: menos cliques, mais vendas."
 ]
 
-# Lista real de imagens disponíveis no repositório
+# Lista de imagens reais da pasta conectavenda/imagens
 imagens = [
     "Cafeteira.jpg", "Chaleira.jpg", "NexGard2.jpg", "Scalibor.jpg", "Seresto.jpg", "air.jpg",
     "android-chrome-192x192.png", "android-chrome-512x512.png", "aparador.jpg", "apple-touch-icon.png",
@@ -32,15 +32,18 @@ imagem = random.choice(imagens)
 # Data atual
 hoje = datetime.date.today().isoformat()
 
+# Caminho relativo para uso no site
+imagem_url = f"/imagens/{imagem}"
+
 # Gera conteúdo do post
 titulo = f"Dica do dia - {hoje}"
-imagem_url = f"https://raw.githubusercontent.com/RafaelEliasIoppi/conectavenda/main/imagens/{imagem}"
-
 conteudo = f"""---
 title: "{titulo}"
 date: "{hoje}"
 image: "{imagem_url}"
 ---
+
+![Imagem da dica]({imagem_url})
 
 💡 {dica}
 """
