@@ -18,33 +18,24 @@ frases = [
     "Simplifique o checkout: menos cliques, mais vendas."
 ]
 
-# Lista de imagens na pasta original /imagens/
-imagens = [
-    "Cafeteira.jpg", "Chaleira.jpg", "NexGard2.jpg", "Scalibor.jpg", "Seresto.jpg", "air.jpg",
-    "android-chrome-192x192.png", "android-chrome-512x512.png", "aparador.jpg", "apple-touch-icon.png",
-    "bravecto.jpg", "confort pads.jpg", "creatina.jpg", "favicon-16x16.png", "favicon-32x32.png",
-    "favicon.ico", "favicon.png", "fone.jpg", "fone2.jpg", "grill.jpg", "liquidificador.jpg",
-    "luna6.png", "luna9.png", "macaco.jpg", "nexxt.jpg", "tapete.jpg"
-]
-
 # Caminhos
 origem_pasta = "imagens"
 destino_pasta = "static/img/uploads"
+os.makedirs(destino_pasta, exist_ok=True)
+
+# Lista de imagens reais da pasta origem
+imagens = [f for f in os.listdir(origem_pasta) if os.path.isfile(os.path.join(origem_pasta, f))]
 
 # Seleciona frase e imagem aleatória
 dica = random.choice(frases)
-imagem = random.choice(imagens)
+imagem_original = random.choice(imagens)
 
-# Verifica se imagem existe na origem
-origem_imagem = os.path.join(origem_pasta, imagem)
-destino_imagem = os.path.join(destino_pasta, imagem)
-
-if not os.path.exists(origem_imagem):
-    print(f"❌ Imagem não encontrada: {origem_imagem}")
-    exit()
+# Renomeia imagem se tiver espaços ou letras maiúsculas
+imagem_normalizada = re.sub(r'\s+', '-', imagem_original).lower()
+origem_imagem = os.path.join(origem_pasta, imagem_original)
+destino_imagem = os.path.join(destino_pasta, imagem_normalizada)
 
 # Copia imagem para static/img/uploads/
-os.makedirs(destino_pasta, exist_ok=True)
 shutil.copy2(origem_imagem, destino_imagem)
 
 # Data e hora atual
@@ -56,7 +47,7 @@ hora = agora.strftime("%H%M")
 slug = re.sub(r'\W+', '-', dica[:30].lower()).strip('-')
 
 # Caminho público da imagem
-imagem_url = f"/img/uploads/{imagem}"
+imagem_url = f"/img/uploads/{imagem_normalizada}"
 
 # Gera conteúdo do post
 titulo = f"Dica do dia - {data}"
@@ -73,9 +64,9 @@ image: "{imagem_url}"
 
 # Caminho do post com identificador único
 caminho_post = f"content/posts/{data}-dica-{hora}-{slug}.md"
+os.makedirs(os.path.dirname(caminho_post), exist_ok=True)
 
 # Salva o post
-os.makedirs(os.path.dirname(caminho_post), exist_ok=True)
 with open(caminho_post, "w", encoding="utf-8") as f:
     f.write(conteudo)
 
