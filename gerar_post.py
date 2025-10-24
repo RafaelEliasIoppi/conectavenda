@@ -2,6 +2,7 @@ import datetime
 import random
 import os
 import re
+import shutil
 
 # Frases motivacionais
 frases = [
@@ -17,7 +18,7 @@ frases = [
     "Simplifique o checkout: menos cliques, mais vendas."
 ]
 
-# Lista de imagens reais da pasta static/img/uploads/
+# Lista de imagens na pasta original /imagens/
 imagens = [
     "Cafeteira.jpg", "Chaleira.jpg", "NexGard2.jpg", "Scalibor.jpg", "Seresto.jpg", "air.jpg",
     "android-chrome-192x192.png", "android-chrome-512x512.png", "aparador.jpg", "apple-touch-icon.png",
@@ -26,9 +27,25 @@ imagens = [
     "luna6.png", "luna9.png", "macaco.jpg", "nexxt.jpg", "tapete.jpg"
 ]
 
+# Caminhos
+origem_pasta = "imagens"
+destino_pasta = "static/img/uploads"
+
 # Seleciona frase e imagem aleatória
 dica = random.choice(frases)
 imagem = random.choice(imagens)
+
+# Verifica se imagem existe na origem
+origem_imagem = os.path.join(origem_pasta, imagem)
+destino_imagem = os.path.join(destino_pasta, imagem)
+
+if not os.path.exists(origem_imagem):
+    print(f"❌ Imagem não encontrada: {origem_imagem}")
+    exit()
+
+# Copia imagem para static/img/uploads/
+os.makedirs(destino_pasta, exist_ok=True)
+shutil.copy2(origem_imagem, destino_imagem)
 
 # Data e hora atual
 agora = datetime.datetime.now()
@@ -58,9 +75,9 @@ image: "{imagem_url}"
 caminho_post = f"content/posts/{data}-dica-{hora}-{slug}.md"
 
 # Salva o post
-if not os.path.exists(caminho_post):
-    with open(caminho_post, "w", encoding="utf-8") as f:
-        f.write(conteudo)
-    print(f"✅ Post criado: {caminho_post}")
-else:
-    print("ℹ️ Post já existe. Nenhuma ação necessária.")
+os.makedirs(os.path.dirname(caminho_post), exist_ok=True)
+with open(caminho_post, "w", encoding="utf-8") as f:
+    f.write(conteudo)
+
+print(f"✅ Post criado: {caminho_post}")
+print(f"📁 Imagem copiada para: {destino_imagem}")
