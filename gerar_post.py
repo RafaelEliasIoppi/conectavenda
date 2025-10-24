@@ -1,6 +1,7 @@
 import datetime
 import random
 import os
+import re
 
 # Frases motivacionais
 frases = [
@@ -29,17 +30,22 @@ imagens = [
 dica = random.choice(frases)
 imagem = random.choice(imagens)
 
-# Data atual
-hoje = datetime.date.today().isoformat()
+# Data e hora atual
+agora = datetime.datetime.now()
+data = agora.date().isoformat()
+hora = agora.strftime("%H%M")
+
+# Slug da dica para nome do arquivo
+slug = re.sub(r'\W+', '-', dica[:30].lower()).strip('-')
 
 # Caminho relativo para uso no site
 imagem_url = f"/imagens/{imagem}"
 
 # Gera conteúdo do post
-titulo = f"Dica do dia - {hoje}"
+titulo = f"Dica do dia - {data}"
 conteudo = f"""---
 title: "{titulo}"
-date: "{hoje}"
+date: "{data}"
 image: "{imagem_url}"
 ---
 
@@ -48,8 +54,8 @@ image: "{imagem_url}"
 💡 {dica}
 """
 
-# Caminho do post
-caminho_post = f"content/posts/{hoje}-dica.md"
+# Caminho do post com identificador único
+caminho_post = f"content/posts/{data}-dica-{hora}-{slug}.md"
 
 # Salva o post
 if not os.path.exists(caminho_post):
